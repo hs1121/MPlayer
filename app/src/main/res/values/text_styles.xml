@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="heading_text_size">24sp</dimen>
+
+
+    <style name="heading_text_style" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/primary_dark</item>
+        <item name="android:textSize">@dimen/heading_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">sara</item>
+    </style>
+
+</resources>

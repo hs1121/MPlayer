@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="radius_bottom_nav">20dp</dimen>
+    <dimen name="top_bar_icon_size">32dp</dimen>
+
+
+</resources>
