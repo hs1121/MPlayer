@@ -3,5 +3,11 @@
     <dimen name="radius_bottom_nav">20dp</dimen>
     <dimen name="top_bar_icon_size">32dp</dimen>
 
+    <dimen name="card_music_item">80dp</dimen>
+    <dimen name="card_item_image_size">60dp</dimen>
+    <dimen name="card_item_image_radius">10dp</dimen>
+
+    <dimen name="icon_size">24dp</dimen>
+
 
 </resources>

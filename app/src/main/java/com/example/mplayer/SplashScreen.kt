@@ -5,21 +5,28 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.util.Log
 import android.view.WindowManager
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
 
 class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        GlobalScope.launch {
-            delay(2000);
-            startActivity(Intent(applicationContext,MainActivity::class.java))
-            finish()
+
+        if(savedInstanceState == null) {
+            lifecycleScope.launch {
+                delay(2000)
+                var intent = Intent(this@SplashScreen, MainActivity::class.java)
+                startActivity(intent)
+            }
         }
+        else
+            finish()
     }
+
+
 
 }

@@ -33,4 +33,17 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TitleTextStyle" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/abhaya_libre_bold</item>
+        <item name="android:textColor">@color/primary_dark</item>
+    </style>
+    <style name="normal_text" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/abhaya_libre</item>
+        <item name="android:textColor">@color/black_60</item>
+    </style>
+
+    <style name="icon_style" parent="">
+        <item name="tint">@color/primary_dark</item>
+    </style>
+
 </resources>
