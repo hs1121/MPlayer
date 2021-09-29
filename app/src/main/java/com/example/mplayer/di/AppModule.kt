@@ -1,10 +1,13 @@
 package com.example.mplayer.di
 
+import android.content.ComponentName
 import android.content.Context
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.mplayer.R
+import com.example.mplayer.exoPlayer.MediaSessionConnection
+import com.example.mplayer.exoPlayer.MusicService
 import com.example.mplayer.exoPlayer.MusicSource
 import dagger.Module
 import dagger.Provides
@@ -27,4 +30,16 @@ object AppModule {
             .diskCacheStrategy(DiskCacheStrategy.DATA)
     )
 
+    @Singleton
+    @Provides
+    fun provideMusicSource(
+        @ApplicationContext context: Context
+    )= MusicSource(context)
+
+    @Singleton
+    @Provides
+    fun provideMediaSessionConnection(
+        @ApplicationContext context: Context)= MediaSessionConnection(
+        context,
+        ComponentName(context,MusicService::class.java))
 }

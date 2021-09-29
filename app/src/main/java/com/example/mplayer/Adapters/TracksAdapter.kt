@@ -25,13 +25,14 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 
 class TracksAdapter(private val context: Context,private val glide: RequestManager): RecyclerView.Adapter<TracksAdapter.TracksViewHolder>() {
 
 
-    private var list= mutableListOf<MediaMetadataCompat>()
+    private var list= mutableListOf<MediaBrowserCompat.MediaItem>()
 
 
 
@@ -42,35 +43,38 @@ class TracksAdapter(private val context: Context,private val glide: RequestManag
 
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
         val item = list[position]
-        val binding=holder.binding
+        val binding = holder.binding
+        if (item.isPlayable) {
+            binding.itemTitle.text = item.description.title
+            binding.itemSubtitle.text = item.description.subtitle
+//
+//            glide.load(item.description.iconUri)
+//                .apply(RequestOptions().override(100, 100))
+//                .into(binding.itemImage)
 
-        binding.itemTitle.text=item.description.title
-        binding.itemSubtitle.text=item.description.subtitle
+            binding.root.setOnClickListener {
+                val exoPlayer = SimpleExoPlayer.Builder(context).build().apply {
 
-        glide.load(item.description.iconUri)
-            .apply( RequestOptions().override(100, 100))
-            .into(binding.itemImage)
-
-        binding.root.setOnClickListener{
-            val exoPlayer=SimpleExoPlayer.Builder(context).build().apply {
-
-                setHandleAudioBecomingNoisy(true)
+                    setHandleAudioBecomingNoisy(true)
+                }
+                val mediaItem = item.description.mediaUri?.let { it1 -> MediaItem.fromUri(it1) }
+                if (mediaItem != null) {
+                    exoPlayer.setMediaItem(mediaItem)
+                }
+                exoPlayer.prepare()
+                exoPlayer.play()
             }
-            val mediaItem= item.description.mediaUri?.let { it1 -> MediaItem.fromUri(it1) }
-            if (mediaItem != null) {
-                exoPlayer.setMediaItem(mediaItem)
-            }
-            exoPlayer.prepare()
-            exoPlayer.play()
+
+        }else{
+            binding.itemTitle.text = "browsable"
         }
-
     }
 
     override fun getItemCount(): Int {
      return list.size
     }
 
-    fun setList(list:MutableList<MediaMetadataCompat>){
+    fun setList(list:MutableList<MediaBrowserCompat.MediaItem>){
 
         val diffUtil=ListDiffUtil(this.list,list)
         val diffUtilResult=DiffUtil.calculateDiff(diffUtil)

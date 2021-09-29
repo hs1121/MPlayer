@@ -22,9 +22,10 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@ActivityRetainedScoped
-class MusicSource @Inject constructor(@ApplicationContext private val context: Context) {
+class MusicSource (
+    private val context: Context ) {
 
      var musicItems: MutableList<MediaMetadataCompat> = mutableListOf()
     private val onReadyListeners= mutableListOf<(Boolean)-> Unit>()
@@ -86,7 +87,7 @@ class MusicSource @Inject constructor(@ApplicationContext private val context: C
 
                     val pathList=ArrayList<String>()
                     pathList.add("/storage/emulated/0/MIUI/sound_recorder/call_rec")
-                    //TODO: make it user selectable folders to stop getting media
+                    //TODO: make it user selectable folders to stop getting media from that folder
                     if (!path?.contains(pathList[0])!!) {
                         musicItems.add(mediaItem)
                     }
