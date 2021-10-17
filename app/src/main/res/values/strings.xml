@@ -5,4 +5,8 @@
 
     <string name="CHANNEL_NAME">Player Notification Channel</string>
     <string name="CHANNEL_DESCRIPTION">Player playback notification</string>
+
+    <string name="tracks">Tracks</string>
+    <string name="albums">Albums</string>
+    <string name="playlists">Playlists</string>
 </resources>

@@ -11,4 +11,5 @@ class App : Application() {
     companion object {
         val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     }
+
 }

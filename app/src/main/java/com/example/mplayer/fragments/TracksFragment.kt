@@ -1,5 +1,6 @@
 package com.example.mplayer.fragments
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
 import com.example.mplayer.Adapters.TracksAdapter
 import com.example.mplayer.MainActivity
+import com.example.mplayer.PlayerActivity
 import com.example.mplayer.R
 
 import com.example.mplayer.viewModels.MainViewModel
@@ -37,21 +39,18 @@ class TracksFragment : Fragment() {
     var list:MutableList<SongEntity> = mutableListOf()
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d("tracks","OnCreate")
-        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-        mainViewModel.fetchMedia()
-    }
-
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        mainViewModel.fetchMedia()
         binding = FragmentTracksBinding.inflate(layoutInflater)
-
-        adapter = TracksAdapter(requireContext(), glide)
+        adapter = TracksAdapter(requireContext(), glide){ clickedItem->
+            mainViewModel.playMedia(clickedItem,true)
+            startActivity(Intent(requireContext().applicationContext,PlayerActivity::class.java))
+        }
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
         mainViewModel.songList.observe(viewLifecycleOwner, {
@@ -61,10 +60,7 @@ class TracksFragment : Fragment() {
         return binding.root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Toast.makeText(activity, "destroyed", Toast.LENGTH_SHORT).show()
-    }
+
 
 
 
