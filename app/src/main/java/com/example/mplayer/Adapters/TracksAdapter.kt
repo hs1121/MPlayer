@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
-import androidx.navigation.NavDeepLinkRequest.Builder.fromUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -29,12 +28,13 @@ import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 
-class TracksAdapter(private val context: Context,private val glide: RequestManager): RecyclerView.Adapter<TracksAdapter.TracksViewHolder>() {
+class TracksAdapter(
+    private val context: Context,
+    private val glide: RequestManager,
+     val itemClickListener:(MediaBrowserCompat.MediaItem)->Unit ): RecyclerView.Adapter<TracksAdapter.TracksViewHolder>() {
 
 
     private var list= mutableListOf<MediaBrowserCompat.MediaItem>()
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
         val binding: MusicItemListLayoutBinding = MusicItemListLayoutBinding.inflate(LayoutInflater.from(context))
@@ -44,25 +44,18 @@ class TracksAdapter(private val context: Context,private val glide: RequestManag
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
         val item = list[position]
         val binding = holder.binding
+        if (list.lastIndex==position)
+            binding.endLine.visibility=View.INVISIBLE
         if (item.isPlayable) {
             binding.itemTitle.text = item.description.title
             binding.itemSubtitle.text = item.description.subtitle
-//
-//            glide.load(item.description.iconUri)
-//                .apply(RequestOptions().override(100, 100))
-//                .into(binding.itemImage)
+
+            glide.load(item.description.iconUri)
+                .apply(RequestOptions().override(100, 100))
+                .into(binding.itemImage)
 
             binding.root.setOnClickListener {
-                val exoPlayer = SimpleExoPlayer.Builder(context).build().apply {
-
-                    setHandleAudioBecomingNoisy(true)
-                }
-                val mediaItem = item.description.mediaUri?.let { it1 -> MediaItem.fromUri(it1) }
-                if (mediaItem != null) {
-                    exoPlayer.setMediaItem(mediaItem)
-                }
-                exoPlayer.prepare()
-                exoPlayer.play()
+                itemClickListener(item)
             }
 
         }else{
@@ -82,9 +75,5 @@ class TracksAdapter(private val context: Context,private val glide: RequestManag
         diffUtilResult.dispatchUpdatesTo(this)
     }
 
-    inner class TracksViewHolder( val binding:MusicItemListLayoutBinding): RecyclerView.ViewHolder(binding.root){
-        init {
-            binding.itemMove.visibility= View.GONE
-        }
-    }
+    inner class TracksViewHolder( val binding:MusicItemListLayoutBinding): RecyclerView.ViewHolder(binding.root)
 }

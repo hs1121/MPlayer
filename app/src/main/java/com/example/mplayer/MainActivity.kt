@@ -1,69 +1,171 @@
 package com.example.mplayer
 
-import android.content.pm.PackageManager
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.MenuItem
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
-import com.example.mplayer.Constants.PERMISSION_READ_INTERNAL_STORAGE
-import com.example.mplayer.Utility.FragmentTransection
-import com.example.mplayer.viewModels.MainViewModel
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.mplayer.databinding.ActivityMainBinding
+import com.example.mplayer.exoPlayer.MusicSource
 import com.example.mplayer.fragments.AlbumFragment
 import com.example.mplayer.fragments.PlaylistFragment
 import com.example.mplayer.fragments.TracksFragment
+import com.example.mplayer.viewModels.MainViewModel
+import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import java.lang.Exception
+import javax.inject.Inject
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var navController: NavController
+    private lateinit var currentState: TabState
+    private lateinit var tracksFragment: TracksFragment
+    private lateinit var playlistFragment: PlaylistFragment
+    private lateinit var albumFragment: AlbumFragment
+    private var mainViewModel: MainViewModel?=null
 
+
+
+
+    fun getViewModel()= if (mainViewModel==null) ViewModelProvider(this)
+        .get(MainViewModel::class.java).also { mainViewModel=it }
+    else mainViewModel
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        navController=findNavController(R.id.nav_host_container)
+
+            window.statusBarColor = getColor(R.color.background_color)
+            binding = ActivityMainBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+            val fromSplashScreen=intent.getBooleanExtra(Constants.FROM_SPLASH_SCREEN,false)
 
 
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.playlist_fragment,
-                R.id.tracks_fragment,
-                R.id.album_fragment
-            )
-        )
-
-        binding.bottomNavigation.setupWithNavController(navController)
-        binding.toolbarLayout.setupWithNavController(binding.toolbar,navController,appBarConfiguration)
+            tracksFragment = TracksFragment()
+            playlistFragment = PlaylistFragment()
+            albumFragment = AlbumFragment()
 
 
-        Log.d("this","that")
+            binding.bottomNavigation.setOnItemSelectedListener(OnNavigationItemSelectListener())
+            binding.bottomNavigation.menu.findItem(R.id.tracks_fragment).isChecked = true
+            currentState = TabState.TRACKS
+            binding.toolbarLayout.title = getString(R.string.tracks)
 
-
-        binding.bottomNavigation.setOnNavigationItemSelectedListener {
-            if (it.itemId == R.id.tracks_fragment) {
-                navController.popBackStack(R.id.tracks_fragment, false)
-                true
+            if (savedInstanceState!=null) {
+                val count = supportFragmentManager.backStackEntryCount
+                repeat(count) {
+                    supportFragmentManager.popBackStack()
+                }
             }
-            else
-                NavigationUI.onNavDestinationSelected(it , navController)
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.nav_host_container, albumFragment)
+                    .add(R.id.nav_host_container, playlistFragment)
+                    .add(R.id.nav_host_container, tracksFragment)
+                    .commit()
+
+
+            setTabStateFragment(TabState.TRACKS).commit()
         }
 
+    private fun setTabStateFragment(state: TabState): FragmentTransaction {
+        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        val transaction = supportFragmentManager.beginTransaction()
+        //  transaction.setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
+        when (state) {
+            TabState.PLAYLISTS -> {
+                try {
+                    playlistFragment.getBinding().root.visibility = View.VISIBLE
+                    tracksFragment.getBinding().root.visibility = View.GONE
+                    albumFragment.getBinding().root.visibility = View.GONE
+                } catch (e: Exception) {
+                }
+
+                currentState = TabState.PLAYLISTS
+                binding.toolbarLayout.title = getString(R.string.playlists)
+            }
+            TabState.TRACKS -> {
+                try {
+                    tracksFragment.getBinding().root.visibility = View.VISIBLE
+                    playlistFragment.getBinding().root.visibility = View.GONE
+                    albumFragment.getBinding().root.visibility = View.GONE
+                } catch (e: Exception) {
+                }
+                currentState = TabState.TRACKS
+                binding.toolbarLayout.title = getString(R.string.tracks)
+            }
+            TabState.ALBUMS -> {
+                try {
+                    albumFragment.getBinding().root.visibility = View.VISIBLE
+                    playlistFragment.getBinding().root.visibility = View.GONE
+                    tracksFragment.getBinding().root.visibility = View.GONE
+                } catch (e: Exception) {
+                }
+                currentState = TabState.ALBUMS
+                binding.toolbarLayout.title = getString(R.string.albums)
+            }
+        }
+        return transaction
     }
 
-    override fun onSupportNavigateUp(): Boolean { // use ?
-        return navController.navigateUp() || return super.onSupportNavigateUp()
+    private fun transact(
+        transaction: FragmentTransaction,
+        fragmentVisible: Fragment,
+        fragment2: Fragment,
+        fragment3: Fragment
+    ) {
+        if (!fragmentVisible.isResumed)
+            fragmentVisible.onResume()
+        if (fragment2.isResumed)
+            fragment2.onPause()
+        if (fragment3.isResumed)
+            fragment3.onPause()
     }
+
+
+    private inner class OnNavigationItemSelectListener : NavigationBarView.OnItemSelectedListener {
+        override fun onNavigationItemSelected(item: MenuItem): Boolean {
+            return when (item.itemId) {
+                R.id.playlist_fragment -> {
+                    setTabStateFragment(TabState.PLAYLISTS).commit()
+                    true
+                }
+                R.id.tracks_fragment -> {
+                    setTabStateFragment(TabState.TRACKS).commit()
+                    true
+                }
+                R.id.album_fragment -> {
+                    setTabStateFragment(TabState.ALBUMS).commit()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    internal enum class TabState {
+        PLAYLISTS,
+        TRACKS,
+        ALBUMS,
+    }
+
+    override fun onBackPressed() {
+        if (currentState != TabState.TRACKS) {
+            binding.bottomNavigation.menu.findItem(R.id.tracks_fragment).isChecked = true
+            setTabStateFragment(TabState.TRACKS).commit()
+        } else
+            super.onBackPressed()
+    }
+
 }

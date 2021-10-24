@@ -9,11 +9,13 @@ import kotlinx.coroutines.withContext
 import android.content.ContentUris
 import android.media.browse.MediaBrowser
 import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
 import android.support.v4.media.MediaDescriptionCompat
 
 import android.support.v4.media.MediaMetadataCompat
 import androidx.core.net.toUri
 import com.example.mplayer.Utility.PathFromUri.getPathFromUri
+import com.example.mplayer.Utility.flag
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.MediaSource
@@ -28,6 +30,9 @@ class MusicSource (
     private val context: Context ) {
 
      var musicItems: MutableList<MediaMetadataCompat> = mutableListOf()
+     var albums:HashMap<String,MutableList<MediaMetadataCompat>> = HashMap()
+
+
     private val onReadyListeners= mutableListOf<(Boolean)-> Unit>()
 
     private var state:State= State.CREATED
@@ -70,13 +75,15 @@ class MusicSource (
                     val path=getPathFromUri(context,pathUri)
 
 
-                    val mediaItem=MediaMetadataCompat.Builder()
+                    val mediaItem=MediaMetadataCompat.Builder().apply {
+                        flag= FLAG_PLAYABLE
+                    }
                         .putString(MediaMetadataCompat.METADATA_KEY_ARTIST,artist)
                         .putString(MediaMetadataCompat.METADATA_KEY_TITLE,name)
                         .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE,name)
                         .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI,pathUri.toString())
                         .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,albumArt.toString())
-                        .putString(MediaMetadataCompat.METADATA_KEY_ART_URI,album)
+                        .putString(MediaMetadataCompat.METADATA_KEY_ALBUM,album)
                         .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE,artist)
                         .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION,artist)
                         .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID,path)
@@ -90,12 +97,15 @@ class MusicSource (
                     //TODO: make it user selectable folders to stop getting media from that folder
                     if (!path?.contains(pathList[0])!!) {
                         musicItems.add(mediaItem)
+
+                  //      val item=MediaBrowserCompat.MediaItem(mediaItem.description,FLAG_PLAYABLE)
+                        val listItem=albums[album]?: mutableListOf()
+                        listItem.add(mediaItem)
+                        albums[album]=listItem
                     }
 
                 }
                 state=State.INITIALIZED
-
-
 
 
 
@@ -145,6 +155,9 @@ class MusicSource (
         INITIALIZING,
         INITIALIZED,
         ERROR
+    }
+    inner class BrowserTree{
+
     }
 
 

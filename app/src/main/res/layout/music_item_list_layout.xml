@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
+    app:cardBackgroundColor="@color/background_color"
     app:cardElevation="0dp">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -73,12 +74,14 @@
             android:layout_height="@dimen/icon_size"
             android:layout_marginEnd="16dp"
             android:src="@drawable/ic_sort"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
 <View
+    android:id="@+id/end_line"
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:background="@color/black_60"

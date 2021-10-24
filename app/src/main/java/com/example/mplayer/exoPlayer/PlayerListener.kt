@@ -12,6 +12,7 @@ class PlayerListener(
             musicService.stopForeground(false)
     }
 
+
     override fun onPlayerError(error: ExoPlaybackException) {
         super.onPlayerError(error)
         Toast.makeText(musicService, "Oops Player Not Prepared", Toast.LENGTH_SHORT).show()

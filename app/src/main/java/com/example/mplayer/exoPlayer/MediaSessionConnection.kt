@@ -6,8 +6,11 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.exoplayer2.SimpleExoPlayer
+import javax.inject.Inject
 
 class MediaSessionConnection(
     private val context: Context,
@@ -19,10 +22,12 @@ class MediaSessionConnection(
     private val _playbackState=MutableLiveData<PlaybackStateCompat?>()
      val playbackState=_playbackState as LiveData<PlaybackStateCompat?>
 
-    private val _mediaMetaData=MutableLiveData<MediaMetadataCompat?>()
-     val mediaMetaData=_mediaMetaData as LiveData<MediaMetadataCompat?>
+    private val _nowPlaying=MutableLiveData<MediaMetadataCompat>()
+     val nowPlaying=_nowPlaying as LiveData<MediaMetadataCompat>
 
 
+    val transportControls:MediaControllerCompat.TransportControls
+    get ()= mediaControllerCompat.transportControls
 
     private lateinit var mediaControllerCompat: MediaControllerCompat
     private val connectionCallback=ConnectionCallback()
@@ -31,7 +36,7 @@ class MediaSessionConnection(
         serviceComponent,
         connectionCallback,
         null
-    ).apply { connect() }
+    ).apply { connect()  }
 
 
     fun subscribe(parentId:String, subscriptionCallback: MediaBrowserCompat.SubscriptionCallback){
@@ -52,6 +57,8 @@ class MediaSessionConnection(
                 registerCallback(ControllerCallback())
             }
         //    MediaControllerCompat.setMediaController(context as Activity,mediaControllerCompat)
+
+
         }
 
         override fun onConnectionSuspended() {
@@ -73,12 +80,13 @@ class MediaSessionConnection(
 
         override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
             super.onMetadataChanged(metadata)
-            _mediaMetaData.postValue(metadata?:NOTHING_PLAYING)
+            _nowPlaying.postValue(metadata?:NOTHING_PLAYING)
         }
 
         override fun onSessionDestroyed() {
             super.onSessionDestroyed()
             connectionCallback.onConnectionSuspended()
+
         }
     }
 

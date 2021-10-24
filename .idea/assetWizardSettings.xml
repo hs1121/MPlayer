@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/more_vert/baseline_more_vert_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/keyboard_arrow_down/baseline_keyboard_arrow_down_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,8 +28,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_more" />
-                            <entry key="sourceFile" value="C:\Users\hs112\Desktop\tracks.svg" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="ic_down" />
+                            <entry key="sourceFile" value="C:\Users\hs112\Desktop\app icons\no_repeat.svg" />
                           </map>
                         </option>
                       </PersistentState>
