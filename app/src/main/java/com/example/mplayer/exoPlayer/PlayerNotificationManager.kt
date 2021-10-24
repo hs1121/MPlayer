@@ -16,6 +16,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.mplayer.Constants.CHANNEL_ID
 import com.example.mplayer.Constants.NOTIFICATION_ID
 import com.example.mplayer.R
+import com.google.android.exoplayer2.DefaultControlDispatcher
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 
@@ -51,7 +52,7 @@ class PlayerNotificationManager(
         ).apply {
             musicService.sessionToken?.let { setMediaSessionToken(it) }
             setSmallIcon(R.drawable.ic_full_logo)
-
+            setControlDispatcher(DefaultControlDispatcher(0, 0))
         }
     }
 

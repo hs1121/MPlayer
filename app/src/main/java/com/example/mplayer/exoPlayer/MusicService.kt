@@ -1,23 +1,17 @@
 package com.example.mplayer.exoPlayer
 
 import android.app.PendingIntent
-import android.app.TaskStackBuilder
 import android.content.Intent
-import android.media.browse.MediaBrowser
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
-import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
-import android.support.v4.media.session.PlaybackStateCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.media.MediaBrowserServiceCompat
 import com.example.mplayer.Constants.MY_MEDIA_ROOT_ID
-import com.example.mplayer.Constants.ROOT_PACKAGE
+import com.example.mplayer.Constants.TRACKS_ROOT
 import com.example.mplayer.MainActivity
 import com.example.mplayer.PlayerActivity
 import com.google.android.exoplayer2.Player
@@ -46,6 +40,8 @@ class MusicService: MediaBrowserServiceCompat() {
     companion object{
         private val _playerInstance = MutableLiveData<SimpleExoPlayer?>()
         val playerInstance:LiveData<SimpleExoPlayer?> = _playerInstance
+
+        var playerList:MutableList<MediaBrowserCompat.MediaItem>?=null
     }
 
     @Inject
@@ -132,9 +128,7 @@ class MusicService: MediaBrowserServiceCompat() {
         val resultsSent = musicSource.whenReady { successfullyInitialized ->
             if (successfullyInitialized) {
                 val children: MutableList<MediaBrowserCompat.MediaItem> = when(parentId) {
-                    ROOT_PACKAGE-> musicSource.musicItems.map { item ->
-                        MediaBrowserCompat.MediaItem(item.description, FLAG_PLAYABLE)
-                    } as MutableList<MediaBrowserCompat.MediaItem>
+                    TRACKS_ROOT-> musicSource.asMediaItem()
                     else -> emptyList<MediaBrowserCompat.MediaItem>() as MutableList<MediaBrowserCompat.MediaItem>
                 }
                             result.sendResult(children)

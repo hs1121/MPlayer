@@ -36,8 +36,6 @@ class TracksAdapter(
 
     private var list= mutableListOf<MediaBrowserCompat.MediaItem>()
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
         val binding: MusicItemListLayoutBinding = MusicItemListLayoutBinding.inflate(LayoutInflater.from(context))
         return TracksViewHolder(binding)
@@ -58,16 +56,6 @@ class TracksAdapter(
 
             binding.root.setOnClickListener {
                 itemClickListener(item)
-//                val exoPlayer = SimpleExoPlayer.Builder(context).build().apply {
-//
-//                    setHandleAudioBecomingNoisy(true)
-//                }
-//                val mediaItem = item.description.mediaUri?.let { it1 -> MediaItem.fromUri(it1) }
-//                if (mediaItem != null) {
-//                    exoPlayer.setMediaItem(mediaItem)
-//                }
-//                exoPlayer.prepare()
-//                exoPlayer.play()
             }
 
         }else{
@@ -87,9 +75,5 @@ class TracksAdapter(
         diffUtilResult.dispatchUpdatesTo(this)
     }
 
-    inner class TracksViewHolder( val binding:MusicItemListLayoutBinding): RecyclerView.ViewHolder(binding.root){
-        init {
-            binding.itemMove.visibility= View.GONE
-        }
-    }
+    inner class TracksViewHolder( val binding:MusicItemListLayoutBinding): RecyclerView.ViewHolder(binding.root)
 }
