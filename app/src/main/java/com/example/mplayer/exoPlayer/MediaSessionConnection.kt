@@ -9,6 +9,7 @@ import android.support.v4.media.session.PlaybackStateCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.media.MediaBrowserServiceCompat
 import com.google.android.exoplayer2.SimpleExoPlayer
 import javax.inject.Inject
 
@@ -36,7 +37,7 @@ class MediaSessionConnection(
         serviceComponent,
         connectionCallback,
         null
-    ).apply { connect()  }
+    ).apply { connect() }
 
 
     fun subscribe(parentId:String, subscriptionCallback: MediaBrowserCompat.SubscriptionCallback){
@@ -102,4 +103,7 @@ class MediaSessionConnection(
         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, 0)
         .build()
 
+    interface OnMusicItemSelected{
+
+    }
 }

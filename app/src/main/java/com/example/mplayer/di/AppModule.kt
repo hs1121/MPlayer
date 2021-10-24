@@ -6,6 +6,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.mplayer.R
+import com.example.mplayer.Utility.BrowsingTree
 import com.example.mplayer.exoPlayer.MediaSessionConnection
 import com.example.mplayer.exoPlayer.MusicService
 import com.example.mplayer.exoPlayer.MusicSource
@@ -35,6 +36,10 @@ object AppModule {
     fun provideMusicSource(
         @ApplicationContext context: Context
     )= MusicSource(context)
+
+    @Singleton
+    @Provides
+    fun provideBrowsingTree(musicSource: MusicSource)=BrowsingTree(musicSource)
 
     @Singleton
     @Provides

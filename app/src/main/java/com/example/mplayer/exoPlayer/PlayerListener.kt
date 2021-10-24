@@ -1,8 +1,12 @@
 package com.example.mplayer.exoPlayer
 
+import android.util.Log
 import android.widget.Toast
 import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 
 class PlayerListener(
     private val musicService: MusicService ):Player.EventListener {
@@ -11,6 +15,7 @@ class PlayerListener(
         if(playbackState==Player.STATE_READY&& !playWhenReady)
             musicService.stopForeground(false)
     }
+
 
 
     override fun onPlayerError(error: ExoPlaybackException) {

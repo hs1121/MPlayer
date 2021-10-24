@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.lifecycle.lifecycleScope
 import com.example.mplayer.Constants.FROM_SPLASH_SCREEN
+import com.example.mplayer.Utility.BrowsingTree
 import com.example.mplayer.Utility.Util
 import com.example.mplayer.exoPlayer.MusicSource
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,7 +31,7 @@ class SplashScreen : AppCompatActivity() {
     }
 
     @Inject
-    lateinit var musicSource: MusicSource
+    lateinit var musicSource: BrowsingTree
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
@@ -51,7 +52,7 @@ class SplashScreen : AppCompatActivity() {
 
     private fun startActivity() {
         lifecycleScope.launch {
-            musicSource.getSongs()
+            musicSource.getMedia()
             var intent = Intent(this@SplashScreen, MainActivity::class.java)
             intent.putExtra(FROM_SPLASH_SCREEN,true)
             startActivity(intent)

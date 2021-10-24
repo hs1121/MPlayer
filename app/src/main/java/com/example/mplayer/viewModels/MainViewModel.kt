@@ -1,10 +1,13 @@
 package com.example.mplayer.viewModels
 
 import android.content.ContentValues.TAG
+import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.mplayer.Constants
 import com.example.mplayer.Constants.TRACKS_ROOT
+import com.example.mplayer.Utility.from
 import com.example.mplayer.Utility.isPlayEnabled
 import com.example.mplayer.Utility.isPlaying
 import com.example.mplayer.Utility.isPrepared
@@ -51,7 +54,7 @@ class MainViewModel @Inject constructor(
 
             })
         musicSource.whenReady {
-            _albumList.postValue(musicSource.albums)
+     //       _albumList.postValue(musicSource.albums)
         }
 
     }
@@ -80,7 +83,9 @@ class MainViewModel @Inject constructor(
             }
         }
         else
-            transportControls.playFromMediaId(mediaItem.mediaId,null)
+            transportControls.playFromMediaId(
+                mediaItem.mediaId,
+                Bundle().apply { putString(Constants.METADATA_KEY_FROM, mediaItem.from) })
     }
 
 

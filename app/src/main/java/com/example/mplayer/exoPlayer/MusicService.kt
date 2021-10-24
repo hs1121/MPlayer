@@ -14,6 +14,7 @@ import com.example.mplayer.Constants.MY_MEDIA_ROOT_ID
 import com.example.mplayer.Constants.TRACKS_ROOT
 import com.example.mplayer.MainActivity
 import com.example.mplayer.PlayerActivity
+import com.example.mplayer.Utility.BrowsingTree
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
@@ -47,7 +48,8 @@ class MusicService: MediaBrowserServiceCompat() {
     @Inject
      lateinit var exoPlayer: SimpleExoPlayer
      @Inject
-     lateinit var musicSource: MusicSource
+     lateinit var browsingTree: BrowsingTree
+
      @Inject
      lateinit var dataSourceFactory: DefaultDataSourceFactory
      lateinit var mediaSession : MediaSessionCompat
@@ -75,12 +77,12 @@ class MusicService: MediaBrowserServiceCompat() {
             isActive=true
         }
         sessionToken=mediaSession.sessionToken
-        val playbackPreparer=PlayerPlayBackPreparer(musicSource){
+        val playbackPreparer=PlayerPlayBackPreparer(browsingTree){
             currentlyPlayingSong=it
             mediaSession.setMetadata(it)
 
             preparePlayer(
-                musicSource.musicItems,
+                browsingTree.mediaListByItem(it),
                 it,
                 true
             )
@@ -106,7 +108,7 @@ class MusicService: MediaBrowserServiceCompat() {
     playNow:Boolean
     ){
         val currentIndex= if (currentlyPlayingSong==null) 0 else songs.indexOf(currentSong)
-        exoPlayer.setMediaSource(musicSource.asMusicSource(dataSourceFactory))
+        exoPlayer.setMediaSource(browsingTree.asMusicSource(dataSourceFactory, TRACKS_ROOT))
         exoPlayer.prepare()
         exoPlayer.seekTo(currentIndex,0L)
         exoPlayer.playWhenReady=playNow
@@ -125,13 +127,10 @@ class MusicService: MediaBrowserServiceCompat() {
         parentId: String,
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
-        val resultsSent = musicSource.whenReady { successfullyInitialized ->
+        val resultsSent = browsingTree.whenReady { successfullyInitialized ->
             if (successfullyInitialized) {
-                val children: MutableList<MediaBrowserCompat.MediaItem> = when(parentId) {
-                    TRACKS_ROOT-> musicSource.asMediaItem()
-                    else -> emptyList<MediaBrowserCompat.MediaItem>() as MutableList<MediaBrowserCompat.MediaItem>
-                }
-                            result.sendResult(children)
+                val children: MutableList<MediaBrowserCompat.MediaItem> = browsingTree.asMediaItem(parentId)?: mutableListOf()
+                result.sendResult(children)
                 }
              else {
                 result.sendResult(null)
@@ -143,7 +142,7 @@ class MusicService: MediaBrowserServiceCompat() {
     }
     private inner class PlayerQueueNavigator(mediaSessionCompat: MediaSessionCompat):TimelineQueueNavigator(mediaSessionCompat){
         override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
-            return musicSource.musicItems[windowIndex].description
+            return browsingTree.musicItem()?.get(windowIndex)?.description!!
         }
 
     }

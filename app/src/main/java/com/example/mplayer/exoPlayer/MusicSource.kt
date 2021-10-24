@@ -14,8 +14,10 @@ import android.support.v4.media.MediaDescriptionCompat
 
 import android.support.v4.media.MediaMetadataCompat
 import androidx.core.net.toUri
+import com.example.mplayer.Constants
 import com.example.mplayer.Utility.PathFromUri.getPathFromUri
 import com.example.mplayer.Utility.flag
+import com.example.mplayer.Utility.from
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.MediaSource
@@ -48,6 +50,10 @@ class MusicSource (
                 field=value
             }
         }
+
+    fun setStateInitialized(){
+        state=State.INITIALIZED
+    }
 
     suspend fun  getSongs()= withContext(Dispatchers.IO){
         val uri=MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -90,23 +96,25 @@ class MusicSource (
                         .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI,albumArt.toString())
                         .putString(MediaMetadataCompat.METADATA_KEY_DATE,dateAdded.toString())
                         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,duration)
-                        .build()
+
+
 
                     val pathList=ArrayList<String>()
                     pathList.add("/storage/emulated/0/MIUI/sound_recorder/call_rec")
                     //TODO: make it user selectable folders to stop getting media from that folder
                     if (!path?.contains(pathList[0])!!) {
-                        musicItems.add(mediaItem)
+                        val trackItem=mediaItem
+                        trackItem.from=Constants.TRACKS_ROOT
+                        musicItems.add(trackItem.build())
 
-                  //      val item=MediaBrowserCompat.MediaItem(mediaItem.description,FLAG_PLAYABLE)
+                        val albumItem=mediaItem
+                        albumItem.from=album
                         val listItem=albums[album]?: mutableListOf()
-                        listItem.add(mediaItem)
+                        listItem.add(albumItem.build())
                         albums[album]=listItem
                     }
 
                 }
-                state=State.INITIALIZED
-
 
 
             }
@@ -156,9 +164,7 @@ class MusicSource (
         INITIALIZED,
         ERROR
     }
-    inner class BrowserTree{
 
-    }
 
 
 
