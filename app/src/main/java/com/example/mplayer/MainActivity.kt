@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.mplayer.databinding.ActivityMainBinding
 import com.example.mplayer.exoPlayer.MusicSource
 import com.example.mplayer.fragments.AlbumFragment
+import com.example.mplayer.fragments.AlbumListFragment
 import com.example.mplayer.fragments.PlaylistFragment
 import com.example.mplayer.fragments.TracksFragment
 import com.example.mplayer.viewModels.MainViewModel
@@ -32,14 +34,28 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tracksFragment: TracksFragment
     private lateinit var playlistFragment: PlaylistFragment
     private lateinit var albumFragment: AlbumFragment
+    private  var extendedFragment: AlbumListFragment?=null
     private var mainViewModel: MainViewModel?=null
 
 
 
 
     fun getViewModel()= if (mainViewModel==null) ViewModelProvider(this)
-        .get(MainViewModel::class.java).also { mainViewModel=it }
+        .get(MainViewModel::class.java).also { mainViewModel=it ; setViewModelListeners()}
     else mainViewModel
+
+    private fun setViewModelListeners() {
+        mainViewModel?.songList?.observe(this){ list->
+            if (list!=null){
+//                val transaction = supportFragmentManager.beginTransaction()
+//                extendedFragment=AlbumListFragment(list, mainViewModel!!)
+//                transaction.add(R.id.nav_host_container,extendedFragment!!).commit()
+//                setTabStateFragment(TabState.ALBUM_EXTENDED).commit()
+
+
+            }
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,23 +68,26 @@ class MainActivity : AppCompatActivity() {
 
             val fromSplashScreen=intent.getBooleanExtra(Constants.FROM_SPLASH_SCREEN,false)
 
+            if (fromSplashScreen&&savedInstanceState==null){
 
-            tracksFragment = TracksFragment()
-            playlistFragment = PlaylistFragment()
-            albumFragment = AlbumFragment()
+            }else {
+
+                tracksFragment = TracksFragment()
+                playlistFragment = PlaylistFragment()
+                albumFragment = AlbumFragment()
 
 
-            binding.bottomNavigation.setOnItemSelectedListener(OnNavigationItemSelectListener())
-            binding.bottomNavigation.menu.findItem(R.id.tracks_fragment).isChecked = true
-            currentState = TabState.TRACKS
-            binding.toolbarLayout.title = getString(R.string.tracks)
+                binding.bottomNavigation.setOnItemSelectedListener(OnNavigationItemSelectListener())
+                binding.bottomNavigation.menu.findItem(R.id.tracks_fragment).isChecked = true
+                currentState = TabState.TRACKS
+                binding.toolbarLayout.title = getString(R.string.tracks)
 
-            if (savedInstanceState!=null) {
-                val count = supportFragmentManager.backStackEntryCount
-                repeat(count) {
-                    supportFragmentManager.popBackStack()
+                if (savedInstanceState != null) {
+                    val count = supportFragmentManager.backStackEntryCount
+                    repeat(count) {
+                        supportFragmentManager.popBackStack()
+                    }
                 }
-            }
                 supportFragmentManager.beginTransaction()
                     .add(R.id.nav_host_container, albumFragment)
                     .add(R.id.nav_host_container, playlistFragment)
@@ -76,7 +95,11 @@ class MainActivity : AppCompatActivity() {
                     .commit()
 
 
-            setTabStateFragment(TabState.TRACKS).commit()
+                setTabStateFragment(TabState.TRACKS).commit()
+
+            }
+
+
         }
 
     private fun setTabStateFragment(state: TabState): FragmentTransaction {
@@ -89,6 +112,7 @@ class MainActivity : AppCompatActivity() {
                     playlistFragment.getBinding().root.visibility = View.VISIBLE
                     tracksFragment.getBinding().root.visibility = View.GONE
                     albumFragment.getBinding().root.visibility = View.GONE
+                    extendedFragment?.let { it.getBinding().root.visibility = View.GONE }
                 } catch (e: Exception) {
                 }
 
@@ -100,6 +124,7 @@ class MainActivity : AppCompatActivity() {
                     tracksFragment.getBinding().root.visibility = View.VISIBLE
                     playlistFragment.getBinding().root.visibility = View.GONE
                     albumFragment.getBinding().root.visibility = View.GONE
+                    extendedFragment?.let { it.getBinding().root.visibility = View.GONE }
                 } catch (e: Exception) {
                 }
                 currentState = TabState.TRACKS
@@ -110,10 +135,21 @@ class MainActivity : AppCompatActivity() {
                     albumFragment.getBinding().root.visibility = View.VISIBLE
                     playlistFragment.getBinding().root.visibility = View.GONE
                     tracksFragment.getBinding().root.visibility = View.GONE
+                    extendedFragment?.let { it.getBinding().root.visibility = View.GONE }
                 } catch (e: Exception) {
                 }
                 currentState = TabState.ALBUMS
                 binding.toolbarLayout.title = getString(R.string.albums)
+            }
+            else->{
+                try {
+                    albumFragment.getBinding().root.visibility = View.GONE
+                    playlistFragment.getBinding().root.visibility = View.GONE
+                    tracksFragment.getBinding().root.visibility = View.GONE
+                    extendedFragment?.let { it.getBinding().root.visibility = View.VISIBLE }
+                } catch (e: Exception) {
+                }
+                currentState=TabState.ALBUM_EXTENDED
             }
         }
         return transaction
@@ -158,10 +194,15 @@ class MainActivity : AppCompatActivity() {
         PLAYLISTS,
         TRACKS,
         ALBUMS,
+        ALBUM_EXTENDED,
+        PLAYLIST_EXTENDED
     }
 
     override fun onBackPressed() {
-        if (currentState != TabState.TRACKS) {
+        if (currentState==TabState.ALBUM_EXTENDED){
+            setTabStateFragment(TabState.ALBUMS).commit()
+        }
+        else if (currentState != TabState.TRACKS) {
             binding.bottomNavigation.menu.findItem(R.id.tracks_fragment).isChecked = true
             setTabStateFragment(TabState.TRACKS).commit()
         } else

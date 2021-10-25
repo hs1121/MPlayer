@@ -11,20 +11,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
 import com.example.mplayer.Adapters.AlbumAdapter
 import com.example.mplayer.Adapters.TracksAdapter
+import com.example.mplayer.Constants.ALBUMS_ROOT
 import com.example.mplayer.MainActivity
 import com.example.mplayer.R
 import com.example.mplayer.databinding.FragmentAlbumBinding
 import com.example.mplayer.databinding.FragmentPlaylistBinding
 import com.example.mplayer.databinding.FragmentTracksBinding
 import com.example.mplayer.viewModels.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class AlbumFragment : Fragment() {
 
     @Inject
     lateinit var glide: RequestManager
     private  lateinit var  mainViewModel: MainViewModel
-    lateinit var adapter: AlbumAdapter
+    lateinit var adapter: TracksAdapter
     private lateinit var binding: FragmentAlbumBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,17 +43,17 @@ class AlbumFragment : Fragment() {
         mainViewModel= mainActivity.getViewModel()!!
         binding = FragmentAlbumBinding.inflate(layoutInflater)
 
-        adapter= AlbumAdapter(requireContext()){
-            // todo show items in adapter
+        mainViewModel.getMedia(ALBUMS_ROOT)
+        adapter= TracksAdapter(requireContext(),glide){
+            mainViewModel.itemClicked(it)
         }
 
-        mainViewModel.albumList.observe(viewLifecycleOwner,{ map->
-            val list= mutableListOf<String>()
-            map.forEach{
-                list.add(it.key)
-            }
+        mainViewModel.albumList.observe(viewLifecycleOwner,{ list->
             adapter.setList(list)
         })
+        mainViewModel.songList.observe(viewLifecycleOwner){
+            adapter.setList(it)
+        }
 
 
         binding.albumRecyclerView.layoutManager=LinearLayoutManager(requireContext())

@@ -47,11 +47,12 @@ class AlbumAdapter (
     }
 
     fun setList(list: MutableList<String>) {
-
-        val diffUtil = ListDiffUtil(this.list, list)
-        val diffUtilResult = DiffUtil.calculateDiff(diffUtil)
-        this.list = list
-        diffUtilResult.dispatchUpdatesTo(this)
+this.list=list
+        notifyDataSetChanged()
+//        val diffUtil = ListDiffUtil(this.list, list)
+//        val diffUtilResult = DiffUtil.calculateDiff(diffUtil)
+//        this.list = list
+//        diffUtilResult.dispatchUpdatesTo(this)
     }
 
     inner class AlbumViewHolder(val binding: MusicItemListLayoutBinding) :

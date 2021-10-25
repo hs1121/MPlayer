@@ -82,7 +82,7 @@ class MusicSource (
 
 
                     val mediaItem=MediaMetadataCompat.Builder().apply {
-                        flag= FLAG_PLAYABLE
+                        flag=(MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
                     }
                         .putString(MediaMetadataCompat.METADATA_KEY_ARTIST,artist)
                         .putString(MediaMetadataCompat.METADATA_KEY_TITLE,name)
@@ -96,6 +96,7 @@ class MusicSource (
                         .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI,albumArt.toString())
                         .putString(MediaMetadataCompat.METADATA_KEY_DATE,dateAdded.toString())
                         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,duration)
+
 
 
 

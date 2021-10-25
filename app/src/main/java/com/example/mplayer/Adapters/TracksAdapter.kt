@@ -54,12 +54,19 @@ class TracksAdapter(
                 .apply(RequestOptions().override(100, 100))
                 .into(binding.itemImage)
 
-            binding.root.setOnClickListener {
-                itemClickListener(item)
-            }
+
 
         }else{
-            binding.itemTitle.text = "browsable"
+          binding.itemTitle.text=item.description.title
+            glide.load(item.description.iconUri)
+                .apply(RequestOptions().override(100, 100))
+                .into(binding.itemImage)
+            binding.itemSubtitle.visibility=View.GONE
+            binding.itemMore.visibility=View.GONE
+            binding.itemMove.visibility=View.GONE
+        }
+        binding.root.setOnClickListener {
+            itemClickListener(item)
         }
     }
 

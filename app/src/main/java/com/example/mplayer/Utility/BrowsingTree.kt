@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
+import com.example.mplayer.Constants
 import com.example.mplayer.Constants.ALBUMS_ROOT
 import com.example.mplayer.Constants.TRACKS_ROOT
 import com.example.mplayer.exoPlayer.MusicSource
@@ -26,10 +27,15 @@ class BrowsingTree @Inject constructor(private val musicSource: MusicSource) {
             val albumRoot = browsingList[ALBUMS_ROOT] ?: mutableListOf()
             musicSource.albums.forEach{
                 val album:MediaMetadataCompat =MediaMetadataCompat.Builder().apply {
-                    flag=(MediaBrowserCompat.MediaItem.FLAG_BROWSABLE) }
+                    flag=(MediaBrowserCompat.MediaItem.FLAG_BROWSABLE)
+                    from= ALBUMS_ROOT}
                     .putText(MediaMetadataCompat.METADATA_KEY_ALBUM,it.key)
                     .putText(MediaMetadataCompat.METADATA_KEY_MEDIA_ID,it.key)
-                    .build()
+                    .putText(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
+                        it.value[0].description.iconUri.toString()
+                    ).build()
+
+
                 albumRoot.add(album)
                 browsingList[it.key]=it.value
             }
@@ -70,7 +76,7 @@ class BrowsingTree @Inject constructor(private val musicSource: MusicSource) {
             .setSubtitle(song.description.subtitle)
             desc.from=song.from
 
-        MediaBrowserCompat.MediaItem(desc.build(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
+        MediaBrowserCompat.MediaItem(desc.build(),song.bundle.getLong(Constants.METADATA_KEY_FLAG).toInt())
     }?.toMutableList()
 
     fun musicItem()=browsingList[TRACKS_ROOT]
