@@ -42,6 +42,7 @@ class TracksFragment : Fragment() {
        // mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         val mainActivity: MainActivity = activity as MainActivity
         mainViewModel= mainActivity.getViewModel()!!
+        if (mainViewModel.tracksList.value==null|| mainViewModel.tracksList.value?.isHandled() == false)
         mainViewModel.getMedia(TRACKS_ROOT)
         binding = FragmentTracksBinding.inflate(layoutInflater)
         adapter = TracksAdapter(requireContext(), glide){ clickedItem->
@@ -51,7 +52,7 @@ class TracksFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
         mainViewModel.tracksList.observe(viewLifecycleOwner, {
-            adapter.setList(it)
+            adapter.setList(it.peekContent())
             Log.d("debug","check")
         })
 

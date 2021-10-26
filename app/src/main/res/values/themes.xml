@@ -21,6 +21,10 @@
         <item name="itemTextColor">@color/bottom_nav_color</item>
         <item name="backgroundTint">@color/bottom_nav_background</item>
     </style>
+    <style name="custom_card" parent="Widget.MaterialComponents.CardView">
+        <item name="android:topRightRadius">@dimen/radius_bottom_nav</item>
+        <item name="android:topLeftRadius">@dimen/radius_bottom_nav</item>
+    </style>
 
 
     <style name="TextAppearance.App.CollapsingToolbar.Expanded" parent="TextAppearance.MaterialComponents.Headline5">

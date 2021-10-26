@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
 import com.example.mplayer.Adapters.AlbumAdapter
@@ -42,19 +43,18 @@ class AlbumFragment : Fragment() {
         val mainActivity:MainActivity= activity as MainActivity
         mainViewModel= mainActivity.getViewModel()!!
         binding = FragmentAlbumBinding.inflate(layoutInflater)
-
+        if (mainViewModel.albumList.value==null|| mainViewModel.albumList.value?.isHandled() == false)
         mainViewModel.getMedia(ALBUMS_ROOT)
-        adapter= TracksAdapter(requireContext(),glide){
-            mainViewModel.itemClicked(it)
+        adapter= TracksAdapter(requireContext(),glide){item->
+            val key= item.description.mediaId!!
+            val action=AlbumFragmentDirections.actionToAlbumList(key)
+            findNavController().navigate(action)
+
         }
 
         mainViewModel.albumList.observe(viewLifecycleOwner,{ list->
-            adapter.setList(list)
+            adapter.setList(list.peekContent())
         })
-        mainViewModel.songList.observe(viewLifecycleOwner){
-            adapter.setList(it)
-        }
-
 
         binding.albumRecyclerView.layoutManager=LinearLayoutManager(requireContext())
         binding.albumRecyclerView.adapter=adapter

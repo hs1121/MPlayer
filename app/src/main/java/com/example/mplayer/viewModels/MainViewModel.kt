@@ -20,13 +20,13 @@ class MainViewModel @Inject constructor(
     private val mediaSessionConnection: MediaSessionConnection
 ) : ViewModel() {
 
-    private var _tracksList = MutableLiveData<MutableList<MediaBrowserCompat.MediaItem>>()
-    var tracksList: LiveData<MutableList<MediaBrowserCompat.MediaItem>> = _tracksList
-    private val _albumList = MutableLiveData<MutableList<MediaBrowserCompat.MediaItem>>()
-    val albumList: LiveData<MutableList<MediaBrowserCompat.MediaItem>> = _albumList
+    private var _tracksList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
+    var tracksList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _tracksList
+    private val _albumList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
+    val albumList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _albumList
 
-    private val _songList = MutableLiveData<MutableList<MediaBrowserCompat.MediaItem>>()
-    val songList: LiveData<MutableList<MediaBrowserCompat.MediaItem>> = _songList
+    private var _songList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
+    var songList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _songList
 
 
     companion object {
@@ -49,15 +49,16 @@ class MainViewModel @Inject constructor(
             ) {
                 super.onChildrenLoaded(parentId, children)
                 when (key) {
-                    TRACKS_ROOT -> _tracksList.postValue(children)
-                    ALBUMS_ROOT -> _albumList.postValue(children)
-                    else -> _songList.postValue(children)
+                    TRACKS_ROOT -> _tracksList.postValue(Event(children).also { it.handle() })
+                    ALBUMS_ROOT -> _albumList.postValue(Event(children).also { it.handle() })
+                    else -> _songList.postValue(Event(children).also { it.handle() })
                 }
 
             }
         })
 
     }
+
 
 
     fun playMedia(mediaItem: MediaBrowserCompat.MediaItem, isPauseEnable: Boolean = true) {
@@ -92,6 +93,11 @@ class MainViewModel @Inject constructor(
             getMedia(item.description.mediaId.toString())
 
         }
+    }
+
+    fun resetSongList() {
+        _songList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
+        songList = _songList
     }
 
 
