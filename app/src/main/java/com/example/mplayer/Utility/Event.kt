@@ -7,6 +7,8 @@ class Event<T>(val data:T) {
 
     fun handle(){isHandled=true}
 
+    fun unHandel(){isHandled=false}
+
     fun peekContent()=data
 
 }

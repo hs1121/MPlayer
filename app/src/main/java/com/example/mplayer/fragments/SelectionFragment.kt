@@ -79,6 +79,7 @@ class SelectionFragment : Fragment() {
                 val playlistEntity = PlaylistEntity(name,by,"",iconUri,idList)
 
                 mainViewModel.insertPlaylist(playlistEntity)
+                mainViewModel.resetPlaylist()
                 activity?.onBackPressed().also { return true }
                 true
             }

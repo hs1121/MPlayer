@@ -19,4 +19,7 @@ interface PlaylistDao {
     @Query("SELECT * FROM playlist")
      fun getAll(): Flow<MutableList<PlaylistEntity>?>
 
+    @Query("SELECT * FROM playlist")
+    suspend fun getPlaylists(): MutableList<PlaylistEntity>?
+
 }

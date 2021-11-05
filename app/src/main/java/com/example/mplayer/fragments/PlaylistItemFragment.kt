@@ -26,7 +26,7 @@ class PlaylistItemFragment : Fragment() {
     lateinit var glide:RequestManager
     private lateinit var mainViewModel: MainViewModel
 
-    val args:PlaylistItemFragmentArgs by navArgs()
+    private val args:PlaylistItemFragmentArgs by navArgs()
 
 
 
@@ -43,18 +43,10 @@ class PlaylistItemFragment : Fragment() {
         }
         binding.recyclerView.adapter=mAdapter
 
-        mainViewModel.tracksList.observe(viewLifecycleOwner) { event->
-            val mediaIds=args.mediaIds
-            val list= mutableListOf<MediaBrowserCompat.MediaItem>()
-            mediaIds.forEach { id->
-               val item= event.data.find { id==it.description.mediaId }
-                if (item != null) {
-                    list.add(item)
-                }
-            }
-            mAdapter.setList(list)
+        mainViewModel.getMedia(args.mediaId)
 
-
+        mainViewModel.songList.observe(viewLifecycleOwner){
+            mAdapter.setList(it.data)
         }
 
 

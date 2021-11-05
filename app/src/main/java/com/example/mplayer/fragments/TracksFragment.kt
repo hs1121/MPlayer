@@ -56,10 +56,6 @@ class TracksFragment : Fragment() {
 
         return binding.root
     }
-    fun getBinding()=binding
-
-
-
 
 
 

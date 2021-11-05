@@ -76,16 +76,27 @@ class MainActivity : AppCompatActivity() {
             )
 
             binding.bottomNavigation.setOnItemSelectedListener {
-                if (it.itemId == R.id.tracks_fragment) {
-                    navController.popBackStack(R.id.tracks_fragment, false)
-                    true
+                when (it.itemId) {
+                    R.id.tracks_fragment -> {
+                        navController.popBackStack(R.id.tracks_fragment, false)
+                        true
+                    }
+                    R.id.album_fragment -> {
+                        navController.popBackStack(com.example.mplayer.R.id.album_fragment, false)
+                        true
+                    }
+                    R.id.playlistItemFragment -> {
+                        navController.popBackStack(com.example.mplayer.R.id.playlist_fragment, false)
+                        true
+                    }
+                    else -> NavigationUI.onNavDestinationSelected(it , navController)
                 }
-                else
-                    NavigationUI.onNavDestinationSelected(it , navController)
             }
             binding.bottomNavigation.selectedItemId=R.id.tracks_fragment
 
         }
+
+
 
 
     }

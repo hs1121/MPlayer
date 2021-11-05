@@ -8,11 +8,16 @@ import androidx.fragment.app.DialogFragment
 import com.example.mplayer.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AddPlaylistDialog(
     val onAddClick:(String,String)->Unit
 ) :DialogFragment() {
 
+    @Inject
+    lateinit var nameValidator: NameValidator
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,9 +31,14 @@ class AddPlaylistDialog(
         val addButton=view.findViewById<MaterialButton>(R.id.add_button)
 
         addButton.setOnClickListener {
-            if (nameText.text.toString().isNotEmpty()&& byText.text.toString().isNotEmpty()){
-                onAddClick(nameText.text.toString(),byText.text.toString())
-                dismiss()
+            when (val results = nameValidator.isPlaylistNameValid(nameText.text?.toString())) {
+                is DataResults.Error -> {
+                    nameText.error = results.message
+                }
+                else -> {
+                    onAddClick(results.data.toString(), byText.text.toString())
+                    dismiss()
+                }
             }
         }
         cancelButton.setOnClickListener {
