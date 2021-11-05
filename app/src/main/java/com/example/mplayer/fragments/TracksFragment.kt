@@ -1,6 +1,5 @@
 package com.example.mplayer.fragments
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +10,10 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
+import com.example.mplayer.Adapters.PlaylistAdapter
 import com.example.mplayer.Adapters.TracksAdapter
 import com.example.mplayer.Constants.TRACKS_ROOT
 import com.example.mplayer.MainActivity
-import com.example.mplayer.PlayerActivity
 import com.example.mplayer.viewModels.MainViewModel
 import com.example.mplayer.databinding.FragmentTracksBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,8 +45,7 @@ class TracksFragment : Fragment() {
         mainViewModel.getMedia(TRACKS_ROOT)
         binding = FragmentTracksBinding.inflate(layoutInflater)
         adapter = TracksAdapter(requireContext(), glide){ clickedItem->
-            mainViewModel.playMedia(clickedItem,false)
-            startActivity(Intent(requireContext().applicationContext,PlayerActivity::class.java))
+            mainViewModel.itemClicked(clickedItem,requireContext())
         }
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter

@@ -1,6 +1,8 @@
 package com.example.mplayer.viewModels
 
 import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.util.Log
@@ -8,22 +10,36 @@ import androidx.lifecycle.*
 import com.example.mplayer.Constants
 import com.example.mplayer.Constants.ALBUMS_ROOT
 import com.example.mplayer.Constants.TRACKS_ROOT
+import com.example.mplayer.PlayerActivity
 import com.example.mplayer.Utility.*
+import com.example.mplayer.database.BrowsingTree
+import com.example.mplayer.database.Repository
+import com.example.mplayer.database.entity.PlaylistEntity
 import com.example.mplayer.exoPlayer.MediaSessionConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val browsingTree: BrowsingTree,
+    private val repository: Repository,
     private val mediaSessionConnection: MediaSessionConnection
 ) : ViewModel() {
 
+
+
     private var _tracksList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
     var tracksList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _tracksList
+
     private val _albumList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
     val albumList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _albumList
+
+     private var _playlist = repository.getAllPlaylists().asLiveData() as MutableLiveData
+     val playlist : LiveData<MutableList<PlaylistEntity>?> = _playlist
+
 
     private var _songList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
     var songList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _songList
@@ -37,6 +53,39 @@ class MainViewModel @Inject constructor(
             }
             return viewModelInstance as MainViewModel
         }
+    }
+
+//    fun getPlaylist(){
+//        viewModelScope.launch(Dispatchers.IO) {
+//            val list=repository.playerDatabase.playlistDao().getAll()
+//            _playlist.postValue(list)
+//        }
+//    }
+
+    fun insertPlaylist(playlistEntity: PlaylistEntity){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertPlaylist(playlistEntity)
+        }
+        val list=playlist.value?: mutableListOf()
+        list.add(playlistEntity)
+        _playlist.postValue(list)
+    }
+    fun deletePlaylist(playlistEntity: PlaylistEntity){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deletePlaylist(playlistEntity)
+        }
+        val list=playlist.value?: mutableListOf()
+        list.remove(playlistEntity)
+        _playlist.postValue(list)
+    }
+
+    fun updatePlaylist(playlistEntity: PlaylistEntity){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updatePlaylist(playlistEntity)
+        }
+        val list=playlist.value?: mutableListOf()
+        list[list.indexOf(list.find { it.name==playlistEntity.name })] = playlistEntity
+        _playlist.postValue(list)
     }
 
 
@@ -58,8 +107,6 @@ class MainViewModel @Inject constructor(
         })
 
     }
-
-
 
     fun playMedia(mediaItem: MediaBrowserCompat.MediaItem, isPauseEnable: Boolean = true) {
 
@@ -87,8 +134,11 @@ class MainViewModel @Inject constructor(
                 Bundle().apply { putString(Constants.METADATA_KEY_FROM, mediaItem.from) })
     }
 
-    fun itemClicked(item: MediaBrowserCompat.MediaItem) {
-        if (item.isPlayable) playMedia(item,false)
+    fun itemClicked(item: MediaBrowserCompat.MediaItem,context: Context) {
+        if (item.isPlayable){
+            playMedia(item,false)
+            context.startActivity(Intent(context,PlayerActivity::class.java))
+        }
         else{
             getMedia(item.description.mediaId.toString())
 
@@ -99,6 +149,8 @@ class MainViewModel @Inject constructor(
         _songList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
         songList = _songList
     }
+
+
 
 
 }

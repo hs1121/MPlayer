@@ -50,5 +50,31 @@
     <style name="icon_style" parent="">
         <item name="tint">@color/primary</item>
     </style>
+    
+    <style name="custom_checkbox_style" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_selector</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="custom_input_style" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">@dimen/input_text_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/input_text_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/input_text_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/input_text_radius</item>
+        <item name="strokeColor">@color/primary</item>
+
+    </style>
+
+    <style name="custom_button_accept_style" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/primary</item>
+        <item name="cornerRadius">@dimen/input_text_radius</item>
+    </style>
+    <style name="custom_button_cancel_style" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/background_color</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/primary</item>
+        <item name="cornerRadius">@dimen/input_text_radius</item>
+    </style>
 
 </resources>

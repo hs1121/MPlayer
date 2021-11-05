@@ -37,4 +37,6 @@
     <color name="unplayed_color">@color/primary_light</color>
     <color name="played_color">@color/primary</color>
 
+    <color name="checkbox_color">@color/primary</color>
+
 </resources>

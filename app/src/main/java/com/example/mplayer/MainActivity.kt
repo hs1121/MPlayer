@@ -1,41 +1,26 @@
 package com.example.mplayer
 
-import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.mplayer.databinding.ActivityMainBinding
-import com.example.mplayer.exoPlayer.MusicSource
-import com.example.mplayer.fragments.AlbumFragment
-import com.example.mplayer.fragments.AlbumListFragment
-import com.example.mplayer.fragments.PlaylistFragment
-import com.example.mplayer.fragments.TracksFragment
 import com.example.mplayer.viewModels.MainViewModel
-import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import java.lang.Exception
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
-    private lateinit var binding: ActivityMainBinding
+     lateinit var binding: ActivityMainBinding
     private var mainViewModel: MainViewModel?=null
 
 
@@ -69,9 +54,9 @@ class MainActivity : AppCompatActivity() {
 
         val fromSplashScreen = intent.getBooleanExtra(Constants.FROM_SPLASH_SCREEN, false)
 
-        if (fromSplashScreen && savedInstanceState != null) {
+        if (true ) {
             navController = findNavController(R.id.nav_host_container)
-
+            setSupportActionBar(binding.toolbar)
 
             val appBarConfiguration = AppBarConfiguration(
                 setOf(
@@ -81,6 +66,8 @@ class MainActivity : AppCompatActivity() {
                 )
             )
 
+
+
             binding.bottomNavigation.setupWithNavController(navController)
             binding.toolbarLayout.setupWithNavController(
                 binding.toolbar,
@@ -88,15 +75,43 @@ class MainActivity : AppCompatActivity() {
                 appBarConfiguration
             )
 
-
-            Log.d("this", "that")
-
+            binding.bottomNavigation.setOnItemSelectedListener {
+                if (it.itemId == R.id.tracks_fragment) {
+                    navController.popBackStack(R.id.tracks_fragment, false)
+                    true
+                }
+                else
+                    NavigationUI.onNavDestinationSelected(it , navController)
+            }
+            binding.bottomNavigation.selectedItemId=R.id.tracks_fragment
 
         }
-        // todo: add code to get trackFragment from stack (from older commit in github)
+
+
+    }
+
+    fun setAppBar(id:Int){
+        binding.toolbar.inflateMenu(id)
+
+        binding.toolbar.setOnMenuItemClickListener { item->
+            return@setOnMenuItemClickListener when(item.itemId){
+                 R.id.confirm_button->{
+                                true
+                            }
+                else-> false
+            }
+
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_app_bar_menu,menu)
+        return true
     }
 
     override fun onSupportNavigateUp(): Boolean { // use ?
         return navController.navigateUp() || return super.onSupportNavigateUp()
     }
 }
+
+

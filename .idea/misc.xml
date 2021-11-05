@@ -36,10 +36,21 @@
         <entry key="..\:/Users/hs112/AndroidStudioProjects/MPlayer/app/src/main/res/layout/music_item_list_layout.xml" value="0.264" />
         <entry key="..\:/Users/hs112/AndroidStudioProjects/MPlayer/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/hs112/AndroidStudioProjects/MPlayer/app/src/main/res/menu/main_app_bar_menu.xml" value="0.176" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/drawable/checkbox_selector.xml" value="0.26614583333333336" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/drawable/ic_checked.xml" value="0.26614583333333336" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/drawable/ic_unchecked.xml" value="0.26614583333333336" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/activity_main.xml" value="0.152" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/app_playlist_dialog.xml" value="0.264" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/fragment_album.xml" value="0.12708333333333333" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/fragment_album_list.xml" value="0.12708333333333333" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/fragment_playlist.xml" value="0.2477355072463768" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/fragment_playlist_item.xml" value="0.23007246376811594" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/fragment_selection.xml" value="0.2341485507246377" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/fragment_tracks.xml" value="0.12708333333333333" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/music_item_list_layout.xml" value="0.536" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/menu/main_app_bar_menu.xml" value="0.12708333333333333" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/menu/selection_menu.xml" value="0.25" />
       </map>
     </option>
   </component>

@@ -5,19 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
-import com.example.mplayer.Adapters.AlbumAdapter
+import com.example.mplayer.Adapters.PlaylistAdapter
 import com.example.mplayer.Adapters.TracksAdapter
 import com.example.mplayer.Constants.ALBUMS_ROOT
 import com.example.mplayer.MainActivity
-import com.example.mplayer.R
 import com.example.mplayer.databinding.FragmentAlbumBinding
-import com.example.mplayer.databinding.FragmentPlaylistBinding
-import com.example.mplayer.databinding.FragmentTracksBinding
 import com.example.mplayer.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -45,7 +40,7 @@ class AlbumFragment : Fragment() {
         binding = FragmentAlbumBinding.inflate(layoutInflater)
         if (mainViewModel.albumList.value==null|| mainViewModel.albumList.value?.isHandled() == false)
         mainViewModel.getMedia(ALBUMS_ROOT)
-        adapter= TracksAdapter(requireContext(),glide){item->
+        adapter= TracksAdapter(requireContext(),glide){ item->
             val key= item.description.mediaId!!
             val action=AlbumFragmentDirections.actionToAlbumList(key)
             findNavController().navigate(action)

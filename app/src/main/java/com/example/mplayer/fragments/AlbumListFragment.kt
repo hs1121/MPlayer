@@ -1,25 +1,19 @@
 package com.example.mplayer.fragments
 
 import android.os.Bundle
-import android.support.v4.media.MediaBrowserCompat
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavArgs
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
-import com.example.mplayer.Adapters.AlbumAdapter
+import com.example.mplayer.Adapters.PlaylistAdapter
 import com.example.mplayer.Adapters.TracksAdapter
 import com.example.mplayer.MainActivity
-import com.example.mplayer.R
 import com.example.mplayer.databinding.FragmentAlbumListBinding
 import com.example.mplayer.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -49,7 +43,7 @@ class AlbumListFragment : Fragment() {
         }
         binding.recyclerView.layoutManager=LinearLayoutManager(requireContext())
         adapter= TracksAdapter(requireContext(),glide){
-                mainViewModel.itemClicked(it)
+                mainViewModel.itemClicked(it,requireContext())
         }
         binding.recyclerView.adapter=adapter
         mainViewModel.songList.observe(viewLifecycleOwner){
