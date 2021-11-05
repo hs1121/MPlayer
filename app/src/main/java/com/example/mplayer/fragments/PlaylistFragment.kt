@@ -30,7 +30,6 @@ class PlaylistFragment : Fragment() {
 
     private  lateinit var  mainViewModel: MainViewModel
     private lateinit var binding: FragmentPlaylistBinding
-    private  lateinit var playlist : MutableList<PlaylistEntity>
     private lateinit var mAdapter: TracksAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +38,7 @@ class PlaylistFragment : Fragment() {
         val mainActivity: MainActivity = activity as MainActivity
         mainViewModel= mainActivity.getViewModel()!!
         binding = FragmentPlaylistBinding.inflate(layoutInflater)
-        binding.recyclerView.layoutManager=LinearLayoutManager(requireContext())
+
         if (mainViewModel.playlist.value==null|| mainViewModel.playlist.value?.isHandled() == false)
         mainViewModel.getMedia(Constants.PLAYLIST_ROOT)
         mAdapter= TracksAdapter(requireContext(),glide){
@@ -48,7 +47,12 @@ class PlaylistFragment : Fragment() {
                 )
             findNavController().navigate(action)
         }
-        binding.recyclerView.adapter=mAdapter
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = mAdapter
+            setItemViewCacheSize(16)
+        //    setHasFixedSize(true)
+        }
 
         mainViewModel.playlist.observe(viewLifecycleOwner){
             mAdapter.setList(it.peekContent())

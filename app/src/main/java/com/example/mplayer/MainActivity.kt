@@ -21,36 +21,26 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
      lateinit var binding: ActivityMainBinding
-    private var mainViewModel: MainViewModel?=null
+    private lateinit var mainViewModel: MainViewModel
 
 
 
 
-    fun getViewModel()= if (mainViewModel==null) ViewModelProvider(this)
-        .get(MainViewModel::class.java).also { mainViewModel=it ; setViewModelListeners()}
-    else mainViewModel
+    fun getViewModel()= mainViewModel
 
-    private fun setViewModelListeners() {
-        mainViewModel?.songList?.observe(this){ list->
-            if (list!=null){
-//                val transaction = supportFragmentManager.beginTransaction()
-//                extendedFragment=AlbumListFragment(list, mainViewModel!!)
-//                transaction.add(R.id.nav_host_container,extendedFragment!!).commit()
-//                setTabStateFragment(TabState.ALBUM_EXTENDED).commit()
-
-
-            }
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        mainViewModel=ViewModelProvider(this)
+            .get(MainViewModel::class.java)
+
         window.statusBarColor = getColor(R.color.background_color)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
 
         val fromSplashScreen = intent.getBooleanExtra(Constants.FROM_SPLASH_SCREEN, false)
 
@@ -66,8 +56,6 @@ class MainActivity : AppCompatActivity() {
                 )
             )
 
-
-
             binding.bottomNavigation.setupWithNavController(navController)
             binding.toolbarLayout.setupWithNavController(
                 binding.toolbar,
@@ -75,44 +63,11 @@ class MainActivity : AppCompatActivity() {
                 appBarConfiguration
             )
 
-            binding.bottomNavigation.setOnItemSelectedListener {
-                when (it.itemId) {
-                    R.id.tracks_fragment -> {
-                        navController.popBackStack(R.id.tracks_fragment, false)
-                        true
-                    }
-                    R.id.album_fragment -> {
-                        navController.popBackStack(com.example.mplayer.R.id.album_fragment, false)
-                        true
-                    }
-                    R.id.playlistItemFragment -> {
-                        navController.popBackStack(com.example.mplayer.R.id.playlist_fragment, false)
-                        true
-                    }
-                    else -> NavigationUI.onNavDestinationSelected(it , navController)
-                }
-            }
             binding.bottomNavigation.selectedItemId=R.id.tracks_fragment
 
         }
+        mainViewModel?.initMedia()
 
-
-
-
-    }
-
-    fun setAppBar(id:Int){
-        binding.toolbar.inflateMenu(id)
-
-        binding.toolbar.setOnMenuItemClickListener { item->
-            return@setOnMenuItemClickListener when(item.itemId){
-                 R.id.confirm_button->{
-                                true
-                            }
-                else-> false
-            }
-
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

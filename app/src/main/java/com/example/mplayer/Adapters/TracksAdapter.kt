@@ -26,11 +26,12 @@ class TracksAdapter(
         return TracksViewHolder(binding)
     }
 
+
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
         val item = list[position]
         val binding = holder.binding
-        if (list.lastIndex==position)
-            binding.endLine.visibility=View.INVISIBLE
+//        if (list.lastIndex==position)
+//            binding.endLine.visibility=View.INVISIBLE
         if (item.isPlayable) {
             binding.itemTitle.text = item.description.title
             binding.itemSubtitle.text = item.description.subtitle

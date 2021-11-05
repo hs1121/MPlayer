@@ -156,5 +156,11 @@ class MainViewModel @Inject constructor(
         _playlist.postValue(Event(mutableListOf()))
     }
 
+    fun initMedia() {
+        getMedia(TRACKS_ROOT)
+        getMedia(ALBUMS_ROOT)
+        getMedia(PLAYLIST_ROOT)
+    }
+
 
 }

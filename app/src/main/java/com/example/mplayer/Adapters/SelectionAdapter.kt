@@ -28,8 +28,8 @@ class SelectionAdapter (
     override fun onBindViewHolder(holder: SelectionViewHolder, position: Int) {
         val item = list[position]
         val binding = holder.binding
-        if (list.lastIndex==position)
-            binding.endLine.visibility= View.INVISIBLE
+//        if (list.lastIndex==position)
+//            binding.endLine.visibility= View.INVISIBLE
         if (item.isPlayable) {
             binding.itemTitle.text = item.description.title
             binding.itemSubtitle.text = item.description.subtitle
