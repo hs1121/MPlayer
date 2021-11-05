@@ -26,12 +26,12 @@ inline var MediaMetadataCompat.Builder.from: String
 
 
 inline var MediaMetadataCompat.from: String
-    @Deprecated(NO_GET, level = DeprecationLevel.ERROR)
-    set(value) = throw IllegalAccessException("Cannot set  MediaMetadataCompat")
+    set(value) {
+         bundle.putString(METADATA_KEY_FROM,value)}
     get() {
-        val key1=getText(METADATA_KEY_FROM).toString()
+        val key1=getText(METADATA_KEY_FROM)
 
-        return key1
+        return key1.toString()
     }
 
 inline var MediaDescriptionCompat.Builder.from : String

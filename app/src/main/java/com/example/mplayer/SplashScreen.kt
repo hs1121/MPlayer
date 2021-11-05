@@ -7,9 +7,8 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.lifecycle.lifecycleScope
 import com.example.mplayer.Constants.FROM_SPLASH_SCREEN
-import com.example.mplayer.Utility.BrowsingTree
+import com.example.mplayer.database.BrowsingTree
 import com.example.mplayer.Utility.Util
-import com.example.mplayer.exoPlayer.MusicSource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject

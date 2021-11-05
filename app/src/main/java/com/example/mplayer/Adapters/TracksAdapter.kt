@@ -1,31 +1,16 @@
 package com.example.mplayer.Adapters
 
 import android.content.Context
-import android.media.browse.MediaBrowser
-import android.net.Uri
 import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.MediaMetadataCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
-import com.example.mplayer.R
 import com.example.mplayer.Utility.ListDiffUtil
-import com.example.mplayer.databinding.FragmentTracksBinding
 import com.example.mplayer.databinding.MusicItemListLayoutBinding
-import com.example.mplayer.exoPlayer.SongEntity
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import javax.inject.Inject
 
 
 class TracksAdapter(
@@ -54,18 +39,26 @@ class TracksAdapter(
                 .apply(RequestOptions().override(100, 100))
                 .into(binding.itemImage)
 
-            binding.root.setOnClickListener {
-                itemClickListener(item)
-            }
+
 
         }else{
-            binding.itemTitle.text = "browsable"
+          binding.itemTitle.text=item.description.title
+            glide.load(item.description.iconUri)
+                .apply(RequestOptions().override(100, 100))
+                .into(binding.itemImage)
+            binding.itemSubtitle.visibility=View.GONE
+            binding.itemMore.visibility=View.GONE
+            binding.itemMove.visibility=View.GONE
+        }
+        binding.root.setOnClickListener {
+            itemClickListener(item)
         }
     }
 
     override fun getItemCount(): Int {
      return list.size
     }
+
 
     fun setList(list:MutableList<MediaBrowserCompat.MediaItem>){
 

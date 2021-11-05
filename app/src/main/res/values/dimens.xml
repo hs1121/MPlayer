@@ -9,5 +9,7 @@
 
     <dimen name="icon_size">24dp</dimen>
 
+    <dimen name="input_text_radius">10dp</dimen>
+
 
 </resources>

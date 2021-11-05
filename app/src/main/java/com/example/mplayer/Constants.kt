@@ -19,4 +19,7 @@ object Constants {
         const val METADATA_KEY_FROM="com.example.mplayer.Utility.METADATA_KEY_FROM"
         const val NO_GET = "Property does not have a 'get'"
         const val FROM_SPLASH_SCREEN="fromSplashScreen"
+
+        const val PLAYER_DATABASE="MPlayerDatabase"
+        const val PLAYLIST_TABLE="Playlist"
 }

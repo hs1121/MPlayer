@@ -1,4 +1,4 @@
-package com.example.mplayer.exoPlayer
+package com.example.mplayer.database.entity
 
 import androidx.room.PrimaryKey
 

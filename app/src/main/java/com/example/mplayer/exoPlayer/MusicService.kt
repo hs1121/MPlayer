@@ -11,10 +11,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.media.MediaBrowserServiceCompat
 import com.example.mplayer.Constants.MY_MEDIA_ROOT_ID
-import com.example.mplayer.Constants.TRACKS_ROOT
 import com.example.mplayer.MainActivity
 import com.example.mplayer.PlayerActivity
-import com.example.mplayer.Utility.BrowsingTree
+import com.example.mplayer.database.BrowsingTree
+import com.example.mplayer.Utility.from
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
@@ -77,22 +77,25 @@ class MusicService: MediaBrowserServiceCompat() {
             isActive=true
         }
         sessionToken=mediaSession.sessionToken
+        val mediaSessionConnector = MediaSessionConnector(mediaSession)
+
         val playbackPreparer=PlayerPlayBackPreparer(browsingTree){
             currentlyPlayingSong=it
             mediaSession.setMetadata(it)
-
+            val key=it?.from?:""
+            mediaSessionConnector.setQueueNavigator(PlayerQueueNavigator(mediaSession,key))
             preparePlayer(
                 browsingTree.mediaListByItem(it),
                 it,
+                key,
                 true
             )
         }
 
 
-        val mediaSessionConnector = MediaSessionConnector(mediaSession)
+
         mediaSessionConnector.setPlaybackPreparer(playbackPreparer)
         mediaSessionConnector.setPlayer(exoPlayer)
-         mediaSessionConnector.setQueueNavigator(PlayerQueueNavigator(mediaSession))
         playerEventListener=PlayerListener(this)
         exoPlayer.addListener(playerEventListener)
          playerNotificationManager=PlayerNotificationManager(this).apply {
@@ -105,10 +108,11 @@ class MusicService: MediaBrowserServiceCompat() {
     private fun preparePlayer(
     songs:MutableList<MediaMetadataCompat>,
     currentSong:MediaMetadataCompat?,
+    from:String?,
     playNow:Boolean
     ){
         val currentIndex= if (currentlyPlayingSong==null) 0 else songs.indexOf(currentSong)
-        exoPlayer.setMediaSource(browsingTree.asMusicSource(dataSourceFactory, TRACKS_ROOT))
+        exoPlayer.setMediaSource(browsingTree.asMusicSource(dataSourceFactory,from ))
         exoPlayer.prepare()
         exoPlayer.seekTo(currentIndex,0L)
         exoPlayer.playWhenReady=playNow
@@ -140,9 +144,9 @@ class MusicService: MediaBrowserServiceCompat() {
             result.detach()
         }
     }
-    private inner class PlayerQueueNavigator(mediaSessionCompat: MediaSessionCompat):TimelineQueueNavigator(mediaSessionCompat){
+    private inner class PlayerQueueNavigator(mediaSessionCompat: MediaSessionCompat,private val keyString: String):TimelineQueueNavigator(mediaSessionCompat){
         override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
-            return browsingTree.musicItem()?.get(windowIndex)?.description!!
+            return browsingTree.musicItem(keyString)?.get(windowIndex)?.description!!
         }
 
     }

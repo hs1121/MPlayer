@@ -1,4 +1,4 @@
-package com.example.mplayer.exoPlayer
+package com.example.mplayer.database
 
 import android.content.Context
 import android.net.Uri
@@ -7,39 +7,31 @@ import android.provider.MediaStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import android.content.ContentUris
-import android.media.browse.MediaBrowser
 import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
-import android.support.v4.media.MediaDescriptionCompat
 
 import android.support.v4.media.MediaMetadataCompat
-import androidx.core.net.toUri
 import com.example.mplayer.Constants
 import com.example.mplayer.Utility.PathFromUri.getPathFromUri
 import com.example.mplayer.Utility.flag
 import com.example.mplayer.Utility.from
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.source.ConcatenatingMediaSource
-import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
-import javax.inject.Singleton
 
-class MusicSource (
-    private val context: Context ) {
+class MusicSource @Inject constructor(
+    @ApplicationContext val context: Context,
+    private val playerDatabase: MPlayerDatabase
+) {
 
      var musicItems: MutableList<MediaMetadataCompat> = mutableListOf()
      var albums:HashMap<String,MutableList<MediaMetadataCompat>> = HashMap()
+    val playLists:HashMap<String,MutableList<MediaMetadataCompat>> = HashMap()
 
 
     private val onReadyListeners= mutableListOf<(Boolean)-> Unit>()
 
-    private var state:State= State.CREATED
+    private var state: State = State.CREATED
         set(value){
-            if(value==State.INITIALIZED|| value==State.ERROR){
+            if(value== State.INITIALIZED || value== State.ERROR){
                 synchronized(onReadyListeners){
                     field=value
                     onReadyListeners.forEach { listeners ->
@@ -52,7 +44,7 @@ class MusicSource (
         }
 
     fun setStateInitialized(){
-        state=State.INITIALIZED
+        state= State.INITIALIZED
     }
 
     suspend fun  getSongs()= withContext(Dispatchers.IO){
@@ -82,7 +74,7 @@ class MusicSource (
 
 
                     val mediaItem=MediaMetadataCompat.Builder().apply {
-                        flag= FLAG_PLAYABLE
+                        flag=(MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
                     }
                         .putString(MediaMetadataCompat.METADATA_KEY_ARTIST,artist)
                         .putString(MediaMetadataCompat.METADATA_KEY_TITLE,name)
@@ -96,6 +88,7 @@ class MusicSource (
                         .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI,albumArt.toString())
                         .putString(MediaMetadataCompat.METADATA_KEY_DATE,dateAdded.toString())
                         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,duration)
+
 
 
 
@@ -119,40 +112,28 @@ class MusicSource (
 
             }
         }
-
+    //    getPlaylist()
     }
 
-    fun asMusicSource(dataSourceFactory: DefaultDataSourceFactory): ConcatenatingMediaSource{
-        val concatenatingMediaSource=ConcatenatingMediaSource()
-        musicItems.forEach{ song ->
-            val mediaSource=ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(MediaItem.fromUri(song.description.mediaUri!!))
-            //TODO: check if it works or not
-            concatenatingMediaSource.addMediaSource(mediaSource)
-        }
-        return concatenatingMediaSource
+     suspend fun getPlaylist() {
+//        withContext(Dispatchers.IO){
+//            val list= playerDatabase.playlistDao().getAll()?: mutableListOf()
+//            list.forEach{ entity->
+//                playLists[entity.name]=entity.data
+//            }
+//
+//        }
     }
-
-    fun asMediaItem()=musicItems.map { song->
-        val desc= MediaDescriptionCompat.Builder()
-            .setMediaId(song.description.mediaId)
-            .setIconUri(song.description.iconUri)
-            .setMediaUri(song.description.mediaUri)
-            .setTitle(song.description.title)
-            .setSubtitle(song.description.subtitle)
-            .build()
-        MediaBrowserCompat.MediaItem(desc, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
-    }.toMutableList()
 
 
 
 
     fun whenReady(action: (Boolean)-> Unit):Boolean{
-        return if(state==State.CREATED||state==State.INITIALIZING){
+        return if(state== State.CREATED ||state== State.INITIALIZING){
             onReadyListeners+=action
             false
         }else{
-            action(state==State.INITIALIZED)
+            action(state== State.INITIALIZED)
             true
         }
     }
