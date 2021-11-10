@@ -1,5 +1,6 @@
 package com.example.mplayer.database
 
+import android.net.Uri
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
@@ -42,8 +43,10 @@ class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
                 ).build()
 
 
-            albumRoot.add(album)
-            browsingList[it.key] = it.value
+            if (it.value.isNotEmpty()) {
+                albumRoot.add(album)
+                browsingList[it.key] = it.value
+            }
         }
 
         val playlistRoot = browsingList[PLAYLIST_ROOT] ?: mutableListOf()
@@ -80,6 +83,17 @@ class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
             setTree()
 
         }
+
+    }
+
+     fun mediaReset(list: MutableList<Uri>){
+         browsingList.forEach{ entry ->
+        list.forEach{ uri->
+           browsingList[entry.key]?.remove(entry.value.find { uri==it.description.mediaUri })
+        }
+            if (entry.value.isEmpty())
+                 browsingList[ALBUMS_ROOT]?.remove(browsingList[ALBUMS_ROOT]?.find { entry.key==it.description.mediaId })
+         }
 
     }
 

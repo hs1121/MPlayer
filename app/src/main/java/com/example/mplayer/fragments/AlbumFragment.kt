@@ -35,12 +35,12 @@ class AlbumFragment : Fragment() {
         binding = FragmentAlbumBinding.inflate(layoutInflater)
         if (mainViewModel.albumList.value==null|| mainViewModel.albumList.value?.isHandled() == false)
         mainViewModel.getMedia(ALBUMS_ROOT)
-        mAdapter= TracksAdapter(requireContext(),glide){ item->
+        mAdapter= TracksAdapter(requireContext(),glide,{ item->
             val key= item.description.mediaId!!
             val action=AlbumFragmentDirections.actionToAlbumList(key)
             findNavController().navigate(action)
 
-        }
+        })
         binding.albumRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mAdapter

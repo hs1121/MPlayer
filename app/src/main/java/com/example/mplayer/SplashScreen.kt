@@ -41,7 +41,9 @@ class SplashScreen : AppCompatActivity() {
                     this,
                     android.Manifest.permission.READ_EXTERNAL_STORAGE,
                     Constants.PERMISSION_READ_INTERNAL_STORAGE
-                )
+                )  &&  Util.isStoragePermissionGranted(this,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Constants.PERMISSION_WRITE_INTERNAL_STORAGE)
             ) {
                     startActivity()
             }

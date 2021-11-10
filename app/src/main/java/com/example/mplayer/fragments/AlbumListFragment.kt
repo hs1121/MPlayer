@@ -37,14 +37,15 @@ class AlbumListFragment : Fragment() {
         val mainActivity: MainActivity = activity as MainActivity
         mainViewModel= mainActivity.getViewModel()!!
         binding= FragmentAlbumListBinding.inflate(layoutInflater)
+
         if (mainViewModel.songList.value==null||
             mainViewModel.songList.value?.isHandled()==false) {
             mainViewModel.getMedia(args.mediaId)
         }
         binding.recyclerView.layoutManager=LinearLayoutManager(requireContext())
-        adapter= TracksAdapter(requireContext(),glide){
+        adapter= TracksAdapter(requireContext(),glide,{
                 mainViewModel.itemClicked(it,requireContext())
-        }
+        })
         binding.recyclerView.adapter=adapter
         mainViewModel.songList.observe(viewLifecycleOwner){
             adapter.setList(it.peekContent())
@@ -55,9 +56,17 @@ class AlbumListFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity)?.supportActionBar?.title=args.mediaId
+    }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         mainViewModel.resetSongList()
+        (activity as MainActivity)?.supportActionBar?.title=""
+
     }
 
     // todo: issue-> wrong song played on Click

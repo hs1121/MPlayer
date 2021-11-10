@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/delete_button"
+        android:title="Delete"
+        android:icon="@drawable/ic_delete"
+        app:iconTint="@color/iconColor"
+        app:showAsAction="ifRoom"/>
+
     <item android:id="@+id/confirm_button"
         android:title="Confirm"
         android:icon="@drawable/exo_ic_check"

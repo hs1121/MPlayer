@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 <item android:title="Playlists"
-    android:id="@+id/playlists"
+    android:id="@+id/playlist_fragment"
     android:icon="@drawable/ic_playlist"
     app:showAsAction="ifRoom"/>
 
     <item android:title="Tracks"
-        android:id="@+id/tracks"
+        android:id="@+id/tracks_fragment"
         android:icon="@drawable/ic_tracks"
         app:showAsAction="ifRoom"/>
 
     <item android:title="Albums"
-        android:id="@+id/albums"
+        android:id="@+id/album_fragment"
         android:icon="@drawable/ic_album"
         app:showAsAction="ifRoom"/>
 </menu>

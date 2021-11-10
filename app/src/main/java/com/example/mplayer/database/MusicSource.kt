@@ -23,7 +23,7 @@ class MusicSource @Inject constructor(
     var mediaItems: MutableList<MediaMetadataCompat.Builder> = mutableListOf()
      var tracks: MutableList<MediaMetadataCompat> = mutableListOf()
      var albums:HashMap<String,MutableList<MediaMetadataCompat>> = HashMap()
-    val playLists:HashMap<String,MutableList<MediaMetadataCompat>> = HashMap()
+    var playLists:HashMap<String,MutableList<MediaMetadataCompat>> = HashMap()
 
 
     private val onReadyListeners= mutableListOf<(Boolean)-> Unit>()
@@ -114,6 +114,7 @@ class MusicSource @Inject constructor(
     }
 
       suspend fun getPlaylist() {
+          playLists= hashMapOf()
             val idsList= playerDatabase.playlistDao().getPlaylists()?: mutableListOf()
 
             idsList.forEach{ entity->

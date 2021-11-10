@@ -27,63 +27,65 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import javax.inject.Inject
 
-const val SERVICE_TAG="MusicService"
+const val SERVICE_TAG = "MusicService"
 
 @AndroidEntryPoint
-class MusicService: MediaBrowserServiceCompat() {
+class MusicService : MediaBrowserServiceCompat() {
 
 
-    var isForegroundService: Boolean=false
-    var currentlyPlayingSong:MediaMetadataCompat?=null
-    var activityIntent:PendingIntent?=null
-    private lateinit var playerNotificationManager:PlayerNotificationManager
+    var isForegroundService: Boolean = false
+    var currentlyPlayingSong: MediaMetadataCompat? = null
+    var activityIntent: PendingIntent? = null
+    private lateinit var playerNotificationManager: PlayerNotificationManager
 
-    companion object{
+    companion object {
         private val _playerInstance = MutableLiveData<SimpleExoPlayer?>()
-        val playerInstance:LiveData<SimpleExoPlayer?> = _playerInstance
+        val playerInstance: LiveData<SimpleExoPlayer?> = _playerInstance
 
-        var playerList:MutableList<MediaBrowserCompat.MediaItem>?=null
+        var playerList: MutableList<MediaBrowserCompat.MediaItem>? = null
     }
 
     @Inject
-     lateinit var exoPlayer: SimpleExoPlayer
-     @Inject
-     lateinit var browsingTree: BrowsingTree
+    lateinit var exoPlayer: SimpleExoPlayer
 
-     @Inject
-     lateinit var dataSourceFactory: DefaultDataSourceFactory
-     lateinit var mediaSession : MediaSessionCompat
-     private lateinit var playerEventListener:PlayerListener
+    @Inject
+    lateinit var browsingTree: BrowsingTree
+
+    @Inject
+    lateinit var dataSourceFactory: DefaultDataSourceFactory
+    lateinit var mediaSession: MediaSessionCompat
+    private lateinit var playerEventListener: PlayerListener
 
 
-
-    private val serviceJob= Job()
-    private val serviceScope= CoroutineScope(Dispatchers.Main+serviceJob)
+    private val serviceJob = Job()
+    private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
 
     override fun onCreate() {
         super.onCreate()
 
-        val intentParent=Intent(this,MainActivity::class.java)
-        intentParent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION
+        val intentParent = Intent(this, MainActivity::class.java)
+        intentParent.flags =
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION
         val intent = Intent(this, PlayerActivity::class.java)
         val intents = arrayOf(intentParent, intent)
-        val pendingIntent = PendingIntent.getActivities(this,0, intents, PendingIntent.FLAG_UPDATE_CURRENT)
-        activityIntent=pendingIntent
+        val pendingIntent =
+            PendingIntent.getActivities(this, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT)
+        activityIntent = pendingIntent
 
 
-        mediaSession= MediaSessionCompat(this, SERVICE_TAG).apply {
+        mediaSession = MediaSessionCompat(this, SERVICE_TAG).apply {
             setSessionActivity(activityIntent)
-            isActive=true
+            isActive = true
         }
-        sessionToken=mediaSession.sessionToken
+        sessionToken = mediaSession.sessionToken
         val mediaSessionConnector = MediaSessionConnector(mediaSession)
 
-        val playbackPreparer=PlayerPlayBackPreparer(browsingTree){
-            currentlyPlayingSong=it
+        val playbackPreparer = PlayerPlayBackPreparer(browsingTree) {
+            currentlyPlayingSong = it
             mediaSession.setMetadata(it)
-            val key=it?.from?:""
-            mediaSessionConnector.setQueueNavigator(PlayerQueueNavigator(mediaSession,key))
+            val key = it?.from ?: ""
+            mediaSessionConnector.setQueueNavigator(PlayerQueueNavigator(mediaSession, key))
             preparePlayer(
                 browsingTree.mediaListByItem(it),
                 it,
@@ -96,9 +98,9 @@ class MusicService: MediaBrowserServiceCompat() {
 
         mediaSessionConnector.setPlaybackPreparer(playbackPreparer)
         mediaSessionConnector.setPlayer(exoPlayer)
-        playerEventListener=PlayerListener(this)
+        playerEventListener = PlayerListener(this)
         exoPlayer.addListener(playerEventListener)
-         playerNotificationManager=PlayerNotificationManager(this).apply {
+        playerNotificationManager = PlayerNotificationManager(this).apply {
             getNotificationManager().setPlayer(exoPlayer)
         }
 
@@ -106,16 +108,16 @@ class MusicService: MediaBrowserServiceCompat() {
     }
 
     private fun preparePlayer(
-    songs:MutableList<MediaMetadataCompat>,
-    currentSong:MediaMetadataCompat?,
-    from:String?,
-    playNow:Boolean
-    ){
-        val currentIndex= if (currentlyPlayingSong==null) 0 else songs.indexOf(currentSong)
-        exoPlayer.setMediaSource(browsingTree.asMusicSource(dataSourceFactory,from ))
+        songs: MutableList<MediaMetadataCompat>,
+        currentSong: MediaMetadataCompat?,
+        from: String?,
+        playNow: Boolean
+    ) {
+        val currentIndex = if (currentlyPlayingSong == null) 0 else songs.indexOf(currentSong)
+        exoPlayer.setMediaSource(browsingTree.asMusicSource(dataSourceFactory, from))
         exoPlayer.prepare()
-        exoPlayer.seekTo(currentIndex,0L)
-        exoPlayer.playWhenReady=playNow
+        exoPlayer.seekTo(currentIndex, 0L)
+        exoPlayer.playWhenReady = playNow
         _playerInstance.postValue(exoPlayer)
     }
 
@@ -133,10 +135,10 @@ class MusicService: MediaBrowserServiceCompat() {
     ) {
         val resultsSent = browsingTree.whenReady { successfullyInitialized ->
             if (successfullyInitialized) {
-                val children: MutableList<MediaBrowserCompat.MediaItem> = browsingTree.asMediaItem(parentId)?: mutableListOf()
+                val children: MutableList<MediaBrowserCompat.MediaItem> =
+                    browsingTree.asMediaItem(parentId) ?: mutableListOf()
                 result.sendResult(children)
-                }
-             else {
+            } else {
                 result.sendResult(null)
             }
         }
@@ -144,7 +146,11 @@ class MusicService: MediaBrowserServiceCompat() {
             result.detach()
         }
     }
-    private inner class PlayerQueueNavigator(mediaSessionCompat: MediaSessionCompat,private val keyString: String):TimelineQueueNavigator(mediaSessionCompat){
+
+    private inner class PlayerQueueNavigator(
+        mediaSessionCompat: MediaSessionCompat,
+        private val keyString: String
+    ) : TimelineQueueNavigator(mediaSessionCompat) {
         override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
             return browsingTree.musicItem(keyString)?.get(windowIndex)?.description!!
         }

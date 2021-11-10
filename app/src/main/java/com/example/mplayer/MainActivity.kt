@@ -1,8 +1,13 @@
 package com.example.mplayer
 
+import android.app.PendingIntent
+import android.content.Intent
+import android.content.IntentSender
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.RequiresApi
@@ -16,6 +21,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.mplayer.databinding.ActivityMainBinding
 import com.example.mplayer.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import retrofit2.http.DELETE
+import java.lang.Exception
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -70,6 +77,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+
+
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_app_bar_menu,menu)
         return true
@@ -78,6 +89,15 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean { // use ?
         return navController.navigateUp() || return super.onSupportNavigateUp()
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if (requestCode==Constants.REQUEST_CODE_DELETE&& resultCode== AppCompatActivity.RESULT_OK) {
+            mainViewModel.mediaRemoved(true)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
 }
 
 

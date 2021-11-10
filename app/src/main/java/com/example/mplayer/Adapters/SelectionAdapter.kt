@@ -14,7 +14,8 @@ import com.example.mplayer.databinding.MusicItemListLayoutBinding
 
 class SelectionAdapter (
     private val context: Context,
-    private val glide: RequestManager): RecyclerView.Adapter<SelectionAdapter.SelectionViewHolder>() {
+    private val glide: RequestManager,
+    private val selectedItem:String?): RecyclerView.Adapter<SelectionAdapter.SelectionViewHolder>() {
 
 
     private var list= mutableListOf<MediaBrowserCompat.MediaItem>()
@@ -28,6 +29,11 @@ class SelectionAdapter (
     override fun onBindViewHolder(holder: SelectionViewHolder, position: Int) {
         val item = list[position]
         val binding = holder.binding
+        if (selectedItem!=null&&item.mediaId==selectedItem){
+            binding.checkBox.isChecked=true
+            selectedItems.add(item)
+        }
+
 //        if (list.lastIndex==position)
 //            binding.endLine.visibility= View.INVISIBLE
         if (item.isPlayable) {
@@ -44,10 +50,14 @@ class SelectionAdapter (
                 .apply(RequestOptions().override(100, 100))
                 .into(binding.itemImage)
             binding.itemSubtitle.visibility= View.GONE
-            binding.itemMore.visibility= View.GONE
-            binding.itemMove.visibility= View.GONE
         }
         binding.checkBox.setOnClickListener {
+            if (binding.checkBox.isChecked)
+                selectedItems.add(item)
+            else
+                selectedItems.remove(item)
+        }
+        binding.materialCardView3.setOnClickListener {
             if (binding.checkBox.isChecked)
                 selectedItems.add(item)
             else
@@ -60,8 +70,17 @@ class SelectionAdapter (
         return list.size
     }
 
+    fun getUris()=selectedItems.map { it.description.mediaUri!! }
 
     fun getSelectedItems()=selectedItems
+
+    fun getUnSelectedItems()=run {
+        val newList=list
+        selectedItems.forEach {  item->
+            newList.remove(item)
+        }
+        return@run newList
+    }
 
 
     fun setList(list:MutableList<MediaBrowserCompat.MediaItem>){

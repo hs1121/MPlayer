@@ -8,11 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
 import com.example.mplayer.Adapters.TracksAdapter
 import com.example.mplayer.Constants.TRACKS_ROOT
 import com.example.mplayer.MainActivity
+import com.example.mplayer.Utility.Action
+import com.example.mplayer.Utility.Content
+import com.example.mplayer.Utility.from
 import com.example.mplayer.viewModels.MainViewModel
 import com.example.mplayer.databinding.FragmentTracksBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,9 +47,15 @@ class TracksFragment : Fragment() {
         if (mainViewModel.tracksList.value==null|| mainViewModel.tracksList.value?.isHandled() == false)
         mainViewModel.getMedia(TRACKS_ROOT)
         binding = FragmentTracksBinding.inflate(layoutInflater)
-        mAdapter = TracksAdapter(requireContext(), glide){ clickedItem->
+        mAdapter = TracksAdapter(requireContext(), glide ,{ clickedItem->
             mainViewModel.itemClicked(clickedItem,requireContext())
-        }
+        },{
+            val action=TracksFragmentDirections.actionTracksFragmentToSelectionFragment(null,null,
+                Action.EDIT,
+                Content.TRACK,
+                TRACKS_ROOT,it.mediaId)
+            findNavController().navigate(action)
+        })
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mAdapter
