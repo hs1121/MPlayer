@@ -1,17 +1,21 @@
 package com.example.mplayer.fragments
 
 import android.os.Bundle
-import android.support.v4.media.MediaBrowserCompat
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
-import com.example.mplayer.Adapters.TracksAdapter
+import com.example.mplayer.Adapters.PlaylistAdapter
+import com.example.mplayer.Constants
 import com.example.mplayer.MainActivity
 import com.example.mplayer.R
+import com.example.mplayer.Utility.Action
+import com.example.mplayer.Utility.Content
+import com.example.mplayer.Utility.DragAndDropHelper
+import com.example.mplayer.Utility.from
 import com.example.mplayer.databinding.FragmentPlaylistItemBinding
 import com.example.mplayer.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,12 +25,12 @@ import javax.inject.Inject
 class PlaylistItemFragment : Fragment() {
 
     private lateinit var binding:FragmentPlaylistItemBinding
-    private lateinit var mAdapter:TracksAdapter
+    private lateinit var mAdapter: PlaylistAdapter
     @Inject
     lateinit var glide:RequestManager
     private lateinit var mainViewModel: MainViewModel
 
-    val args:PlaylistItemFragmentArgs by navArgs()
+    private val args:PlaylistItemFragmentArgs by navArgs()
 
 
 
@@ -35,31 +39,68 @@ class PlaylistItemFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val mainActivity: MainActivity = activity as MainActivity
+        mainActivity.supportActionBar?.title=args.mediaId
+
         mainViewModel= mainActivity.getViewModel()!!
         binding= FragmentPlaylistItemBinding.inflate(inflater)
         binding.recyclerView.layoutManager=LinearLayoutManager(requireContext())
-        mAdapter= TracksAdapter(requireContext(),glide){
+        mAdapter= PlaylistAdapter(requireContext(),glide,{
+            val action=PlaylistItemFragmentDirections.actionPlaylistItemFragmentToSelectionFragment(null,null,
+                Action.EDIT,
+                Content.PLAYLIST_ITEM,
+                it.from,it.mediaId)
+            findNavController().navigate(action)
+        }){
             mainViewModel.itemClicked(it,requireContext())
         }
         binding.recyclerView.adapter=mAdapter
 
-        mainViewModel.tracksList.observe(viewLifecycleOwner) { event->
-            val mediaIds=args.mediaIds
-            val list= mutableListOf<MediaBrowserCompat.MediaItem>()
-            mediaIds.forEach { id->
-               val item= event.data.find { id==it.description.mediaId }
-                if (item != null) {
-                    list.add(item)
-                }
-            }
-            mAdapter.setList(list)
+//        val dragAndDropHelper=ItemTouchHelper(DragAndDropHelper(mAdapter))
+//        dragAndDropHelper.attachToRecyclerView(binding.recyclerView)
 
 
+        if (mainViewModel.songList.value==null||
+            mainViewModel.songList.value?.isHandled()==false)
+        mainViewModel.getMedia(args.mediaId)
+
+        mainViewModel.songList.observe(viewLifecycleOwner){
+            mAdapter.setList(it.data)
         }
-
-
+        setHasOptionsMenu(true)
         return binding.root
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity)?.supportActionBar?.title=args.mediaId
+    }
+
+
+    override fun onDestroyView() {
+
+        super.onDestroyView()
+        mainViewModel.resetSongList()
+        (activity as MainActivity)?.supportActionBar?.title=""
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        val item = menu.findItem(R.id.sort_icon)
+        item.isVisible = false
+        inflater.inflate(R.menu.arrange_menu_item,menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when (item.itemId){
+            R.id.arrange_items->{
+               val action = PlaylistItemFragmentDirections.actionPlaylistItemFragmentToArrangeFragment(args.mediaId)
+                findNavController().navigate(action)
+                true
+            }
+            else->{  super.onOptionsItemSelected(item)}
+        }
+    }
 
 }

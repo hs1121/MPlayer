@@ -16,7 +16,8 @@ import com.example.mplayer.databinding.MusicItemListLayoutBinding
 class TracksAdapter(
     private val context: Context,
     private val glide: RequestManager,
-     val itemClickListener:(MediaBrowserCompat.MediaItem)->Unit ): RecyclerView.Adapter<TracksAdapter.TracksViewHolder>() {
+     val itemClickListener:(MediaBrowserCompat.MediaItem)->Unit,
+    private val onLongClick:((MediaBrowserCompat.MediaItem)->Unit)={}): RecyclerView.Adapter<TracksAdapter.TracksViewHolder>() {
 
 
     private var list= mutableListOf<MediaBrowserCompat.MediaItem>()
@@ -26,11 +27,12 @@ class TracksAdapter(
         return TracksViewHolder(binding)
     }
 
+
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
         val item = list[position]
         val binding = holder.binding
-        if (list.lastIndex==position)
-            binding.endLine.visibility=View.INVISIBLE
+//        if (list.lastIndex==position)
+//            binding.endLine.visibility=View.INVISIBLE
         if (item.isPlayable) {
             binding.itemTitle.text = item.description.title
             binding.itemSubtitle.text = item.description.subtitle
@@ -39,6 +41,10 @@ class TracksAdapter(
                 .apply(RequestOptions().override(100, 100))
                 .into(binding.itemImage)
 
+            binding.root.setOnLongClickListener {
+                onLongClick(item)
+                true
+            }
 
 
         }else{

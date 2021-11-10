@@ -4,6 +4,8 @@ object Constants {
         const val PERMISSION_READ_INTERNAL_STORAGE=10
         const val PERMISSION_WRITE_INTERNAL_STORAGE=11
 
+        const val REQUEST_CODE_DELETE=5
+
         const val NOTIFICATION_ID=101
         const val CHANNEL_ID="playback_notification_channel_id"
 

@@ -18,6 +18,12 @@ class Repository @Inject constructor(
     suspend fun deletePlaylist(entity: PlaylistEntity){
         playerDatabase.playlistDao().delete(entity)
     }
+    suspend fun deletePlaylist(name: MutableList<String>){
+        name.forEach {
+            playerDatabase.playlistDao().delete(it)
+        }
+
+    }
 
 
     suspend fun updatePlaylist(entity: PlaylistEntity){
@@ -28,4 +34,11 @@ class Repository @Inject constructor(
      fun getAllPlaylists(): Flow<MutableList<PlaylistEntity>?>{
         return playerDatabase.playlistDao().getAll()
      }
+
+   suspend fun updatePlaylistITem(item:MutableList<String?>,name:String){
+       val entity= playerDatabase.playlistDao().getPlaylistItem(name)
+       entity.data=item
+        updatePlaylist(entity)
+    }
+
 }

@@ -9,8 +9,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
 import com.example.mplayer.Adapters.PlaylistAdapter
+import com.example.mplayer.Adapters.TracksAdapter
+import com.example.mplayer.Constants
 import com.example.mplayer.MainActivity
+import com.example.mplayer.Utility.Action
 import com.example.mplayer.Utility.AddPlaylistDialog
+import com.example.mplayer.Utility.Content
+import com.example.mplayer.database.Repository
 import com.example.mplayer.database.entity.PlaylistEntity
 import com.example.mplayer.databinding.FragmentPlaylistBinding
 import com.example.mplayer.viewModels.MainViewModel
@@ -22,10 +27,11 @@ class PlaylistFragment : Fragment() {
 
     @Inject
     lateinit var glide: RequestManager
+    @Inject
+    lateinit var repository: Repository
 
     private  lateinit var  mainViewModel: MainViewModel
     private lateinit var binding: FragmentPlaylistBinding
-    private  lateinit var playlist : MutableList<PlaylistEntity>
     private lateinit var mAdapter: PlaylistAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,19 +40,32 @@ class PlaylistFragment : Fragment() {
         val mainActivity: MainActivity = activity as MainActivity
         mainViewModel= mainActivity.getViewModel()!!
         binding = FragmentPlaylistBinding.inflate(layoutInflater)
-        binding.recyclerView.layoutManager=LinearLayoutManager(requireContext())
-        mAdapter= PlaylistAdapter(requireContext(),glide){
+
+        if (mainViewModel.playlist.value==null|| mainViewModel.playlist.value?.isHandled() == false)
+        mainViewModel.getMedia(Constants.PLAYLIST_ROOT)
+
+
+        mAdapter= PlaylistAdapter(requireContext(),glide,{
+            val action=PlaylistFragmentDirections.actionPlaylistFragmentToSelectionFragment(null,null,
+                Action.EDIT,Content.PLAYLIST,Constants.PLAYLIST_ROOT,it.mediaId)
+            findNavController().navigate(action)
+        }
+        ){
                 val action = PlaylistFragmentDirections.actionPlaylistFragmentToPlaylistItemFragment(
-                    it.data.toTypedArray()
+                    it.mediaId.toString()
                 )
             findNavController().navigate(action)
         }
-        binding.recyclerView.adapter=mAdapter
 
-        mainViewModel.playlist.observe(viewLifecycleOwner){list->
-            playlist=list?: mutableListOf()
-            mAdapter.setList(playlist)
 
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = mAdapter
+            setItemViewCacheSize(16)
+        }
+
+        mainViewModel.playlist.observe(viewLifecycleOwner){
+            mAdapter.setList(it.peekContent())
         }
         binding.addPlaylist.setOnClickListener {
             showDialog()
@@ -66,8 +85,10 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun showSelection(name: String, by: String) {
-       val action = PlaylistFragmentDirections.actionPlaylistFragmentToSelectionFragment(name,by)
+       val action = PlaylistFragmentDirections.actionPlaylistFragmentToSelectionFragment(
+           name,by,Action.ADD,Content.TRACK,Constants.TRACKS_ROOT,null)
         findNavController().navigate(action)
     }
+
 
 }

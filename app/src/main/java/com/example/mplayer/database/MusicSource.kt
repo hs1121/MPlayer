@@ -4,8 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import android.content.ContentUris
 import android.support.v4.media.MediaBrowserCompat
 
@@ -22,9 +20,10 @@ class MusicSource @Inject constructor(
     private val playerDatabase: MPlayerDatabase
 ) {
 
-     var musicItems: MutableList<MediaMetadataCompat> = mutableListOf()
+    var mediaItems: MutableList<MediaMetadataCompat.Builder> = mutableListOf()
+     var tracks: MutableList<MediaMetadataCompat> = mutableListOf()
      var albums:HashMap<String,MutableList<MediaMetadataCompat>> = HashMap()
-    val playLists:HashMap<String,MutableList<MediaMetadataCompat>> = HashMap()
+    var playLists:HashMap<String,MutableList<MediaMetadataCompat>> = HashMap()
 
 
     private val onReadyListeners= mutableListOf<(Boolean)-> Unit>()
@@ -47,7 +46,7 @@ class MusicSource @Inject constructor(
         state= State.INITIALIZED
     }
 
-    suspend fun  getSongs()= withContext(Dispatchers.IO){
+    suspend fun  getSongs(){
         val uri=MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.contentResolver.query(uri,null,null,null)?.use { cursor->
@@ -89,6 +88,7 @@ class MusicSource @Inject constructor(
                         .putString(MediaMetadataCompat.METADATA_KEY_DATE,dateAdded.toString())
                         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,duration)
 
+                        mediaItems.add(mediaItem)
 
 
 
@@ -96,15 +96,14 @@ class MusicSource @Inject constructor(
                     pathList.add("/storage/emulated/0/MIUI/sound_recorder/call_rec")
                     //TODO: make it user selectable folders to stop getting media from that folder
                     if (!path?.contains(pathList[0])!!) {
-                        val trackItem=mediaItem
-                        trackItem.from=Constants.TRACKS_ROOT
-                        musicItems.add(trackItem.build())
+                        val trackItem = mediaItem
+                        trackItem.from = Constants.TRACKS_ROOT
+                        tracks.add(trackItem.build())
 
-                        val albumItem=mediaItem
-                        albumItem.from=album
-                        val listItem=albums[album]?: mutableListOf()
-                        listItem.add(albumItem.build())
-                        albums[album]=listItem
+                        mediaItem.from = album
+                        val listItem = albums[album] ?: mutableListOf()
+                        listItem.add(mediaItem.build())
+                        albums[album] = listItem
                     }
 
                 }
@@ -112,17 +111,25 @@ class MusicSource @Inject constructor(
 
             }
         }
-    //    getPlaylist()
     }
 
-     suspend fun getPlaylist() {
-//        withContext(Dispatchers.IO){
-//            val list= playerDatabase.playlistDao().getAll()?: mutableListOf()
-//            list.forEach{ entity->
-//                playLists[entity.name]=entity.data
-//            }
-//
-//        }
+      suspend fun getPlaylist() {
+          playLists= hashMapOf()
+            val idsList= playerDatabase.playlistDao().getPlaylists()?: mutableListOf()
+
+            idsList.forEach{ entity->
+
+                val itemList= mutableListOf<MediaMetadataCompat>()
+                entity.data.forEach{ id ->
+                   val item= mediaItems.find { id==it.build().description.mediaId }
+                    item?.let {
+                        val builder=it
+                        builder.from=entity.name
+                        itemList.add(builder.build())
+                    }
+                }
+                playLists[entity.name]=itemList
+            }
     }
 
 

@@ -13,10 +13,4 @@
         android:title="Sort"
         app:iconTint="@color/primary"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/more_icon"
-        android:icon="@drawable/ic_more"
-        android:title="More"
-        app:iconTint="@color/primary"
-        app:showAsAction="ifRoom" />
 </menu>

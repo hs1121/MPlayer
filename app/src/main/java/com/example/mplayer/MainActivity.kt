@@ -1,8 +1,13 @@
 package com.example.mplayer
 
+import android.app.PendingIntent
+import android.content.Intent
+import android.content.IntentSender
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.RequiresApi
@@ -16,41 +21,33 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.mplayer.databinding.ActivityMainBinding
 import com.example.mplayer.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import retrofit2.http.DELETE
+import java.lang.Exception
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
      lateinit var binding: ActivityMainBinding
-    private var mainViewModel: MainViewModel?=null
+    private lateinit var mainViewModel: MainViewModel
 
 
 
 
-    fun getViewModel()= if (mainViewModel==null) ViewModelProvider(this)
-        .get(MainViewModel::class.java).also { mainViewModel=it ; setViewModelListeners()}
-    else mainViewModel
+    fun getViewModel()= mainViewModel
 
-    private fun setViewModelListeners() {
-        mainViewModel?.songList?.observe(this){ list->
-            if (list!=null){
-//                val transaction = supportFragmentManager.beginTransaction()
-//                extendedFragment=AlbumListFragment(list, mainViewModel!!)
-//                transaction.add(R.id.nav_host_container,extendedFragment!!).commit()
-//                setTabStateFragment(TabState.ALBUM_EXTENDED).commit()
-
-
-            }
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        mainViewModel=ViewModelProvider(this)
+            .get(MainViewModel::class.java)
+
         window.statusBarColor = getColor(R.color.background_color)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
 
         val fromSplashScreen = intent.getBooleanExtra(Constants.FROM_SPLASH_SCREEN, false)
 
@@ -66,8 +63,6 @@ class MainActivity : AppCompatActivity() {
                 )
             )
 
-
-
             binding.bottomNavigation.setupWithNavController(navController)
             binding.toolbarLayout.setupWithNavController(
                 binding.toolbar,
@@ -75,34 +70,16 @@ class MainActivity : AppCompatActivity() {
                 appBarConfiguration
             )
 
-            binding.bottomNavigation.setOnItemSelectedListener {
-                if (it.itemId == R.id.tracks_fragment) {
-                    navController.popBackStack(R.id.tracks_fragment, false)
-                    true
-                }
-                else
-                    NavigationUI.onNavDestinationSelected(it , navController)
-            }
             binding.bottomNavigation.selectedItemId=R.id.tracks_fragment
 
         }
-
+        mainViewModel?.initMedia()
 
     }
 
-    fun setAppBar(id:Int){
-        binding.toolbar.inflateMenu(id)
 
-        binding.toolbar.setOnMenuItemClickListener { item->
-            return@setOnMenuItemClickListener when(item.itemId){
-                 R.id.confirm_button->{
-                                true
-                            }
-                else-> false
-            }
 
-        }
-    }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_app_bar_menu,menu)
@@ -112,6 +89,15 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean { // use ?
         return navController.navigateUp() || return super.onSupportNavigateUp()
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if (requestCode==Constants.REQUEST_CODE_DELETE&& resultCode== AppCompatActivity.RESULT_OK) {
+            mainViewModel.mediaRemoved(true)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
 }
 
 

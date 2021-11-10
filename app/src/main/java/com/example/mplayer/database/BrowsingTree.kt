@@ -1,10 +1,12 @@
 package com.example.mplayer.database
 
+import android.net.Uri
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import com.example.mplayer.Constants
 import com.example.mplayer.Constants.ALBUMS_ROOT
+import com.example.mplayer.Constants.PLAYLIST_ROOT
 import com.example.mplayer.Constants.TRACKS_ROOT
 import com.example.mplayer.Utility.flag
 import com.example.mplayer.Utility.from
@@ -12,6 +14,8 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -20,9 +24,10 @@ class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
 
 
     private fun setTree() {
+        browsingList = mutableMapOf()
 
         val trackRoot = browsingList[TRACKS_ROOT] ?: mutableListOf()
-        trackRoot.addAll(musicSource.musicItems)
+        trackRoot.addAll(musicSource.tracks)
 
         val albumRoot = browsingList[ALBUMS_ROOT] ?: mutableListOf()
         musicSource.albums.forEach {
@@ -38,40 +43,67 @@ class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
                 ).build()
 
 
-            albumRoot.add(album)
+            if (it.value.isNotEmpty()) {
+                albumRoot.add(album)
+                browsingList[it.key] = it.value
+            }
+        }
+
+        val playlistRoot = browsingList[PLAYLIST_ROOT] ?: mutableListOf()
+        musicSource.playLists.forEach {
+            val playlist: MediaMetadataCompat = MediaMetadataCompat.Builder().apply {
+                flag = (MediaBrowserCompat.MediaItem.FLAG_BROWSABLE)
+                from = PLAYLIST_ROOT
+            }
+                .putText(MediaMetadataCompat.METADATA_KEY_ALBUM, it.key)
+                .putText(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, it.key)
+                .putText(
+                    MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
+                    it.value[0].description.iconUri.toString()
+                ).build()
+
+
+            playlistRoot.add(playlist)
             browsingList[it.key] = it.value
         }
 
-//        val playlistRoot = browsingList[PLAYLIST_ROOT] ?: mutableListOf()
-//        musicSource.playLists.forEach {
-//            val playlist: MediaMetadataCompat = MediaMetadataCompat.Builder().apply {
-//                flag = (MediaBrowserCompat.MediaItem.FLAG_BROWSABLE)
-//                from = PLAYLIST_ROOT
-//            }
-//                .putText(MediaMetadataCompat.METADATA_KEY_ALBUM, it.key)
-//                .putText(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, it.key)
-//                .putText(
-//                    MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
-//                    it.value[0].description.iconUri.toString()
-//                ).build()
-//
-//
-//            playlistRoot.add(playlist)
-//            browsingList[it.key] = it.value
-//        }
-
         browsingList[TRACKS_ROOT] = trackRoot
         browsingList[ALBUMS_ROOT] = albumRoot
-      //  browsingList[PLAYLIST_ROOT] = playlistRoot
+        browsingList[PLAYLIST_ROOT] = playlistRoot
 
         musicSource.setStateInitialized()
 
     }
 
-    suspend fun getMedia() {
-        musicSource.getSongs()
-        setTree()
 
+    suspend fun getMedia() {
+        withContext(Dispatchers.IO){
+            musicSource.getSongs()
+            musicSource.getPlaylist()
+            setTree()
+
+        }
+
+    }
+
+     fun mediaReset(list: MutableList<Uri>){
+         browsingList.forEach{ entry ->
+        list.forEach{ uri->
+           browsingList[entry.key]?.remove(entry.value.find { uri==it.description.mediaUri })
+        }
+            if (entry.value.isEmpty())
+                 browsingList[ALBUMS_ROOT]?.remove(browsingList[ALBUMS_ROOT]?.find { entry.key==it.description.mediaId })
+         }
+
+    }
+
+    suspend fun updatePlaylist()= withContext(Dispatchers.IO){
+        musicSource.getPlaylist()
+        setTree()
+    }
+
+    fun isRootAvailable(id:String):Boolean{
+        return !browsingList.containsKey(id)
     }
 
     fun whenReady(action: (Boolean) -> Unit): Boolean {

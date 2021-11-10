@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
-import com.example.mplayer.Adapters.PlaylistAdapter
 import com.example.mplayer.Adapters.TracksAdapter
 import com.example.mplayer.Constants.ALBUMS_ROOT
 import com.example.mplayer.MainActivity
@@ -23,13 +22,9 @@ class AlbumFragment : Fragment() {
     @Inject
     lateinit var glide: RequestManager
     private  lateinit var  mainViewModel: MainViewModel
-    lateinit var adapter: TracksAdapter
+    lateinit var mAdapter: TracksAdapter
     private lateinit var binding: FragmentAlbumBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,20 +35,23 @@ class AlbumFragment : Fragment() {
         binding = FragmentAlbumBinding.inflate(layoutInflater)
         if (mainViewModel.albumList.value==null|| mainViewModel.albumList.value?.isHandled() == false)
         mainViewModel.getMedia(ALBUMS_ROOT)
-        adapter= TracksAdapter(requireContext(),glide){ item->
+        mAdapter= TracksAdapter(requireContext(),glide,{ item->
             val key= item.description.mediaId!!
             val action=AlbumFragmentDirections.actionToAlbumList(key)
             findNavController().navigate(action)
 
+        })
+        binding.albumRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = mAdapter
+            setItemViewCacheSize(16)
+           // setHasFixedSize(true)
         }
 
         mainViewModel.albumList.observe(viewLifecycleOwner,{ list->
-            adapter.setList(list.peekContent())
+            mAdapter.setList(list.peekContent())
         })
 
-        binding.albumRecyclerView.layoutManager=LinearLayoutManager(requireContext())
-        binding.albumRecyclerView.adapter=adapter
-        binding
 
         return binding.root
     }

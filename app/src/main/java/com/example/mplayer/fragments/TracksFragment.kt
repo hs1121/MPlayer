@@ -8,12 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
-import com.example.mplayer.Adapters.PlaylistAdapter
 import com.example.mplayer.Adapters.TracksAdapter
 import com.example.mplayer.Constants.TRACKS_ROOT
 import com.example.mplayer.MainActivity
+import com.example.mplayer.Utility.Action
+import com.example.mplayer.Utility.Content
+import com.example.mplayer.Utility.from
 import com.example.mplayer.viewModels.MainViewModel
 import com.example.mplayer.databinding.FragmentTracksBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +31,7 @@ class TracksFragment : Fragment() {
     lateinit var glide: RequestManager
     private  lateinit var mainViewModel:MainViewModel
     private lateinit var binding: FragmentTracksBinding
-     private lateinit var adapter: TracksAdapter
+     private lateinit var mAdapter: TracksAdapter
 
 
 
@@ -44,22 +47,28 @@ class TracksFragment : Fragment() {
         if (mainViewModel.tracksList.value==null|| mainViewModel.tracksList.value?.isHandled() == false)
         mainViewModel.getMedia(TRACKS_ROOT)
         binding = FragmentTracksBinding.inflate(layoutInflater)
-        adapter = TracksAdapter(requireContext(), glide){ clickedItem->
+        mAdapter = TracksAdapter(requireContext(), glide ,{ clickedItem->
             mainViewModel.itemClicked(clickedItem,requireContext())
+        },{
+            val action=TracksFragmentDirections.actionTracksFragmentToSelectionFragment(null,null,
+                Action.EDIT,
+                Content.TRACK,
+                TRACKS_ROOT,it.mediaId)
+            findNavController().navigate(action)
+        })
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = mAdapter
+            setItemViewCacheSize(16)
+//            setHasFixedSize(true)
         }
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerView.adapter = adapter
         mainViewModel.tracksList.observe(viewLifecycleOwner, {
-            adapter.setList(it.peekContent())
+            mAdapter.setList(it.peekContent())
             Log.d("debug","check")
         })
 
         return binding.root
     }
-    fun getBinding()=binding
-
-
-
 
 
 

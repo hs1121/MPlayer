@@ -5,11 +5,18 @@
     android:id="@+id/m_player_navigation"
     app:startDestination="@id/tracks_fragment">
 
+
     <fragment
         android:id="@+id/tracks_fragment"
         android:name="com.example.mplayer.fragments.TracksFragment"
         android:label="Tracks"
-        tools:layout="@layout/fragment_tracks" />
+        tools:layout="@layout/fragment_tracks" >
+        <action
+            android:id="@+id/action_tracks_fragment_to_selectionFragment"
+            app:destination="@id/selectionFragment" />
+    </fragment>
+
+<!--//////////////////////////////////////////////////////////////////-->
     <fragment
         android:id="@+id/album_fragment"
         android:name="com.example.mplayer.fragments.AlbumFragment"
@@ -19,6 +26,18 @@
             android:id="@+id/action_to_album_list"
             app:destination="@id/albumListFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/albumListFragment"
+        android:name="com.example.mplayer.fragments.AlbumListFragment"
+        android:label=""
+        tools:layout="@layout/fragment_album_list">
+        <argument
+            android:name="mediaId"
+            app:argType="string" />
+    </fragment>
+
+<!-- /////////////////////////////////////////////////////////// -->
     <fragment
         android:id="@+id/playlist_fragment"
         android:name="com.example.mplayer.fragments.PlaylistFragment"
@@ -34,15 +53,7 @@
             android:id="@+id/action_playlist_fragment_to_playlistItemFragment"
             app:destination="@id/playlistItemFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/albumListFragment"
-        android:name="com.example.mplayer.fragments.AlbumListFragment"
-        android:label="Album"
-        tools:layout="@layout/fragment_album_list">
-        <argument
-            android:name="mediaId"
-            app:argType="string" />
-    </fragment>
+
     <fragment
         android:id="@+id/selectionFragment"
         android:name="com.example.mplayer.fragments.SelectionFragment"
@@ -50,18 +61,49 @@
         tools:layout="@layout/fragment_selection" >
         <argument
             android:name="name"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
         <argument
             android:name="by"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="action"
+            app:argType="com.example.mplayer.Utility.Action" />
+        <argument
+            android:name="content"
+            app:argType="com.example.mplayer.Utility.Content" />
+        <argument
+            android:name="mediaId"
             app:argType="string" />
+        <argument
+            android:name="selectedItemId"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/playlistItemFragment"
         android:name="com.example.mplayer.fragments.PlaylistItemFragment"
-        android:label="fragment_playlist_item"
+        android:label=""
         tools:layout="@layout/fragment_playlist_item" >
         <argument
-            android:name="mediaIds"
-            app:argType="string[]" />
+            android:name="mediaId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_playlistItemFragment_to_arrangeFragment"
+            app:destination="@id/arrangeFragment" />
+        <action
+            android:id="@+id/action_playlistItemFragment_to_selectionFragment"
+            app:destination="@id/selectionFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/arrangeFragment"
+        android:name="com.example.mplayer.fragments.ArrangeFragment"
+        android:label="Rearrange"
+        tools:layout="@layout/fragment_arrange">
+        <argument
+            android:name="mediaId"
+            app:argType="string" />
+    </fragment>
+
 </navigation>
