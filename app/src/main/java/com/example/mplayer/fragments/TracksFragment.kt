@@ -62,6 +62,10 @@ class TracksFragment : Fragment() {
             setItemViewCacheSize(16)
 //            setHasFixedSize(true)
         }
+        binding.refreshLayout.setOnRefreshListener {
+            binding.refreshLayout.isRefreshing=false
+            mainViewModel.getMedia()
+        }
         mainViewModel.tracksList.observe(viewLifecycleOwner, {
             mAdapter.setList(it.peekContent())
             Log.d("debug","check")

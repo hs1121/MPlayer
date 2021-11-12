@@ -47,6 +47,11 @@ class MusicSource @Inject constructor(
     }
 
     suspend fun  getSongs(){
+
+        mediaItems= mutableListOf()
+        tracks= mutableListOf()
+        albums= HashMap()
+        playLists = HashMap()
         val uri=MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.contentResolver.query(uri,null,null,null)?.use { cursor->

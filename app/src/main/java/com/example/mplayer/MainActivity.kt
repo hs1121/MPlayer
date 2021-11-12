@@ -10,6 +10,10 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
@@ -18,11 +22,15 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import com.bumptech.glide.RequestManager
+import com.example.mplayer.Utility.isPlaying
 import com.example.mplayer.databinding.ActivityMainBinding
+import com.example.mplayer.exoPlayer.MusicService
 import com.example.mplayer.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.http.DELETE
 import java.lang.Exception
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -30,6 +38,8 @@ class MainActivity : AppCompatActivity() {
      lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
 
+    @Inject
+    lateinit var glide:RequestManager
 
 
 
@@ -75,10 +85,41 @@ class MainActivity : AppCompatActivity() {
         }
         mainViewModel?.initMedia()
 
+        val playPause: ImageView = findViewById(R.id.play_pause)
+        playPause.setOnClickListener { mainViewModel.playPause() }
+
+        mainViewModel.isPlaying.observe(this,{ playbackState ->
+            if (playbackState != null) {
+                when {
+                    playbackState.isPlaying -> playPause.setImageResource(R.drawable.exo_controls_pause)
+                    else -> playPause.setImageResource(R.drawable.exo_controls_play)
+                }
+            }
+        })
+
+        MusicService.playerInstance.observe(this){ it ->
+            if (mainViewModel.exoPlayer==null&&it!=null){
+                mainViewModel.exoPlayer=it
+                binding.playerMini.player=it
+            }else if (mainViewModel.exoPlayer!=null){
+                mainViewModel.exoPlayer?.let { binding.playerMini.player=it }
+            }
+        }
+
+        mainViewModel.currentlyPlayingSong.observe(this,{ item ->
+            if(item.description.mediaUri!=null)
+                binding.playerMini.visibility=View.VISIBLE
+            val title=findViewById<TextView>(R.id.player_mini_title)
+            val image=findViewById<ImageView>(R.id.player_mini_image)
+            title.text=item.description.title
+            item?.description?.iconUri.let { glide.load(it).into(image) }
+
+        })
+        binding.playerMini.setOnClickListener {
+            startActivity(Intent(applicationContext, PlayerActivity::class.java))
+        }
+
     }
-
-
-
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -94,6 +135,10 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode==Constants.REQUEST_CODE_DELETE&& resultCode== AppCompatActivity.RESULT_OK) {
             mainViewModel.mediaRemoved(true)
+        }
+        else {
+            Toast.makeText(this, "Unable to delete", Toast.LENGTH_SHORT).show()
+            mainViewModel.mediaRemoved(false)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

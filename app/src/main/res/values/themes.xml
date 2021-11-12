@@ -21,9 +21,11 @@
         <item name="itemTextColor">@color/bottom_nav_color</item>
         <item name="backgroundTint">@color/bottom_nav_background</item>
     </style>
-    <style name="custom_card" parent="Widget.MaterialComponents.CardView">
+    <style name="custom_card" parent="CardView">
         <item name="android:topRightRadius">@dimen/radius_bottom_nav</item>
         <item name="android:topLeftRadius">@dimen/radius_bottom_nav</item>
+        <item name="android:bottomLeftRadius">0dp</item>
+        <item name="android:bottomRightRadius">0dp</item>
     </style>
 
 

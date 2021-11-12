@@ -1,9 +1,7 @@
 package com.example.mplayer.Utility
 
-import android.Manifest
 import android.app.Activity
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import androidx.core.app.ActivityCompat
 
@@ -13,11 +11,9 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
-import androidx.core.app.ActivityCompat.startIntentSenderForResult
 import com.example.mplayer.Constants
-import com.example.mplayer.MainActivity
 import java.lang.Exception
-import java.util.ArrayList
+import android.widget.Toast
 
 
 object  Util {
@@ -39,7 +35,7 @@ object  Util {
             }
         }
 
-    fun requestDeletePermission( context:Activity,uriList:List<Uri>){
+    fun requestDeletePermission( context:Activity,uriList:List<Uri>,callback:(Boolean,String)->Unit){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val pi: PendingIntent = MediaStore.createDeleteRequest(context.contentResolver, uriList)
             try {
@@ -48,8 +44,37 @@ object  Util {
                     Intent(),0,0,0)
             } catch (e: Exception) { }
         }
+        else
+            deleteFileUsingDisplayName(context,uriList,callback)
     }
 
+    private fun deleteFileUsingDisplayName(
+        activity: Activity,
+        uriList: List<Uri>,
+        callback: (Boolean,String) -> Unit
+    ) {
+
+
+    val resolver = activity.contentResolver
+    try {
+        var successes=0
+        uriList.forEach { uri ->
+            val result = resolver.delete(uri, null, null)
+            Log.d("resultCode", result.toString())
+            if (result > 0)
+                successes++
+        }
+        if (successes== uriList.size)
+            callback(true, "")
+        else if (successes>0&&successes<uriList.size)
+            callback(false, "Unable to delete few files")
+        else
+            callback(false, "Unable to delete")
+    } catch (ex: Exception) {
+        ex.printStackTrace()
+        callback(false,"Unable to delete")
+    }
+    }
 
 
 

@@ -3,7 +3,9 @@ package com.example.mplayer.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
+import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -97,7 +99,7 @@ class SelectionFragment : Fragment() {
 
                 val list = mAdapter.getSelectedItems()
                 val name = args.name!!
-                val by = args.by!!
+                val by = args.by?:""
 
                 val iconUri: String? = if (list.isNotEmpty()) {
                     list[0].description.iconUri?.toString()
@@ -143,15 +145,28 @@ class SelectionFragment : Fragment() {
                 }
             }
             else -> {
-                activity?.let { Util.requestDeletePermission(it,mAdapter.getUris()) }
+                activity?.let { Util.requestDeletePermission(it,mAdapter.getUris()){success,message->
+                    if (success)
+                        mainViewModel.mediaRemoved(true)
+                    else {
+                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                        mainViewModel.mediaRemoved(false)
+                    }
+                }
+                 }
             }
         }
         mainViewModel.mediaRemoved.observe(viewLifecycleOwner){
             if (it) {
                 mainViewModel.mediaRemoved(mAdapter.getUris().toMutableList()) {
+                    Toast.makeText(requireContext(), "Deleted Successfully", Toast.LENGTH_SHORT)
+                        .show()
                     activity?.onBackPressed()
                 }
+
             }
+            else
+                activity?.onBackPressed()
 
         }
     }

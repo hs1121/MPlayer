@@ -18,6 +18,7 @@ import com.example.mplayer.database.BrowsingTree
 import com.example.mplayer.database.Repository
 import com.example.mplayer.database.entity.PlaylistEntity
 import com.example.mplayer.exoPlayer.MediaSessionConnection
+import com.google.android.exoplayer2.SimpleExoPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
@@ -32,7 +33,9 @@ class MainViewModel @Inject constructor(
     private val mediaSessionConnection: MediaSessionConnection
 ) : ViewModel() {
 
-
+    val currentlyPlayingSong=mediaSessionConnection.nowPlaying
+    val isPlaying=mediaSessionConnection.playbackState
+    var exoPlayer: SimpleExoPlayer?=null
 
     private var _tracksList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
     var tracksList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _tracksList
@@ -164,6 +167,19 @@ class MainViewModel @Inject constructor(
                 Bundle().apply { putString(Constants.METADATA_KEY_FROM, mediaItem.from) })
     }
 
+    fun playPause() {
+        mediaSessionConnection.playbackState.value?.let { playbackState ->
+            when {
+                playbackState.isPlaying -> {
+                    mediaSessionConnection.transportControls.pause()
+                }
+                else -> {
+                    mediaSessionConnection.transportControls.play()
+                }
+            }
+        }
+    }
+
     fun itemClicked(item: MediaBrowserCompat.MediaItem,context: Context) {
         if (item.isPlayable){
             playMedia(item,false)
@@ -197,11 +213,24 @@ class MainViewModel @Inject constructor(
         _playlist.postValue(Event(mutableListOf()))
     }
 
+    fun resetMedia() {
+        _playlist.postValue(Event(mutableListOf()))
+        _tracksList.postValue(Event(mutableListOf()))
+        _albumList.postValue(Event(mutableListOf()))
+    }
+
     fun initMedia() {
         getMedia(TRACKS_ROOT)
         getMedia(ALBUMS_ROOT)
         getMedia(PLAYLIST_ROOT)
     }
+    fun getMedia(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.browsingTree.getMedia()
+            initMedia()
+        }
+    }
+
 
 
 }

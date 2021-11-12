@@ -50,7 +50,7 @@ class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
         }
 
         val playlistRoot = browsingList[PLAYLIST_ROOT] ?: mutableListOf()
-        musicSource.playLists.forEach {
+        musicSource.playLists.forEach { it ->
             val playlist: MediaMetadataCompat = MediaMetadataCompat.Builder().apply {
                 flag = (MediaBrowserCompat.MediaItem.FLAG_BROWSABLE)
                 from = PLAYLIST_ROOT
@@ -59,7 +59,7 @@ class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
                 .putText(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, it.key)
                 .putText(
                     MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
-                    it.value[0].description.iconUri.toString()
+                    it.value.let { item-> return@let if (item.isNotEmpty()) item[0].description.iconUri else ""}.toString()
                 ).build()
 
 
