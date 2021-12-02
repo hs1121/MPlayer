@@ -6,7 +6,9 @@
         android:icon="@drawable/ic_search"
         android:title="Search"
         app:iconTint="@color/primary"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="collapseActionView|ifRoom"
+        app:actionViewClass="android.widget.SearchView" />
+
     <item
         android:id="@+id/sort_icon"
         android:icon="@drawable/ic_sort"

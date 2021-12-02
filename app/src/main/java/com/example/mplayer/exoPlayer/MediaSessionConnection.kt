@@ -10,6 +10,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.media.MediaBrowserServiceCompat
+import com.example.mplayer.Utility.from
 import com.google.android.exoplayer2.SimpleExoPlayer
 import javax.inject.Inject
 
@@ -81,6 +82,7 @@ class MediaSessionConnection(
 
         override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
             super.onMetadataChanged(metadata)
+//           _nowPlaying.postValue( MusicService.currentSong?:NOTHING_PLAYING)
             _nowPlaying.postValue(metadata?:NOTHING_PLAYING)
         }
 
@@ -103,7 +105,5 @@ class MediaSessionConnection(
         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, 0)
         .build()
 
-    interface OnMusicItemSelected{
 
-    }
 }

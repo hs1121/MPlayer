@@ -1,6 +1,7 @@
 package com.example.mplayer.fragments
 
 import android.os.Bundle
+import android.support.v4.media.MediaBrowserCompat
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -22,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PlaylistItemFragment : Fragment() {
+class PlaylistItemFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
 
     private lateinit var binding:FragmentPlaylistItemBinding
     private lateinit var mAdapter: PlaylistAdapter
@@ -44,19 +45,12 @@ class PlaylistItemFragment : Fragment() {
         mainViewModel= mainActivity.getViewModel()!!
         binding= FragmentPlaylistItemBinding.inflate(inflater)
         binding.recyclerView.layoutManager=LinearLayoutManager(requireContext())
-        mAdapter= PlaylistAdapter(requireContext(),glide,{
-            val action=PlaylistItemFragmentDirections.actionPlaylistItemFragmentToSelectionFragment(null,null,
-                Action.EDIT,
-                Content.PLAYLIST_ITEM,
-                it.from,it.mediaId)
-            findNavController().navigate(action)
-        }){
-            mainViewModel.itemClicked(it,requireContext())
-        }
+
+        mAdapter= PlaylistAdapter(requireContext(),glide)
+        mAdapter.setPlaylistItemListener(this)
         binding.recyclerView.adapter=mAdapter
 
-//        val dragAndDropHelper=ItemTouchHelper(DragAndDropHelper(mAdapter))
-//        dragAndDropHelper.attachToRecyclerView(binding.recyclerView)
+
 
 
         if (mainViewModel.songList.value==null||
@@ -67,9 +61,14 @@ class PlaylistItemFragment : Fragment() {
             mAdapter.setList(it.data)
         }
         setHasOptionsMenu(true)
+
+        if(mAdapter!=null) test(0) else test(1)
+        test(0)
         return binding.root
+
     }
 
+    private fun test(value:Int=0, str:String="")="hello"
 
     override fun onResume() {
         super.onResume()
@@ -101,6 +100,26 @@ class PlaylistItemFragment : Fragment() {
             }
             else->{  super.onOptionsItemSelected(item)}
         }
+    }
+
+    override fun onItemClick(item: MediaBrowserCompat.MediaItem) {
+        mainViewModel.itemClicked(item,requireContext())
+    }
+
+    override fun onLongClick(item: MediaBrowserCompat.MediaItem,position: Int) {
+        val action=PlaylistItemFragmentDirections.actionPlaylistItemFragmentToSelectionFragment(null,null,
+            Action.EDIT,
+            Content.PLAYLIST_ITEM,
+            item.from,item.mediaId,position)
+        findNavController().navigate(action)
+    }
+
+    override fun onItemEdited(id:String,name: String, by: String, item: MediaBrowserCompat.MediaItem) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onItemDelete(item: MediaBrowserCompat.MediaItem) {
+        TODO("Not yet implemented")
     }
 
 }

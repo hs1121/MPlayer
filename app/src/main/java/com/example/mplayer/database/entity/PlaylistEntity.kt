@@ -7,10 +7,11 @@ import com.example.mplayer.Constants.PLAYLIST_TABLE
 
 @Entity(tableName = PLAYLIST_TABLE)
 data class PlaylistEntity(
-    @PrimaryKey
-    var name:String="",
-    var createdBy:String="unknown",
-    var createdOn:String="",
+    var name: String = "",
+    var createdBy: String = "unknown",
+    var createdOn: String = "",
     var iconUri: String? = null,
-    var data: MutableList<String?> = mutableListOf()
+    var data: MutableList<String?> = mutableListOf(),
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0
 )

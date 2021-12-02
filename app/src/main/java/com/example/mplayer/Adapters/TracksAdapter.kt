@@ -17,7 +17,7 @@ class TracksAdapter(
     private val context: Context,
     private val glide: RequestManager,
      val itemClickListener:(MediaBrowserCompat.MediaItem)->Unit,
-    private val onLongClick:((MediaBrowserCompat.MediaItem)->Unit)={}): RecyclerView.Adapter<TracksAdapter.TracksViewHolder>() {
+    private val onLongClick:((MediaBrowserCompat.MediaItem,Int)->Unit)?): RecyclerView.Adapter<TracksAdapter.TracksViewHolder>() {
 
 
     private var list= mutableListOf<MediaBrowserCompat.MediaItem>()
@@ -42,7 +42,7 @@ class TracksAdapter(
                 .into(binding.itemImage)
 
             binding.root.setOnLongClickListener {
-                onLongClick(item)
+                onLongClick?.let { it(item,position) }
                 true
             }
 

@@ -26,6 +26,7 @@ interface PlaylistDao {
     @Query("SELECT * FROM Playlist WHERE NAME=:name")
     suspend fun getPlaylistItem(name:String):PlaylistEntity
 
+
     @Query("DELETE FROM Playlist WHERE NAME=:name")
     suspend fun delete(name:String)
 

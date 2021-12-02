@@ -13,8 +13,12 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AddPlaylistDialog(
+    private val name:String?,
+    private val by:String?,
     val onAddClick:(String,String)->Unit
 ) :DialogFragment() {
+
+
 
     @Inject
     lateinit var nameValidator: NameValidator

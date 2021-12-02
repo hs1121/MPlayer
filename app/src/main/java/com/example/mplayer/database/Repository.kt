@@ -10,6 +10,8 @@ class Repository @Inject constructor(
     val playerDatabase: MPlayerDatabase
 ){
 
+    suspend fun getPlaylist(name:String)= playerDatabase.playlistDao().getPlaylistItem(name)
+
     suspend fun insertPlaylist(entity: PlaylistEntity){
         playerDatabase.playlistDao().insert(entity)
     }

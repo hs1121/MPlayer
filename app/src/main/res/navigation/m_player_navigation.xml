@@ -80,6 +80,9 @@
             android:name="selectedItemId"
             app:argType="string"
             app:nullable="true" />
+        <argument
+            android:name="pos"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/playlistItemFragment"

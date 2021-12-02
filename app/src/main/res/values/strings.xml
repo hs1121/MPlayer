@@ -9,4 +9,6 @@
     <string name="tracks">Tracks</string>
     <string name="albums">Albums</string>
     <string name="playlists">Playlists</string>
+
+    <string name="about_equalizer">Equalizer is an audio filter to change the frequency\n envelope of the sound.</string>
 </resources>

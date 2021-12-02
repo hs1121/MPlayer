@@ -35,6 +35,8 @@ object  Util {
             }
         }
 
+    fun MediaMetadataWithFromImp(){}
+
     fun requestDeletePermission( context:Activity,uriList:List<Uri>,callback:(Boolean,String)->Unit){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val pi: PendingIntent = MediaStore.createDeleteRequest(context.contentResolver, uriList)

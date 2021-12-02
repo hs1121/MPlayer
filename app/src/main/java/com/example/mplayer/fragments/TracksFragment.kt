@@ -49,11 +49,11 @@ class TracksFragment : Fragment() {
         binding = FragmentTracksBinding.inflate(layoutInflater)
         mAdapter = TracksAdapter(requireContext(), glide ,{ clickedItem->
             mainViewModel.itemClicked(clickedItem,requireContext())
-        },{
+        },{item,pos->
             val action=TracksFragmentDirections.actionTracksFragmentToSelectionFragment(null,null,
                 Action.EDIT,
                 Content.TRACK,
-                TRACKS_ROOT,it.mediaId)
+                TRACKS_ROOT,item.mediaId,pos)
             findNavController().navigate(action)
         })
         binding.recyclerView.apply {

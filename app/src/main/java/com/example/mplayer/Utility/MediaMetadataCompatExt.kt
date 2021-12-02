@@ -29,7 +29,7 @@ inline var MediaMetadataCompat.from: String
     set(value) {
          bundle.putString(METADATA_KEY_FROM,value)}
     get() {
-        val key1=getText(METADATA_KEY_FROM)
+        val key1=getText(METADATA_KEY_FROM)?:""
 
         return key1.toString()
     }

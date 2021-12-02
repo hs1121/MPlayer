@@ -42,7 +42,7 @@ class MusicService : MediaBrowserServiceCompat() {
         private val _playerInstance = MutableLiveData<SimpleExoPlayer?>()
         val playerInstance: LiveData<SimpleExoPlayer?> = _playerInstance
 
-        var playerList: MutableList<MediaBrowserCompat.MediaItem>? = null
+        var currentSong: MediaMetadataCompat? = null
     }
 
     @Inject
@@ -83,6 +83,7 @@ class MusicService : MediaBrowserServiceCompat() {
 
         val playbackPreparer = PlayerPlayBackPreparer(browsingTree) {
             currentlyPlayingSong = it
+            currentSong=it
             mediaSession.setMetadata(it)
             val key = it?.from ?: ""
             mediaSessionConnector.setQueueNavigator(PlayerQueueNavigator(mediaSession, key))

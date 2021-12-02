@@ -40,7 +40,7 @@ class AlbumFragment : Fragment() {
             val action=AlbumFragmentDirections.actionToAlbumList(key)
             findNavController().navigate(action)
 
-        })
+        },null)
         binding.albumRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mAdapter

@@ -1,6 +1,7 @@
 package com.example.mplayer
 
 import android.app.Activity
+import android.content.Intent
 import android.media.session.PlaybackState
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -60,5 +61,8 @@ class PlayerActivity : AppCompatActivity() {
             item?.description?.iconUri.let { glide.load(it).into(binding.songImage) }
 
         })
+
+        binding.back.setOnClickListener { onBackPressed() }
+        binding.settings.setOnClickListener { startActivity(Intent(applicationContext,SettingActivity::class.java)) }
     }
 }

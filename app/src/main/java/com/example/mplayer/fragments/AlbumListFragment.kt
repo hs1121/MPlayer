@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
-import com.example.mplayer.Adapters.PlaylistAdapter
 import com.example.mplayer.Adapters.TracksAdapter
 import com.example.mplayer.MainActivity
 import com.example.mplayer.databinding.FragmentAlbumListBinding
@@ -45,7 +44,7 @@ class AlbumListFragment : Fragment() {
         binding.recyclerView.layoutManager=LinearLayoutManager(requireContext())
         adapter= TracksAdapter(requireContext(),glide,{
                 mainViewModel.itemClicked(it,requireContext())
-        })
+        },null)
         binding.recyclerView.adapter=adapter
         mainViewModel.songList.observe(viewLifecycleOwner){
             adapter.setList(it.peekContent())

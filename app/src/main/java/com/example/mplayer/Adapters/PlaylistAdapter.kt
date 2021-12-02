@@ -5,21 +5,23 @@ import android.support.v4.media.MediaBrowserCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
+import com.example.mplayer.R
+import com.example.mplayer.Utility.AddPlaylistDialog
 import com.example.mplayer.Utility.ListDiffUtil
 import com.example.mplayer.databinding.MusicItemListLayoutBinding
 
 class PlaylistAdapter (
     private val context: Context,
-    private val glide: RequestManager,
-    val longPressListener :(MediaBrowserCompat.MediaItem)->Unit,
-    val itemClickListener:(MediaBrowserCompat.MediaItem)->Unit ): RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
+    private val glide: RequestManager): RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
 
 
     private var list = mutableListOf<MediaBrowserCompat.MediaItem>()
+    private lateinit var playlistListener:PlaylistItemListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
         val binding: MusicItemListLayoutBinding =
@@ -53,11 +55,33 @@ class PlaylistAdapter (
             binding.itemMore.visibility = View.VISIBLE
             binding.itemMove.visibility = View.GONE
         }
+
+        binding.itemMore.setOnClickListener {
+            val popupMenu=PopupMenu(context,binding.itemMore)
+            popupMenu.inflate(R.menu.list_menu)
+
+            popupMenu.setOnMenuItemClickListener {
+                when(it.itemId){
+                    R.id.edit_item->{
+                        val dialog=AddPlaylistDialog(item.mediaId,null){name,by->
+                            playlistListener.onItemEdited(item.mediaId!!,name,by,item)
+                        }
+                        true
+                    }
+                    R.id.delete_item->{
+                        playlistListener.onItemDelete(item)
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+
         binding.root.setOnClickListener {
-            itemClickListener(item)
+            playlistListener.onItemClick(item)
         }
         binding.root.setOnLongClickListener {
-            longPressListener(item)
+            playlistListener.onLongClick(item,position)
             true
         }
     }
@@ -86,5 +110,15 @@ class PlaylistAdapter (
 
     inner class PlaylistViewHolder(val binding: MusicItemListLayoutBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    interface PlaylistItemListener{
+        fun onItemClick(item:MediaBrowserCompat.MediaItem)
+        fun onLongClick(item:MediaBrowserCompat.MediaItem,position: Int)
+        fun onItemEdited(id:String,name: String, by: String, item: MediaBrowserCompat.MediaItem)
+        fun onItemDelete(item:MediaBrowserCompat.MediaItem)
+    }
+    fun setPlaylistItemListener(playlistListener:PlaylistItemListener){
+        this.playlistListener=playlistListener
+    }
 
 }

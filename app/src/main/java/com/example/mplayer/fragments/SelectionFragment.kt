@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.util.Log
 import android.view.*
+import android.widget.Adapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
@@ -23,6 +25,13 @@ import com.example.mplayer.databinding.FragmentSelectionBinding
 import com.example.mplayer.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import androidx.recyclerview.widget.LinearSmoothScroller
+
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.SmoothScroller
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class SelectionFragment : Fragment() {
@@ -50,6 +59,14 @@ class SelectionFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         mAdapter = SelectionAdapter(requireContext(), glide, args.selectedItemId)
         binding.recyclerView.adapter = mAdapter
+
+//        var smoothScroller: SmoothScroller = object : LinearSmoothScroller(context) {
+//            override fun getVerticalSnapPreference(): Int {
+//                return SNAP_TO_START
+//            }
+//        }
+
+
         when (args.mediaId) {
             Constants.TRACKS_ROOT -> {
                 mainViewModel.tracksList.value?.let { event ->
@@ -72,6 +89,31 @@ class SelectionFragment : Fragment() {
                 }
             }
         }
+
+        mAdapter.registerAdapterDataObserver( object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(
+                positionStart: Int,
+                itemCount: Int
+            ) {
+                binding.recyclerView.scrollToPosition(args.pos)
+            }
+
+
+//            override fun onItemRangeRemoved(
+//                positionStart: Int,
+//                itemCount: Int
+//            ) {
+//                binding.recyclerView.smoothScrollToPosition(itemCount)
+//            }
+        })
+
+//        smoothScroller.targetPosition = args.pos;
+//
+        lifecycleScope.launch {
+            delay(1000)
+            (binding.recyclerView.layoutManager as LinearLayoutManager).scrollToPosition(args.pos)
+        }
+
 
         setHasOptionsMenu(true)
         return binding.root
@@ -170,6 +212,7 @@ class SelectionFragment : Fragment() {
 
         }
     }
+
 
    
 

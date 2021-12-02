@@ -82,15 +82,14 @@ class MainViewModel @Inject constructor(
         }
 
     }
-//    fun deletePlaylist(playlistEntity: PlaylistEntity){
-//        viewModelScope.launch(Dispatchers.IO) {
-//            repository.deletePlaylist(playlistEntity)
-//        }
-//        val list=playlist.value?: mutableListOf()
-//        list.remove(playlistEntity)
-//        _playlist.postValue(list)
-//    }
-//
+
+   suspend fun getPlayList(id:String):PlaylistEntity= repository.getPlaylist(id)
+
+    fun deletePlaylist(entity: PlaylistEntity){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deletePlaylist(entity)
+        }
+    }
     fun deletePlaylists(name:MutableList<String>, callBack: () -> Unit){
         viewModelScope.launch {
             repository.deletePlaylist(name)

@@ -1,6 +1,7 @@
 package com.example.mplayer.fragments
 
 import android.os.Bundle
+import android.support.v4.media.MediaBrowserCompat
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -38,8 +39,7 @@ class ArrangeFragment : Fragment() {
         binding = FragmentArrangeBinding.inflate(inflater)
         mainViewModel= mainActivity.getViewModel()!!
         binding.recyclerView.layoutManager= LinearLayoutManager(requireContext())
-        mAdapter= PlaylistAdapter(requireContext(),glide,{}){
-        }
+        mAdapter= PlaylistAdapter(requireContext(),glide)
         binding.recyclerView.adapter=mAdapter
 
         val dragAndDropHelper= ItemTouchHelper(DragAndDropHelper(mAdapter))
@@ -54,6 +54,24 @@ class ArrangeFragment : Fragment() {
             mAdapter.setList(it.data)
         }
         setHasOptionsMenu(true)
+
+
+        mAdapter.setPlaylistItemListener(object :PlaylistAdapter.PlaylistItemListener{
+            override fun onItemClick(item: MediaBrowserCompat.MediaItem)=Unit
+
+            override fun onLongClick(item: MediaBrowserCompat.MediaItem,position: Int) =Unit
+
+            override fun onItemEdited(
+                id: String,
+                name: String,
+                by: String,
+                item: MediaBrowserCompat.MediaItem
+            ) =Unit
+
+            override fun onItemDelete(item: MediaBrowserCompat.MediaItem) =Unit
+
+        })
+
         return binding.root
     }
 
@@ -78,6 +96,5 @@ class ArrangeFragment : Fragment() {
 
         }
     }
-
 
 }

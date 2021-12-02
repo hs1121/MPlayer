@@ -1,15 +1,17 @@
 package com.example.mplayer.fragments
 
 import android.os.Bundle
+import android.support.v4.media.MediaBrowserCompat
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
 import com.example.mplayer.Adapters.PlaylistAdapter
-import com.example.mplayer.Adapters.TracksAdapter
+
 import com.example.mplayer.Constants
 import com.example.mplayer.MainActivity
 import com.example.mplayer.Utility.Action
@@ -20,10 +22,12 @@ import com.example.mplayer.database.entity.PlaylistEntity
 import com.example.mplayer.databinding.FragmentPlaylistBinding
 import com.example.mplayer.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PlaylistFragment : Fragment() {
+class PlaylistFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
 
     @Inject
     lateinit var glide: RequestManager
@@ -45,18 +49,9 @@ class PlaylistFragment : Fragment() {
         mainViewModel.getMedia(Constants.PLAYLIST_ROOT)
 
 
-        mAdapter= PlaylistAdapter(requireContext(),glide,{
-            val action=PlaylistFragmentDirections.actionPlaylistFragmentToSelectionFragment(null,null,
-                Action.EDIT,Content.PLAYLIST,Constants.PLAYLIST_ROOT,it.mediaId)
-            findNavController().navigate(action)
-        }
-        ){
-                val action = PlaylistFragmentDirections.actionPlaylistFragmentToPlaylistItemFragment(
-                    it.mediaId.toString()
-                )
-            findNavController().navigate(action)
-        }
 
+        mAdapter= PlaylistAdapter(requireContext(),glide)
+        mAdapter.setPlaylistItemListener(this)
 
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -78,7 +73,7 @@ class PlaylistFragment : Fragment() {
     private fun showDialog(){
 
         activity?.supportFragmentManager?.let {
-            AddPlaylistDialog{ name, by ->
+            AddPlaylistDialog(null,null){ name, by ->
                 showSelection(name,by)
             }.show(it,"add Playlist")
         }
@@ -86,8 +81,35 @@ class PlaylistFragment : Fragment() {
 
     private fun showSelection(name: String, by: String) {
        val action = PlaylistFragmentDirections.actionPlaylistFragmentToSelectionFragment(
-           name,by,Action.ADD,Content.TRACK,Constants.TRACKS_ROOT,null)
+           name,by,Action.ADD,Content.TRACK,Constants.TRACKS_ROOT,null,0)
         findNavController().navigate(action)
+    }
+
+
+    override fun onItemClick(item: MediaBrowserCompat.MediaItem) {
+        val action = PlaylistFragmentDirections.actionPlaylistFragmentToPlaylistItemFragment(
+            item.mediaId.toString()
+        )
+        findNavController().navigate(action)
+    }
+
+    override fun onLongClick(item: MediaBrowserCompat.MediaItem,position: Int) {
+        val action=PlaylistFragmentDirections.actionPlaylistFragmentToSelectionFragment(null,null,
+            Action.EDIT,Content.PLAYLIST,Constants.PLAYLIST_ROOT,item.mediaId,position)
+        findNavController().navigate(action)
+    }
+
+    override fun onItemEdited(id:String,name: String, by: String, item: MediaBrowserCompat.MediaItem) {
+        lifecycleScope.launch(Dispatchers.IO){
+           val entity= mainViewModel.getPlayList(id)
+            entity.name=name
+            entity.createdBy=by
+            mainViewModel.updatePlaylist(entity)
+        }
+    }
+
+    override fun onItemDelete(item: MediaBrowserCompat.MediaItem) {
+        TODO("Not yet implemented")
     }
 
 

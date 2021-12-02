@@ -11,5 +11,7 @@
 
     <dimen name="input_text_radius">10dp</dimen>
 
+    <dimen name="equalizer_seek_bar_height">240dp</dimen>
+
 
 </resources>

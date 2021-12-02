@@ -20,6 +20,7 @@ class SelectionAdapter (
 
     private var list= mutableListOf<MediaBrowserCompat.MediaItem>()
     private var selectedItems= mutableListOf<MediaBrowserCompat.MediaItem>()
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectionViewHolder {
         val binding: MusicItemListLayoutBinding = MusicItemListLayoutBinding.inflate(LayoutInflater.from(context))
@@ -89,9 +90,17 @@ class SelectionAdapter (
         val diffUtilResult= DiffUtil.calculateDiff(diffUtil)
         this.list=list
         diffUtilResult.dispatchUpdatesTo(this)
+
+
+
     }
 
-    inner class SelectionViewHolder( val binding: MusicItemListLayoutBinding): RecyclerView.ViewHolder(binding.root){
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView=recyclerView
+    }
+
+    inner class SelectionViewHolder(val binding: MusicItemListLayoutBinding): RecyclerView.ViewHolder(binding.root){
         init {
             binding.checkBox.visibility=View.VISIBLE
             binding.itemMove.visibility=View.GONE
