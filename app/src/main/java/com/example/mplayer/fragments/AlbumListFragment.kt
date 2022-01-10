@@ -39,6 +39,7 @@ class AlbumListFragment : Fragment() {
 
         if (mainViewModel.songList.value==null||
             mainViewModel.songList.value?.isHandled()==false) {
+            // fetch album data if not fetched before or not handled (not updated the list after change in main data)
             mainViewModel.getMedia(args.mediaId)
         }
         binding.recyclerView.layoutManager=LinearLayoutManager(requireContext())
@@ -63,12 +64,12 @@ class AlbumListFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mainViewModel.resetSongList()
+        mainViewModel.resetSongList() // reset list so that it can fetch data everytime (for a different/same key)
+        // if title is blank then is can be changed else it donot updates and shows same title
         (activity as MainActivity)?.supportActionBar?.title=""
 
     }
 
-    // todo: issue-> wrong song played on Click
 
 
 

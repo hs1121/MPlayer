@@ -7,5 +7,4 @@
         android:id="@+id/delete_item"
         android:title="Delete" />
 
-
 </menu>

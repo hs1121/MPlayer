@@ -10,6 +10,7 @@ import com.google.gson.Gson
 class TypeConvertor {
 
     val gson = Gson()
+    // type converters to convert data into primitive form and retrieve it in original form form database
 
     @TypeConverter
     fun mediaMetadataToString(list: MutableList<MediaBrowserCompat.MediaItem>):String{

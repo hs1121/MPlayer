@@ -1,6 +1,7 @@
 package com.example.mplayer.Utility
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ class AddPlaylistDialog(
 
 
 
+
     @Inject
     lateinit var nameValidator: NameValidator
 
@@ -34,12 +36,19 @@ class AddPlaylistDialog(
         val cancelButton=view.findViewById<MaterialButton>(R.id.cancel_button)
         val addButton=view.findViewById<MaterialButton>(R.id.add_button)
 
+        nameText.setText(name?:"")
+        byText.setText(by?:"")
+
         addButton.setOnClickListener {
-            when (val results = nameValidator.isPlaylistNameValid(nameText.text?.toString())) {
+            when (val results = nameValidator.isPlaylistNameValid(nameText.text?.toString(),name)) {
                 is DataResults.Error -> {
                     nameText.error = results.message
                 }
-                else -> {
+                is DataResults.Success  -> {
+                    onAddClick(results.data.toString(), byText.text.toString())
+                    dismiss()
+                }
+                is DataResults.Loading -> {
                     onAddClick(results.data.toString(), byText.text.toString())
                     dismiss()
                 }

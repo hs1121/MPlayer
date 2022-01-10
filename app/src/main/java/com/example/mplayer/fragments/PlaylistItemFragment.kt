@@ -3,6 +3,7 @@ package com.example.mplayer.fragments
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.view.*
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -87,6 +88,7 @@ class PlaylistItemFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         val item = menu.findItem(R.id.sort_icon)
         item.isVisible = false
+
         inflater.inflate(R.menu.arrange_menu_item,menu)
     }
 
@@ -98,8 +100,17 @@ class PlaylistItemFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
                 findNavController().navigate(action)
                 true
             }
+            R.id.add_items->{
+                showSelection(args.mediaId,"")
+                true
+            }
             else->{  super.onOptionsItemSelected(item)}
         }
+    }
+    private fun showSelection(name: String, by: String) {
+        val action = PlaylistItemFragmentDirections.actionPlaylistItemFragmentToSelectionFragment(
+            name,by,Action.ADD,Content.TRACK,Constants.TRACKS_ROOT,null,0)
+        findNavController().navigate(action)
     }
 
     override fun onItemClick(item: MediaBrowserCompat.MediaItem) {

@@ -12,6 +12,7 @@ class Repository @Inject constructor(
 
     suspend fun getPlaylist(name:String)= playerDatabase.playlistDao().getPlaylistItem(name)
 
+
     suspend fun insertPlaylist(entity: PlaylistEntity){
         playerDatabase.playlistDao().insert(entity)
     }
@@ -28,8 +29,10 @@ class Repository @Inject constructor(
     }
 
 
-    suspend fun updatePlaylist(entity: PlaylistEntity){
-        playerDatabase.playlistDao().update(entity)
+    suspend fun updatePlaylist(entity: PlaylistEntity?){
+        if (entity != null) {
+            playerDatabase.playlistDao().update(entity)
+        }
     }
 
 
@@ -39,7 +42,7 @@ class Repository @Inject constructor(
 
    suspend fun updatePlaylistITem(item:MutableList<String?>,name:String){
        val entity= playerDatabase.playlistDao().getPlaylistItem(name)
-       entity.data=item
+       entity?.data=item
         updatePlaylist(entity)
     }
 

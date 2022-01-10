@@ -29,8 +29,10 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 @AndroidEntryPoint
@@ -56,15 +58,30 @@ class SelectionFragment : Fragment() {
         mainViewModel = mainActivity.getViewModel()!!
         binding = FragmentSelectionBinding.inflate(inflater)
 
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        mAdapter = SelectionAdapter(requireContext(), glide, args.selectedItemId)
-        binding.recyclerView.adapter = mAdapter
 
-//        var smoothScroller: SmoothScroller = object : LinearSmoothScroller(context) {
-//            override fun getVerticalSnapPreference(): Int {
-//                return SNAP_TO_START
-//            }
-//        }
+        mAdapter = SelectionAdapter(requireContext(), glide, args.selectedItemId)
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = mAdapter
+            setItemViewCacheSize(16)
+//            setHasFixedSize(true)
+        }
+
+
+
+        mAdapter.registerAdapterDataObserver( object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(
+                positionStart: Int,
+                itemCount: Int
+            ) {
+              //  binding.recyclerView.scrollToPosition(args.pos)
+               // binding.recyclerView.verticalScrollbarPosition=args.pos
+                binding.recyclerView.smoothScrollToPosition(args.pos)
+            }
+
+
+
+        })
 
 
         when (args.mediaId) {
@@ -90,29 +107,11 @@ class SelectionFragment : Fragment() {
             }
         }
 
-        mAdapter.registerAdapterDataObserver( object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(
-                positionStart: Int,
-                itemCount: Int
-            ) {
-                binding.recyclerView.scrollToPosition(args.pos)
-            }
 
-
-//            override fun onItemRangeRemoved(
-//                positionStart: Int,
-//                itemCount: Int
-//            ) {
-//                binding.recyclerView.smoothScrollToPosition(itemCount)
-//            }
-        })
 
 //        smoothScroller.targetPosition = args.pos;
 //
-        lifecycleScope.launch {
-            delay(1000)
-            (binding.recyclerView.layoutManager as LinearLayoutManager).scrollToPosition(args.pos)
-        }
+
 
 
         setHasOptionsMenu(true)
@@ -143,19 +142,47 @@ class SelectionFragment : Fragment() {
                 val name = args.name!!
                 val by = args.by?:""
 
-                val iconUri: String? = if (list.isNotEmpty()) {
-                    list[0].description.iconUri?.toString()
-                } else {
-                    ""
-                }
-                val idList = mutableListOf<String?>()
-                list.forEach { idList.add(it.description.mediaId) }
+                lifecycleScope.launch {
 
-                val playlistEntity = PlaylistEntity(name, by, "", iconUri, idList)
 
-                mainViewModel.insertPlaylist(playlistEntity) {
-                    activity?.onBackPressed()
+                    val iconUri: String? = if (list.isNotEmpty()) {
+                        list[0].description.iconUri?.toString()
+                    } else {
+                        ""
+                    }
+                    val idList = mutableListOf<String?>()
+                    list.forEach { idList.add(it.description.mediaId) }
+
+
+                    var playlistEntity = mainViewModel.getPlayList(name) // ?:
+
+                    if( playlistEntity==null){
+                       playlistEntity= PlaylistEntity(name, by, "", iconUri, idList)
+                        mainViewModel.insertPlaylist(playlistEntity) {
+                            activity?.onBackPressed()
+                        }
+                    }else {
+                        playlistEntity.data.addAll(idList)
+
+                            mainViewModel.updatePlaylist(playlistEntity) {
+
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Updated Successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                activity?.onBackPressed()
+                            }
+                        
+
+                    }
+
+
                 }
+
+
+
 
 
                 true

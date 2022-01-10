@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ArrangeFragment : Fragment() {
+class ArrangeFragment : Fragment() { // Used to rearrange the playlist items
 
     private lateinit var binding: FragmentArrangeBinding
     private lateinit var mAdapter: PlaylistAdapter

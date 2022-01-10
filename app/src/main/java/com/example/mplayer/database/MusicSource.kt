@@ -26,6 +26,8 @@ class MusicSource @Inject constructor(
     var playLists:HashMap<String,MutableList<MediaMetadataCompat>> = HashMap()
 
 
+    // a concept which allows us to keep the tasks stored as lambda function(as queue) until an
+    // specific condition is not met(in this case until player is not ready)
     private val onReadyListeners= mutableListOf<(Boolean)-> Unit>()
 
     private var state: State = State.CREATED
@@ -46,8 +48,7 @@ class MusicSource @Inject constructor(
         state= State.INITIALIZED
     }
 
-    suspend fun  getSongs(){
-
+     fun  getSongs(){
         mediaItems= mutableListOf()
         tracks= mutableListOf()
         albums= HashMap()
@@ -138,8 +139,7 @@ class MusicSource @Inject constructor(
     }
 
 
-
-
+    // executes the lambda function if player is ready else stores in the queue
     fun whenReady(action: (Boolean)-> Unit):Boolean{
         return if(state== State.CREATED ||state== State.INITIALIZING){
             onReadyListeners+=action

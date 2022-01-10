@@ -42,6 +42,7 @@ class TracksAdapter(
                 .into(binding.itemImage)
 
             binding.root.setOnLongClickListener {
+
                 onLongClick?.let { it(item,position) }
                 true
             }

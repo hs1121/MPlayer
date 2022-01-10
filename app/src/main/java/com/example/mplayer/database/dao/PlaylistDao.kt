@@ -24,7 +24,8 @@ interface PlaylistDao {
     suspend fun getPlaylists(): MutableList<PlaylistEntity>?
 
     @Query("SELECT * FROM Playlist WHERE NAME=:name")
-    suspend fun getPlaylistItem(name:String):PlaylistEntity
+    suspend fun getPlaylistItem(name:String):PlaylistEntity?
+
 
 
     @Query("DELETE FROM Playlist WHERE NAME=:name")

@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
@@ -60,12 +62,14 @@ class PlaylistAdapter (
             val popupMenu=PopupMenu(context,binding.itemMore)
             popupMenu.inflate(R.menu.list_menu)
 
+
             popupMenu.setOnMenuItemClickListener {
                 when(it.itemId){
                     R.id.edit_item->{
-                        val dialog=AddPlaylistDialog(item.mediaId,null){name,by->
+                        val dialog=AddPlaylistDialog(item.mediaId,item.description.subtitle.toString()){name,by->
                             playlistListener.onItemEdited(item.mediaId!!,name,by,item)
                         }
+                        playlistListener.getFragmentManagerInstance()?.let { manager-> dialog.show(manager,"edit")  }
                         true
                     }
                     R.id.delete_item->{
@@ -75,6 +79,7 @@ class PlaylistAdapter (
                     else -> false
                 }
             }
+            popupMenu.show()
         }
 
         binding.root.setOnClickListener {
@@ -92,7 +97,6 @@ class PlaylistAdapter (
 
 
     fun setList(list: MutableList<MediaBrowserCompat.MediaItem>) {
-
         val diffUtil = ListDiffUtil(this.list, list)
         val diffUtilResult = DiffUtil.calculateDiff(diffUtil)
         this.list = list
@@ -100,8 +104,8 @@ class PlaylistAdapter (
     }
 
     fun itemMoved(dragPos: Int, targetPos: Int) {
+        // changes list data as well as update recyclerview on item drag(playlist items arrange functionality)
         notifyItemMoved(dragPos,targetPos)
-
         val item=list[dragPos]
         list[dragPos]=list[targetPos]
         list[targetPos]=item
@@ -116,6 +120,7 @@ class PlaylistAdapter (
         fun onLongClick(item:MediaBrowserCompat.MediaItem,position: Int)
         fun onItemEdited(id:String,name: String, by: String, item: MediaBrowserCompat.MediaItem)
         fun onItemDelete(item:MediaBrowserCompat.MediaItem)
+        fun getFragmentManagerInstance(): FragmentManager? =null
     }
     fun setPlaylistItemListener(playlistListener:PlaylistItemListener){
         this.playlistListener=playlistListener

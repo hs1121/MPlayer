@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,12 +38,14 @@ class PlaylistFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
     private  lateinit var  mainViewModel: MainViewModel
     private lateinit var binding: FragmentPlaylistBinding
     private lateinit var mAdapter: PlaylistAdapter
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val mainActivity: MainActivity = activity as MainActivity
-        mainViewModel= mainActivity.getViewModel()!!
+        mainViewModel= mainActivity.getViewModel()
         binding = FragmentPlaylistBinding.inflate(layoutInflater)
 
         if (mainViewModel.playlist.value==null|| mainViewModel.playlist.value?.isHandled() == false)
@@ -101,16 +104,30 @@ class PlaylistFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
 
     override fun onItemEdited(id:String,name: String, by: String, item: MediaBrowserCompat.MediaItem) {
         lifecycleScope.launch(Dispatchers.IO){
-           val entity= mainViewModel.getPlayList(id)
-            entity.name=name
-            entity.createdBy=by
-            mainViewModel.updatePlaylist(entity)
+           val entity= mainViewModel.getPlayList(name)
+            entity?.name=name
+            entity?.createdBy=by
+            if (entity != null) {
+                mainViewModel.updatePlaylist(entity){
+
+                }
+            }
         }
     }
 
     override fun onItemDelete(item: MediaBrowserCompat.MediaItem) {
         TODO("Not yet implemented")
     }
+
+
+    override fun getFragmentManagerInstance(): FragmentManager? {
+         var manager:FragmentManager?=null
+         activity?.supportFragmentManager?.let {
+         manager=it
+         }
+         return manager
+    }
+
 
 
 }

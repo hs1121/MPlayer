@@ -23,7 +23,7 @@ class PlayerPlayBackPreparer(
         cb: ResultReceiver?
     )=false
 
-    override fun getSupportedPrepareActions(): Long {
+    override fun getSupportedPrepareActions(): Long { // sets flags by which means(functions) the player should be executed
         return PlaybackStateCompat.ACTION_PREPARE_FROM_MEDIA_ID or
                 PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID
     }
@@ -33,6 +33,8 @@ class PlayerPlayBackPreparer(
     override fun onPrepareFromMediaId(mediaId: String, playWhenReady: Boolean, extras: Bundle?) {
        browsingTree.whenReady {
            val key= extras?.get(Constants.METADATA_KEY_FROM).toString()
+           // the key is required to play specific playlist or album so that concatenating mediaSource
+           // of correct list can be used
             val media=browsingTree.browsingList[key]?.find { it.description.mediaId==mediaId }
            playerPrepared(media)
        }

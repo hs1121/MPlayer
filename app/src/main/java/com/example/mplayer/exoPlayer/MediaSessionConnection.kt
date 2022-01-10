@@ -31,7 +31,7 @@ class MediaSessionConnection(
     val transportControls:MediaControllerCompat.TransportControls
     get ()= mediaControllerCompat.transportControls
 
-    private lateinit var mediaControllerCompat: MediaControllerCompat
+    private lateinit var mediaControllerCompat: MediaControllerCompat  // has to control the media service
     private val connectionCallback=ConnectionCallback()
     private val mediaBrowser=MediaBrowserCompat(
         context,
@@ -75,12 +75,12 @@ class MediaSessionConnection(
     }
 
     private inner class ControllerCallback:MediaControllerCompat.Callback(){
-        override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
+        override fun onPlaybackStateChanged(state: PlaybackStateCompat?) { //executes when playback state is changed
             super.onPlaybackStateChanged(state)
             _playbackState.postValue(state?: EMPTY_PLAYBACK_STATE)
         }
 
-        override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
+        override fun onMetadataChanged(metadata: MediaMetadataCompat?) { //executes when metadata  is changed
             super.onMetadataChanged(metadata)
 //           _nowPlaying.postValue( MusicService.currentSong?:NOTHING_PLAYING)
             _nowPlaying.postValue(metadata?:NOTHING_PLAYING)

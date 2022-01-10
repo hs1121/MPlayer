@@ -2,6 +2,7 @@ package com.example.mplayer.exoPlayer
 
 import android.app.PendingIntent
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
@@ -39,6 +40,7 @@ class MusicService : MediaBrowserServiceCompat() {
     private lateinit var playerNotificationManager: PlayerNotificationManager
 
     companion object {
+        // player instance (used to connect exoplayer ui to player)
         private val _playerInstance = MutableLiveData<SimpleExoPlayer?>()
         val playerInstance: LiveData<SimpleExoPlayer?> = _playerInstance
 
@@ -57,6 +59,7 @@ class MusicService : MediaBrowserServiceCompat() {
     private lateinit var playerEventListener: PlayerListener
 
 
+    // not used (can be used to get network calls etc).
     private val serviceJob = Job()
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
@@ -65,12 +68,18 @@ class MusicService : MediaBrowserServiceCompat() {
         super.onCreate()
 
         val intentParent = Intent(this, MainActivity::class.java)
-        intentParent.flags =
-            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION
+        intentParent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION
         val intent = Intent(this, PlayerActivity::class.java)
-        val intents = arrayOf(intentParent, intent)
-        val pendingIntent =
-            PendingIntent.getActivities(this, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT)
+        val intents = arrayOf(intentParent, intent)   // makes mainActivity open first and then player activity for better UX
+
+        // pending intent for player activity
+        val pendingIntent :PendingIntent = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            PendingIntent.getActivities(this, 0, intents,
+                 PendingIntent.FLAG_IMMUTABLE)
+        else
+            PendingIntent.getActivities(this, 0, intents,
+                PendingIntent.FLAG_UPDATE_CURRENT)
+
         activityIntent = pendingIntent
 
 
@@ -81,12 +90,12 @@ class MusicService : MediaBrowserServiceCompat() {
         sessionToken = mediaSession.sessionToken
         val mediaSessionConnector = MediaSessionConnector(mediaSession)
 
-        val playbackPreparer = PlayerPlayBackPreparer(browsingTree) {
+        val playbackPreparer = PlayerPlayBackPreparer(browsingTree) { // executes whenever user changes the media(callback method)
             currentlyPlayingSong = it
             currentSong=it
             mediaSession.setMetadata(it)
             val key = it?.from ?: ""
-            mediaSessionConnector.setQueueNavigator(PlayerQueueNavigator(mediaSession, key))
+            mediaSessionConnector.setQueueNavigator(PlayerQueueNavigator(mediaSession, key)) // sets the
             preparePlayer(
                 browsingTree.mediaListByItem(it),
                 it,
@@ -101,6 +110,7 @@ class MusicService : MediaBrowserServiceCompat() {
         mediaSessionConnector.setPlayer(exoPlayer)
         playerEventListener = PlayerListener(this)
         exoPlayer.addListener(playerEventListener)
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.S)  // todo : make a notification manager that support's pending intent flags issue
         playerNotificationManager = PlayerNotificationManager(this).apply {
             getNotificationManager().setPlayer(exoPlayer)
         }
@@ -115,7 +125,7 @@ class MusicService : MediaBrowserServiceCompat() {
         playNow: Boolean
     ) {
         val currentIndex = if (currentlyPlayingSong == null) 0 else songs.indexOf(currentSong)
-        exoPlayer.setMediaSource(browsingTree.asMusicSource(dataSourceFactory, from))
+        exoPlayer.setMediaSource(browsingTree.asMusicSource(dataSourceFactory, from)) // set concatenating media source
         exoPlayer.prepare()
         exoPlayer.seekTo(currentIndex, 0L)
         exoPlayer.playWhenReady = playNow
@@ -123,14 +133,17 @@ class MusicService : MediaBrowserServiceCompat() {
     }
 
     override fun onGetRoot(
+        // returns root id (can decide that which key to be passed using clintPackageName)
         clientPackageName: String,
         clientUid: Int,
         rootHints: Bundle?
     ): BrowserRoot? {
         return BrowserRoot(MY_MEDIA_ROOT_ID, null)
+
+
     }
 
-    override fun onLoadChildren(
+    override fun onLoadChildren(// sends media which is requested by key from browsing tree
         parentId: String,
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
@@ -149,6 +162,8 @@ class MusicService : MediaBrowserServiceCompat() {
     }
 
     private inner class PlayerQueueNavigator(
+        // sync the playlist (concatenating media source) with timeline
+        // ie. controls seek change to next song (updates state and metadata
         mediaSessionCompat: MediaSessionCompat,
         private val keyString: String
     ) : TimelineQueueNavigator(mediaSessionCompat) {

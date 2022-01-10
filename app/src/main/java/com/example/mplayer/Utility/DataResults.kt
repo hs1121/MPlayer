@@ -7,4 +7,5 @@ sealed class DataResults<T> (
 
     class Success<T>(data: T): DataResults<T>(data)
     class Error<T>(message: String?,data: T?=null):DataResults<T>(data,message)
+    class Loading<T> :DataResults<T>()
 }

@@ -53,7 +53,20 @@ class PlayerNotificationManager(
             musicService.sessionToken?.let { setMediaSessionToken(it) }
             setSmallIcon(R.drawable.ic_full_logo)
             setControlDispatcher(DefaultControlDispatcher(0, 0))
+
         }
+
+
+//        notificationManager = PlayerNotificationManager.Builder(musicService, NOTIFICATION_ID,
+//            CHANNEL_ID,PlayerDescriptionAdapter())
+//            .setChannelNameResourceId(R.string.CHANNEL_NAME)
+//            .setChannelDescriptionResourceId(R.string.CHANNEL_DESCRIPTION)
+//            .setNotificationListener(PlayerNotificationListener(musicService))
+//            .build().apply {
+//                musicService.sessionToken?.let { setMediaSessionToken(it) }
+//                setSmallIcon(R.drawable.ic_full_logo)
+//                setControlDispatcher(DefaultControlDispatcher(0, 0))
+//            }
     }
 
     fun getNotificationManager():PlayerNotificationManager= notificationManager
@@ -63,8 +76,8 @@ class PlayerNotificationManager(
           return  mediaController.metadata.description.title.toString()
         }
 
-        override fun createCurrentContentIntent(player: Player): PendingIntent? =
-            mediaController.sessionActivity
+        override fun createCurrentContentIntent(player: Player): PendingIntent? = musicService.activityIntent
+        //    mediaController.sessionActivity
 
 
         override fun getCurrentContentText(player: Player): CharSequence? =
@@ -74,6 +87,8 @@ class PlayerNotificationManager(
             player: Player,
             callback: PlayerNotificationManager.BitmapCallback
         ): Bitmap? {
+            // check if changes are made to same song (seek position changed)
+            // to avoid unnecessary updating of icon gives smooth UX of  notification
             if (iconUri==mediaController.metadata.description.iconUri)
                 return bitmap
 

@@ -83,7 +83,7 @@ class MainViewModel @Inject constructor(
 
     }
 
-   suspend fun getPlayList(id:String):PlaylistEntity= repository.getPlaylist(id)
+   suspend fun getPlayList(id:String):PlaylistEntity?= repository.getPlaylist(id)
 
     fun deletePlaylist(entity: PlaylistEntity){
         viewModelScope.launch(Dispatchers.IO) {
@@ -110,10 +110,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun updatePlaylist(playlistEntity: PlaylistEntity){
+    fun updatePlaylist(playlistEntity: PlaylistEntity ,callBack: () -> Unit){
         viewModelScope.launch(Dispatchers.IO) {
             repository.updatePlaylist(playlistEntity)
             repository.browsingTree.updatePlaylist()
+            getMedia(PLAYLIST_ROOT)
+            withContext(Dispatchers.Main) {
+                callBack()
+            }
         }
 
     }
@@ -204,6 +208,7 @@ class MainViewModel @Inject constructor(
 
     }
     fun resetSongList() {
+        // reset the songList to make tell that it is not handled (if any update is made or user selects another album or playlist)
         _songList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
         songList = _songList
     }

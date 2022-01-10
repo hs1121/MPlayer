@@ -22,7 +22,7 @@ import javax.inject.Inject
 class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
     var browsingList = mutableMapOf<String, MutableList<MediaMetadataCompat>>()
 
-
+    // creates a browsing tree in key value pair for easy navagation
     private fun setTree() {
         browsingList = mutableMapOf()
 
@@ -33,7 +33,7 @@ class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
         musicSource.albums.forEach {
             val album: MediaMetadataCompat = MediaMetadataCompat.Builder().apply {
                 flag = (MediaBrowserCompat.MediaItem.FLAG_BROWSABLE)
-                from = ALBUMS_ROOT
+                from = ALBUMS_ROOT  // extension function to store that this item belongs to which key
             }
                 .putText(MediaMetadataCompat.METADATA_KEY_ALBUM, it.key)
                 .putText(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, it.key)
@@ -102,6 +102,7 @@ class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
         setTree()
     }
 
+        // check if the key is not used previously
     fun isRootAvailable(id:String):Boolean{
         return !browsingList.containsKey(id)
     }
@@ -111,6 +112,7 @@ class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
     }
 
 
+    // Media source which allows to back to back playing
     fun asMusicSource(
         dataSourceFactory: DefaultDataSourceFactory,
         key: String?
@@ -125,6 +127,7 @@ class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
         return concatenatingMediaSource
     }
 
+    // used in onLoadChildren function as mediaSource
     fun asMediaItem(key: String) = browsingList[key]?.map { song ->
         val desc = MediaDescriptionCompat.Builder()
             .setMediaId(song.description.mediaId)
@@ -141,6 +144,7 @@ class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
     }?.toMutableList()
 
     fun musicItem(key: String) = browsingList[key]
+
     fun mediaListByItem(item: MediaMetadataCompat?): MutableList<MediaMetadataCompat> {
         val key = item?.from
         return browsingList[key] ?: mutableListOf()

@@ -34,6 +34,7 @@ class AlbumFragment : Fragment() {
         mainViewModel= mainActivity.getViewModel()!!
         binding = FragmentAlbumBinding.inflate(layoutInflater)
         if (mainViewModel.albumList.value==null|| mainViewModel.albumList.value?.isHandled() == false)
+            // fetch album data if not fetched before or not handled (not updated the list after change in main data)
         mainViewModel.getMedia(ALBUMS_ROOT)
         mAdapter= TracksAdapter(requireContext(),glide,{ item->
             val key= item.description.mediaId!!
@@ -55,5 +56,4 @@ class AlbumFragment : Fragment() {
 
         return binding.root
     }
-    fun getBinding()=binding
 }

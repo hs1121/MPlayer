@@ -58,11 +58,15 @@ class SelectionAdapter (
             else
                 selectedItems.remove(item)
         }
-        binding.materialCardView3.setOnClickListener {
-            if (binding.checkBox.isChecked)
+        binding.root.setOnClickListener {
+            if (!binding.checkBox.isChecked) {
                 selectedItems.add(item)
-            else
+                binding.checkBox.isChecked=true
+            }
+            else {
                 selectedItems.remove(item)
+                binding.checkBox.isChecked=false
+            }
         }
 
     }
@@ -71,10 +75,12 @@ class SelectionAdapter (
         return list.size
     }
 
+    // Returns URI of selected media items(for deleting purpose etc.);
     fun getUris()=selectedItems.map { it.description.mediaUri!! }
 
     fun getSelectedItems()=selectedItems
 
+    // returns unSelected media items (to update list with these items after performing operation like delete)
     fun getUnSelectedItems()=run {
         val newList=list
         selectedItems.forEach {  item->
