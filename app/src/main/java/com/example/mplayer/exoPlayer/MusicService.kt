@@ -77,7 +77,7 @@ class MusicService : MediaBrowserServiceCompat() {
 
         // pending intent for player activity
         val pendingIntent :PendingIntent = PendingIntent.getActivities(this, 0, intents,
-                 PendingIntent.FLAG_IMMUTABLE)
+                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
 
         activityIntent = pendingIntent
