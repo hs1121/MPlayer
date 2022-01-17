@@ -57,11 +57,13 @@
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/fragment_tracks.xml" value="0.12708333333333333" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/music_item_list_layout.xml" value="0.264" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/player_mini_layout.xml" value="0.35706462212486306" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/sort_dialog.xml" value="0.19927536231884058" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/menu/arrange_menu_item.xml" value="0.25" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/menu/list_menu.xml" value="0.25" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/menu/main_app_bar_menu.xml" value="0.12708333333333333" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/menu/selection_menu.xml" value="0.25" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/menu/sort_menu.xml" value="0.25" />
       </map>
     </option>
   </component>

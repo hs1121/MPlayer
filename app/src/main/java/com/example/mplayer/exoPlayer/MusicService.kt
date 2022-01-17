@@ -2,6 +2,7 @@ package com.example.mplayer.exoPlayer
 
 import android.app.PendingIntent
 import android.content.Intent
+import android.media.audiofx.Equalizer
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
@@ -18,6 +19,8 @@ import com.example.mplayer.database.BrowsingTree
 import com.example.mplayer.Utility.from
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.analytics.AnalyticsListener
+import com.google.android.exoplayer2.audio.AudioRendererEventListener
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -73,12 +76,9 @@ class MusicService : MediaBrowserServiceCompat() {
         val intents = arrayOf(intentParent, intent)   // makes mainActivity open first and then player activity for better UX
 
         // pending intent for player activity
-        val pendingIntent :PendingIntent = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-            PendingIntent.getActivities(this, 0, intents,
+        val pendingIntent :PendingIntent = PendingIntent.getActivities(this, 0, intents,
                  PendingIntent.FLAG_IMMUTABLE)
-        else
-            PendingIntent.getActivities(this, 0, intents,
-                PendingIntent.FLAG_UPDATE_CURRENT)
+
 
         activityIntent = pendingIntent
 
@@ -103,9 +103,6 @@ class MusicService : MediaBrowserServiceCompat() {
                 true
             )
         }
-
-
-
         mediaSessionConnector.setPlaybackPreparer(playbackPreparer)
         mediaSessionConnector.setPlayer(exoPlayer)
         playerEventListener = PlayerListener(this)
@@ -114,7 +111,6 @@ class MusicService : MediaBrowserServiceCompat() {
         playerNotificationManager = PlayerNotificationManager(this).apply {
             getNotificationManager().setPlayer(exoPlayer)
         }
-
 
     }
 
@@ -172,6 +168,14 @@ class MusicService : MediaBrowserServiceCompat() {
         }
 
     }
+    fun setUpEqualizer(){
+         var eq:Equalizer
+         val sessionId=exoPlayer.audioSessionId
+         eq=Equalizer(1000,sessionId)
+
+    }
+
+
 
 
     override fun onTaskRemoved(rootIntent: Intent?) {
@@ -182,11 +186,11 @@ class MusicService : MediaBrowserServiceCompat() {
 
     override fun onDestroy() {
         serviceScope.cancel()
-
+        playerNotificationManager.getNotificationManager().setPlayer(null)
         _playerInstance.postValue(null)
         exoPlayer.removeListener(playerEventListener)
         exoPlayer.release()
-        playerNotificationManager.getNotificationManager().setPlayer(null)
+
         super.onDestroy()
 
     }

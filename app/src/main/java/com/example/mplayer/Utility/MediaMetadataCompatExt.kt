@@ -9,7 +9,7 @@ import com.example.mplayer.Constants.METADATA_KEY_FROM
 import com.example.mplayer.Constants.NO_GET
 import com.example.mplayer.Constants.PLAYLIST_ROOT
 
-@MediaBrowserCompat.MediaItem.Flags
+
 inline var MediaMetadataCompat.Builder.flag: Int
     @Deprecated(NO_GET, level = DeprecationLevel.ERROR)
     get() = throw IllegalAccessException("Cannot get from MediaMetadataCompat.Builder")

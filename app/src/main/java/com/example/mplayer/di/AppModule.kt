@@ -8,6 +8,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.mplayer.Constants.PLAYER_DATABASE
 import com.example.mplayer.R
+import com.example.mplayer.Utility.PreferenceDataStore
 import com.example.mplayer.database.BrowsingTree
 import com.example.mplayer.database.MPlayerDatabase
 import com.example.mplayer.exoPlayer.MediaSessionConnection
@@ -63,5 +64,9 @@ object AppModule {
     @Provides
     fun provideBrowsingTree(musicSource: MusicSource)= BrowsingTree(musicSource)
 
+    @Singleton
+    @Provides
+    fun providePreferenceDataStore(
+        @ApplicationContext context: Context)=PreferenceDataStore(context)
 
 }

@@ -214,7 +214,8 @@ class SelectionFragment : Fragment() {
                 }
             }
             else -> {
-                activity?.let { Util.requestDeletePermission(it,mAdapter.getUris()){success,message->
+                if (mAdapter.getUris().isNotEmpty())
+                activity?.let {  Util.requestDeletePermission(it,mAdapter.getUris()){success,message->
                     if (success)
                         mainViewModel.mediaRemoved(true)
                     else {

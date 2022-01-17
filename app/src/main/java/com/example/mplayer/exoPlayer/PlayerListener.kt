@@ -12,6 +12,8 @@ class PlayerListener(
     private val musicService: MusicService ):Player.EventListener {
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
         super.onPlayerStateChanged(playWhenReady, playbackState)
+//        super.onPlaybackStateChanged(playbackState)
+//        super.onPlayWhenReadyChanged(playWhenReady,playbackState)
         if(playbackState==Player.STATE_READY&& !playWhenReady) // stop service if player is not ready and remove notification
             musicService.stopForeground(false)
     }

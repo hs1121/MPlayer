@@ -1,22 +1,28 @@
 package com.example.mplayer.exoPlayer
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
+import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.mplayer.Constants.CHANNEL_ID
+import com.example.mplayer.Constants.CHANNEL_NAME
 import com.example.mplayer.Constants.NOTIFICATION_ID
 import com.example.mplayer.R
 import com.google.android.exoplayer2.DefaultControlDispatcher
+
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 
@@ -57,16 +63,26 @@ class PlayerNotificationManager(
         }
 
 
-//        notificationManager = PlayerNotificationManager.Builder(musicService, NOTIFICATION_ID,
-//            CHANNEL_ID,PlayerDescriptionAdapter())
-//            .setChannelNameResourceId(R.string.CHANNEL_NAME)
-//            .setChannelDescriptionResourceId(R.string.CHANNEL_DESCRIPTION)
-//            .setNotificationListener(PlayerNotificationListener(musicService))
-//            .build().apply {
-//                musicService.sessionToken?.let { setMediaSessionToken(it) }
-//                setSmallIcon(R.drawable.ic_full_logo)
-//                setControlDispatcher(DefaultControlDispatcher(0, 0))
-//            }
+//        notificationManager = PlayerNotificationManager.Builder (musicService,
+//        NOTIFICATION_ID,
+//        CHANNEL_ID,PlayerDescriptionAdapter()
+//        ).build()
+//
+////            .apply {
+////
+////            setNotificationListener(PlayerNotificationListener(musicService))
+////            build().apply {
+////                musicService.sessionToken?.let { setMediaSessionToken(it) }
+////                setSmallIcon(R.drawable.ic_full_logo)
+////
+////            }
+////        }
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun notificationChannel(){
+        val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME,NotificationManager.IMPORTANCE_DEFAULT)
+        channel.description=musicService.getString(R.string.CHANNEL_DESCRIPTION)
+
     }
 
     fun getNotificationManager():PlayerNotificationManager= notificationManager

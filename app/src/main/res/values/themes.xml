@@ -6,7 +6,7 @@
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondary">@color/primary_light</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
@@ -14,7 +14,11 @@
         <!-- Customize your theme here. -->
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:textColor">@color/primary</item>
+
         </style>
+
+
+
 
 
     <style name="bottom_nav_style" parent="Widget.MaterialComponents.BottomNavigationView">
