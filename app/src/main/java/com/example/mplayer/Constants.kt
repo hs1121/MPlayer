@@ -5,11 +5,11 @@ object Constants {
         const val PERMISSION_WRITE_EXTERNAL_STORAGE=11
 
         const val REQUEST_CODE_DELETE=5
-
+        const val SEEK_TO="SeekToPosition"
         const val NOTIFICATION_ID=101
         const val CHANNEL_ID="playback_notification_channel_id"
 
-        const val CHANNEL_NAME="Player Notification Channel"
+        const val CHANNEL_NAME="Playback Notification Channel"
 
         const val MY_MEDIA_ROOT_ID="media_root"
 
@@ -19,6 +19,7 @@ object Constants {
         
         const val METADATA_KEY_FLAG="com.example.mplayer.Utility.METADATA_KEY_FLAG"
         const val METADATA_KEY_FROM="com.example.mplayer.Utility.METADATA_KEY_FROM"
+
         const val NO_GET = "Property does not have a 'get'"
         const val FROM_SPLASH_SCREEN="fromSplashScreen"
 

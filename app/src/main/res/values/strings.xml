@@ -3,8 +3,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="CHANNEL_NAME">Player Notification Channel</string>
-    <string name="CHANNEL_DESCRIPTION">Player playback notification</string>
+    <string name="CHANNEL_NAME">Playback Notification</string>
+    <string name="CHANNEL_DESCRIPTION">Notification with player Ui</string>
 
     <string name="tracks">Tracks</string>
     <string name="albums">Albums</string>

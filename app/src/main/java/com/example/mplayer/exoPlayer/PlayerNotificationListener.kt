@@ -22,6 +22,7 @@ class PlayerNotificationListener(
         musicService.apply {  // stop playback and service when notification is removed
             stopForeground(true)
              isForegroundService = false
+            Log.i("Notification","OnNotificationCanceled")
             stopSelf()
         }
     }
@@ -34,12 +35,13 @@ class PlayerNotificationListener(
     ) {
         super.onNotificationPosted(notificationId, notification, ongoing)
         musicService.apply {
-            if (ongoing&&!isForegroundService){  // start service if notification is posted and service is not started
+            if (ongoing&&!isForegroundService){
+                // start service if notification is posted and service is not started
                 ContextCompat.startForegroundService(this,
                 Intent(applicationContext,MusicService::class.java))
                 isForegroundService=true
                 try {
-                    startForeground(NOTIFICATION_ID,notification)
+                    startForeground(notificationId,notification) // notification already places
                 }catch (e:Exception){
                     e.printStackTrace()
                     Log.e("error is",e.message.toString())

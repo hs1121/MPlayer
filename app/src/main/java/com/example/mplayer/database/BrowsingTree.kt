@@ -8,11 +8,13 @@ import com.example.mplayer.Constants
 import com.example.mplayer.Constants.ALBUMS_ROOT
 import com.example.mplayer.Constants.PLAYLIST_ROOT
 import com.example.mplayer.Constants.TRACKS_ROOT
+import com.example.mplayer.Utility.Util
 import com.example.mplayer.Utility.flag
 import com.example.mplayer.Utility.from
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -114,14 +116,13 @@ class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
 
     // Media source which allows to back to back playing
     fun asMusicSource(
-        dataSourceFactory: DefaultDataSourceFactory,
+        dataSourceFactory: DefaultDataSource.Factory,
         key: String?
     ): ConcatenatingMediaSource {
         val concatenatingMediaSource = ConcatenatingMediaSource()
         browsingList[key]?.forEach { song ->
             val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(MediaItem.fromUri(song.description.mediaUri!!))
-            //TODO: check if it works or not
             concatenatingMediaSource.addMediaSource(mediaSource)
         }
         return concatenatingMediaSource
@@ -129,25 +130,19 @@ class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
 
     // used in onLoadChildren function as mediaSource
     fun asMediaItem(key: String) = browsingList[key]?.map { song ->
-        val desc = MediaDescriptionCompat.Builder()
-            .setMediaId(song.description.mediaId)
-            .setIconUri(song.description.iconUri)
-            .setMediaUri(song.description.mediaUri)
-            .setTitle(song.description.title)
-            .setSubtitle(song.description.subtitle)
-        desc.from = song.from
-
-        MediaBrowserCompat.MediaItem(
-            desc.build(),
-            song.bundle.getLong(Constants.METADATA_KEY_FLAG).toInt()
-        )
+       Util.asMediaItem(song)
     }?.toMutableList()
+
+
 
     fun musicItem(key: String) = browsingList[key]
 
     fun mediaListByItem(item: MediaMetadataCompat?): MutableList<MediaMetadataCompat> {
         val key = item?.from
         return browsingList[key] ?: mutableListOf()
+
+    }
+    fun getMediaItem(key:String,name:String){
 
     }
 

@@ -18,6 +18,7 @@ import com.example.mplayer.database.BrowsingTree
 import com.example.mplayer.database.Repository
 import com.example.mplayer.database.entity.PlaylistEntity
 import com.example.mplayer.exoPlayer.MediaSessionConnection
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.SimpleExoPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -33,9 +34,21 @@ class MainViewModel @Inject constructor(
     private val mediaSessionConnection: MediaSessionConnection
 ) : ViewModel() {
 
+    @Inject
+    lateinit var preferenceDataStore:PreferenceDataStore
     val currentlyPlayingSong=mediaSessionConnection.nowPlaying
     val isPlaying=mediaSessionConnection.playbackState
-    var exoPlayer: SimpleExoPlayer?=null
+    var exoPlayer: ExoPlayer?=null
+    set(value) {
+        field=value
+        viewModelScope.launch {
+            val data=preferenceDataStore.readCurrentSongData()
+            data?.apply {
+                restoreCurrentMediaConfig(mediaId,from,time)
+                }
+            }
+        }
+
 
     private var _tracksList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
     var tracksList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _tracksList
@@ -143,6 +156,14 @@ class MainViewModel @Inject constructor(
         })
 
     }
+    private fun restoreCurrentMediaConfig(mediaId:String,from:String,seekTo:Long){
+        val transportControls = mediaSessionConnection.transportControls
+        transportControls.playFromMediaId(
+            mediaId,
+            Bundle().apply { putString(Constants.METADATA_KEY_FROM, from)
+            putLong(Constants.SEEK_TO,seekTo)})
+        transportControls.pause()
+    }
 
     private fun playMedia(mediaItem: MediaBrowserCompat.MediaItem, isPauseEnable: Boolean = true) {
 
@@ -167,7 +188,8 @@ class MainViewModel @Inject constructor(
         } else
             transportControls.playFromMediaId(
                 mediaItem.mediaId,
-                Bundle().apply { putString(Constants.METADATA_KEY_FROM, mediaItem.from) })
+                Bundle().apply { putString(Constants.METADATA_KEY_FROM, mediaItem.from)
+                    putLong(Constants.SEEK_TO,-1L)})
     }
 
     fun playPause() {

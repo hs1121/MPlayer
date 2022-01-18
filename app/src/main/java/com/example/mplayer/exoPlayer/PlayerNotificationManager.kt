@@ -6,12 +6,14 @@ import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.media.session.MediaController
 import android.net.Uri
 import android.os.Build
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationManagerCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -21,10 +23,12 @@ import com.example.mplayer.Constants.CHANNEL_ID
 import com.example.mplayer.Constants.CHANNEL_NAME
 import com.example.mplayer.Constants.NOTIFICATION_ID
 import com.example.mplayer.R
-import com.google.android.exoplayer2.DefaultControlDispatcher
+import com.google.android.exoplayer2.ExoPlayer
+
 
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
+
 
 class PlayerNotificationManager(
     private val musicService: MusicService
@@ -40,60 +44,45 @@ class PlayerNotificationManager(
             .diskCacheStrategy(DiskCacheStrategy.DATA)
     )
 
-    private var mediaController:MediaControllerCompat = MediaControllerCompat(musicService,
-        musicService.sessionToken!!
-    )
 
-    private lateinit var notificationManager:PlayerNotificationManager;
+    private var notificationManager:PlayerNotificationManager;
 
     init {
-        notificationManager = PlayerNotificationManager.createWithNotificationChannel(
-            musicService,
-            CHANNEL_ID,
-            R.string.CHANNEL_NAME,
-            R.string.CHANNEL_DESCRIPTION,
-            NOTIFICATION_ID,
-            PlayerDescriptionAdapter(),
-            PlayerNotificationListener(musicService)
-        ).apply {
-            musicService.sessionToken?.let { setMediaSessionToken(it) }
-            setSmallIcon(R.drawable.ic_full_logo)
-            setControlDispatcher(DefaultControlDispatcher(0, 0))
 
+        val mediaController =MediaControllerCompat(musicService, musicService.sessionToken!!)
+
+        val builder = PlayerNotificationManager.Builder(musicService, NOTIFICATION_ID, CHANNEL_ID)
+        with (builder) {
+            setMediaDescriptionAdapter(PlayerDescriptionAdapter(mediaController))
+            setNotificationListener(PlayerNotificationListener(musicService))
+            setChannelNameResourceId(R.string.CHANNEL_NAME)
+            setChannelDescriptionResourceId(R.string.CHANNEL_DESCRIPTION)
         }
-
-
-//        notificationManager = PlayerNotificationManager.Builder (musicService,
-//        NOTIFICATION_ID,
-//        CHANNEL_ID,PlayerDescriptionAdapter()
-//        ).build()
-//
-////            .apply {
-////
-////            setNotificationListener(PlayerNotificationListener(musicService))
-////            build().apply {
-////                musicService.sessionToken?.let { setMediaSessionToken(it) }
-////                setSmallIcon(R.drawable.ic_full_logo)
-////
-////            }
-////        }
-    }
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun notificationChannel(){
-        val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME,NotificationManager.IMPORTANCE_DEFAULT)
-        channel.description=musicService.getString(R.string.CHANNEL_DESCRIPTION)
+        notificationManager = builder.build()
+        musicService.sessionToken?.let { notificationManager.setMediaSessionToken(it) }
+        notificationManager.setSmallIcon(R.drawable.ic_full_logo)
+        notificationManager.setUseRewindAction(false)
+        notificationManager.setUseFastForwardAction(false)
 
     }
+
+
 
     fun getNotificationManager():PlayerNotificationManager= notificationManager
+    fun hideNotification() {
+        notificationManager.setPlayer(null)
+    }
 
-    private inner class PlayerDescriptionAdapter: PlayerNotificationManager.MediaDescriptionAdapter{
+    fun showNotificationForPlayer(player: ExoPlayer){
+        notificationManager.setPlayer(player)
+    }
+
+    private inner class PlayerDescriptionAdapter(val mediaController: MediaControllerCompat): PlayerNotificationManager.MediaDescriptionAdapter{
         override fun getCurrentContentTitle(player: Player): CharSequence {
           return  mediaController.metadata.description.title.toString()
         }
 
-        override fun createCurrentContentIntent(player: Player): PendingIntent? = musicService.activityIntent
-        //    mediaController.sessionActivity
+        override fun createCurrentContentIntent(player: Player): PendingIntent? =  mediaController.sessionActivity
 
 
         override fun getCurrentContentText(player: Player): CharSequence? =

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mplayer.Utility.isPlaying
 import com.example.mplayer.exoPlayer.MediaSessionConnection
 import com.example.mplayer.exoPlayer.MusicService
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerControlView
 import dagger.hilt.android.components.ServiceComponent
@@ -22,7 +23,7 @@ class PlayerViewModel @Inject constructor(
 
     val songMetaData=mediaSessionConnection.nowPlaying
     val isPlaying=mediaSessionConnection.playbackState
-          var exoPlayer: SimpleExoPlayer?=null
+          var exoPlayer: ExoPlayer?=null
 
 
 

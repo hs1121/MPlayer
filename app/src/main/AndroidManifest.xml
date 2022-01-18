@@ -46,7 +46,11 @@
 
         <service
             android:name=".exoPlayer.MusicService"
-            android:exported="true" >
+            android:exported="true"
+
+            >
+<!--            android:stopWithTask="true" is used to remove notification-->
+
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>

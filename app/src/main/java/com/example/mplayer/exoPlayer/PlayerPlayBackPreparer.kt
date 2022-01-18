@@ -7,17 +7,15 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.example.mplayer.Constants
 import com.example.mplayer.database.BrowsingTree
-import com.google.android.exoplayer2.ControlDispatcher
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 
 class PlayerPlayBackPreparer(
     val browsingTree: BrowsingTree,
-    val playerPrepared : (MediaMetadataCompat?) -> Unit
+    val playerPrepared : (MediaMetadataCompat?,Long) -> Unit
 ):MediaSessionConnector.PlaybackPreparer {
     override fun onCommand(
         player: Player,
-        controlDispatcher: ControlDispatcher,
         command: String,
         extras: Bundle?,
         cb: ResultReceiver?
@@ -36,7 +34,8 @@ class PlayerPlayBackPreparer(
            // the key is required to play specific playlist or album so that concatenating mediaSource
            // of correct list can be used
             val media=browsingTree.browsingList[key]?.find { it.description.mediaId==mediaId }
-           playerPrepared(media)
+           val seekTo=extras?.getLong(Constants.SEEK_TO,0L)?:0L
+           playerPrepared(media,seekTo)
        }
     }
 
