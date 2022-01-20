@@ -9,14 +9,15 @@ import android.content.pm.PackageManager
 import android.net.Uri
 
 import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.util.Log
 import com.example.mplayer.Constants
+import com.example.mplayer.R
 import java.lang.Exception
-import android.widget.Toast
 
 
 object Util {
@@ -97,12 +98,60 @@ object Util {
             .setMediaUri(song.description.mediaUri)
             .setTitle(song.description.title)
             .setSubtitle(song.description.subtitle)
-        desc.from = song.from
 
-        return   MediaBrowserCompat.MediaItem(
-            desc.build(),
+            desc.from=song.from
+            if (song.description.mediaUri!=null){
+                val bundle=Bundle()
+                bundle.putString(Constants.METADATA_KEY_FROM,song.from)
+                bundle.putLong(Constants.METADATA_KEY_DATE,song.date)
+                desc.setExtras(bundle)
+
+            }
+
+        return   MediaBrowserCompat.MediaItem(desc.build(),
             song.bundle.getLong(Constants.METADATA_KEY_FLAG).toInt())
     }
+
+    fun sortList(sortedChildren: MutableList<MediaBrowserCompat.MediaItem>, sortData: SortData)
+    : MutableList<MediaBrowserCompat.MediaItem>{
+        sortData.apply {
+            when(id) {
+                R.id.sort_name -> {
+                    sortedChildren.sortBy { it.description.title.toString() }
+                }
+                R.id.sort_date -> {
+                    sortedChildren.sortBy { it.date }
+                }
+            }
+            if (!isChecked){
+                sortedChildren.reverse()
+            }
+
+        }
+
+        return sortedChildren
+    }
+
+    fun sortBrowsingTree(sortedChildren: MutableList<MediaMetadataCompat>, sortData: SortData)
+            : MutableList<MediaMetadataCompat>{
+        sortData.apply {
+            when(id) {
+                R.id.sort_name -> {
+                    sortedChildren.sortBy { it.description.title.toString() }
+                }
+                R.id.sort_date -> {
+                    sortedChildren.sortBy { it.date }
+                }
+            }
+            if (!isChecked){
+                sortedChildren.reverse()
+            }
+
+        }
+
+        return sortedChildren
+    }
+
 
 }
 

@@ -40,12 +40,8 @@ class PlayerNotificationListener(
                 ContextCompat.startForegroundService(this,
                 Intent(applicationContext,MusicService::class.java))
                 isForegroundService=true
-                try {
-                    startForeground(notificationId,notification) // notification already places
-                }catch (e:Exception){
-                    e.printStackTrace()
-                    Log.e("error is",e.message.toString())
-                }
+                startForeground(notificationId,notification) // notification already places
+
 
             }
 

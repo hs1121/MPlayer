@@ -27,6 +27,8 @@ class MediaSessionConnection(
     private val _nowPlaying=MutableLiveData<MediaMetadataCompat>()
      val nowPlaying=_nowPlaying as LiveData<MediaMetadataCompat>
 
+    private val _onControllerReady=MutableLiveData<Boolean>(false)
+    val onControllerReady= _onControllerReady as LiveData<Boolean>
 
     val transportControls:MediaControllerCompat.TransportControls
     get ()= mediaControllerCompat.transportControls
@@ -57,6 +59,9 @@ class MediaSessionConnection(
             _isConnected.postValue(true)
             mediaControllerCompat= MediaControllerCompat(context,mediaBrowser.sessionToken).apply {
                 registerCallback(ControllerCallback())
+                _onControllerReady.postValue(true)
+
+
             }
         //    MediaControllerCompat.setMediaController(context as Activity,mediaControllerCompat)
 
@@ -73,6 +78,7 @@ class MediaSessionConnection(
             _isConnected.postValue(false)
         }
     }
+
 
     private inner class ControllerCallback:MediaControllerCompat.Callback(){
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) { //executes when playback state is changed
@@ -104,6 +110,7 @@ class MediaSessionConnection(
         .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, "")
         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, 0)
         .build()
+
 
 
 }

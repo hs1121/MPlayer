@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.view.*
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -96,6 +97,7 @@ class PlaylistItemFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
 
         return when (item.itemId){
             R.id.arrange_items->{
+                Toast.makeText(requireContext(), "Hold and Drag to move", Toast.LENGTH_LONG).show()
                val action = PlaylistItemFragmentDirections.actionPlaylistItemFragmentToArrangeFragment(args.mediaId)
                 findNavController().navigate(action)
                 true

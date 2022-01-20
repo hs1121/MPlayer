@@ -50,8 +50,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mainViewModel=ViewModelProvider(this)
-            .get(MainViewModel::class.java)
+        mainViewModel=MainViewModel.getViewModel(this)
+//        mainViewModel=ViewModelProvider(this)
+//            .get(MainViewModel::class.java)
 
         window.statusBarColor = getColor(R.color.background_color)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -84,6 +85,11 @@ class MainActivity : AppCompatActivity() {
 
         }
         mainViewModel?.initMedia()
+        mainViewModel.onControllerReady.observe(this){
+            if (it==true)
+            mainViewModel.initLastPlayedMedia()
+        }
+
 
         val playPause: ImageView = findViewById(R.id.play_pause)
         playPause.setOnClickListener { mainViewModel.playPause() }
@@ -118,6 +124,7 @@ class MainActivity : AppCompatActivity() {
         binding.playerMini.setOnClickListener {
             startActivity(Intent(applicationContext, PlayerActivity::class.java))
         }
+
 
     }
 

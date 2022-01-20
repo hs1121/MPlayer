@@ -1,6 +1,9 @@
 package com.example.mplayer.database
 
 import androidx.room.*
+import com.example.mplayer.Constants
+import com.example.mplayer.Utility.SortData
+import com.example.mplayer.Utility.Util
 import com.example.mplayer.database.entity.PlaylistEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -9,6 +12,15 @@ class Repository @Inject constructor(
     val browsingTree: BrowsingTree,
     val playerDatabase: MPlayerDatabase
 ){
+
+     fun updateSort(sortData: SortData,callback:()->Unit){
+        val list =browsingTree.browsingList[Constants.TRACKS_ROOT]
+        list?.let {
+            browsingTree.browsingList[Constants.TRACKS_ROOT]=Util.sortBrowsingTree(it,sortData)
+            callback()
+        }
+
+    }
 
     suspend fun getPlaylist(name:String)= playerDatabase.playlistDao().getPlaylistItem(name)
 

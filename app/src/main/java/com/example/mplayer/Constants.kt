@@ -6,6 +6,7 @@ object Constants {
 
         const val REQUEST_CODE_DELETE=5
         const val SEEK_TO="SeekToPosition"
+        const val PLAY_MEDIA="PlayMedia"
         const val NOTIFICATION_ID=101
         const val CHANNEL_ID="playback_notification_channel_id"
 
@@ -19,6 +20,7 @@ object Constants {
         
         const val METADATA_KEY_FLAG="com.example.mplayer.Utility.METADATA_KEY_FLAG"
         const val METADATA_KEY_FROM="com.example.mplayer.Utility.METADATA_KEY_FROM"
+        const val METADATA_KEY_DATE="com.example.mplayer.Utility.METADATA_KEY_DATE"
 
         const val NO_GET = "Property does not have a 'get'"
         const val FROM_SPLASH_SCREEN="fromSplashScreen"

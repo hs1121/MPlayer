@@ -1,6 +1,8 @@
 package com.example.mplayer.di
 
 import android.content.Context
+import android.graphics.Color
+import com.example.mplayer.Utility.EqualizerFragmentV2
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -13,6 +15,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ServiceComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ActivityScoped
 import dagger.hilt.android.scopes.ServiceScoped
 
 
@@ -43,6 +46,7 @@ object ServiceModule {
     fun provideDataSourceFactory(
         @ApplicationContext context: Context
     ) = DefaultDataSource.Factory(context)//DefaultDataSourceFactory(context, Util.getUserAgent(context, "MPlayer"))
+
 
 }
 

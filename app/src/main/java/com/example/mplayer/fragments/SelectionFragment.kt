@@ -59,7 +59,7 @@ class SelectionFragment : Fragment() {
         binding = FragmentSelectionBinding.inflate(inflater)
 
 
-        mAdapter = SelectionAdapter(requireContext(), glide, args.selectedItemId)
+        mAdapter = SelectionAdapter(requireContext(), glide,args.selectedItemId, args.pos)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mAdapter
@@ -107,10 +107,6 @@ class SelectionFragment : Fragment() {
             }
         }
 
-
-
-//        smoothScroller.targetPosition = args.pos;
-//
 
 
 
@@ -180,9 +176,6 @@ class SelectionFragment : Fragment() {
 
 
                 }
-
-
-
 
 
                 true

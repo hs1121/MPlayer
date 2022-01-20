@@ -15,7 +15,8 @@ import com.example.mplayer.databinding.MusicItemListLayoutBinding
 class SelectionAdapter (
     private val context: Context,
     private val glide: RequestManager,
-    private val selectedItem:String?): RecyclerView.Adapter<SelectionAdapter.SelectionViewHolder>() {
+    private val selectedItem:String?,
+    private val pos: Int?): RecyclerView.Adapter<SelectionAdapter.SelectionViewHolder>() {
 
 
     private var list= mutableListOf<MediaBrowserCompat.MediaItem>()
@@ -30,7 +31,7 @@ class SelectionAdapter (
     override fun onBindViewHolder(holder: SelectionViewHolder, position: Int) {
         val item = list[position]
         val binding = holder.binding
-        if (selectedItem!=null&&item.mediaId==selectedItem){
+        if (selectedItem!=null&&item.mediaId==selectedItem&&position==pos){
             binding.checkBox.isChecked=true
             selectedItems.add(item)
         }

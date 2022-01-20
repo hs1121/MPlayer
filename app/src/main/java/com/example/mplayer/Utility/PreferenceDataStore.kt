@@ -18,6 +18,7 @@ const val DATA_NAME="MPlayerDataStore"
 const val SORT_BY="SortName"
 const val IS_ASC="IsAsc"
 const val CURRENT_SONG="CurrentSong"
+const val EQUALIZER_DATA_KEY="EqualizerDataKey"
 
 class PreferenceDataStore(private val context: Context) {
 
@@ -48,7 +49,7 @@ class PreferenceDataStore(private val context: Context) {
             save(SORT_BY,id.toString())
     }
 
-    suspend fun getSotData():SortData{
+    suspend fun readSotData():SortData{
         val isAsc=stringToBoolean(read(IS_ASC))
         val id=read(SORT_BY)?.toInt()?: R.id.sort_date
         return SortData(isAsc,id)
@@ -62,6 +63,15 @@ class PreferenceDataStore(private val context: Context) {
         val data = read(CURRENT_SONG)
         return stringToSongData(data)
     }
+
+    suspend fun saveEqData(data: EqualizerData){
+        save(EQUALIZER_DATA_KEY,EqDataToString(data))
+    }
+    suspend fun readEqualizerData(): EqualizerData {
+        val data= read(EQUALIZER_DATA_KEY)
+        return stringToEqData(data)
+    }
+
 
 
 
@@ -88,13 +98,25 @@ class PreferenceDataStore(private val context: Context) {
             null
         }
         return data
+
+    }
+    private fun EqDataToString(data:EqualizerData)=gson.toJson(data)
+    private fun stringToEqData(string: String?):EqualizerData{
+        return try {
+            gson.fromJson(string,EqualizerData::class.java)
+        }
+        catch (e :Exception){
+            Log.e("conversion failed",e.toString()+" unable to convert string to equalizer object")
+            EqualizerData(false,-1, HashMap(),0,0)
+        }
     }
 
 }
 
-data class SortData(val isChecked:Boolean,val id:Int)
-
-data class CurrentSongData(val mediaId:String,val from:String,val time:Long)
+data class SortData(var isChecked:Boolean, var id:Int)
+data class EqualizerData(var isEnable:Boolean,var presetPos:Int,
+                         var bands:HashMap<Short,Short>,var bass:Short,var reverb:Short)
+data class CurrentSongData(val mediaId:String?,val from:String?,val time:Long?)
 
 
 

@@ -14,15 +14,13 @@ import com.example.mplayer.Constants.PLAYLIST_ROOT
 import com.example.mplayer.Constants.TRACKS_ROOT
 import com.example.mplayer.PlayerActivity
 import com.example.mplayer.Utility.*
-import com.example.mplayer.database.BrowsingTree
 import com.example.mplayer.database.Repository
 import com.example.mplayer.database.entity.PlaylistEntity
 import com.example.mplayer.exoPlayer.MediaSessionConnection
+import com.example.mplayer.exoPlayer.MusicService
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.SimpleExoPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -31,24 +29,18 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: Repository,
-    private val mediaSessionConnection: MediaSessionConnection
+    private val mediaSessionConnection: MediaSessionConnection,
+    private val preferenceDataStore: PreferenceDataStore
 ) : ViewModel() {
 
-    @Inject
-    lateinit var preferenceDataStore:PreferenceDataStore
+
     val currentlyPlayingSong=mediaSessionConnection.nowPlaying
     val isPlaying=mediaSessionConnection.playbackState
+    private var currentSongData:CurrentSongData?=null
     var exoPlayer: ExoPlayer?=null
-    set(value) {
-        field=value
-        viewModelScope.launch {
-            val data=preferenceDataStore.readCurrentSongData()
-            data?.apply {
-                restoreCurrentMediaConfig(mediaId,from,time)
-                }
-            }
-        }
 
+
+    val onControllerReady=mediaSessionConnection.onControllerReady
 
     private var _tracksList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
     var tracksList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _tracksList
@@ -64,6 +56,17 @@ class MainViewModel @Inject constructor(
     var songList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _songList
 
 
+   private lateinit var sortData: SortData
+
+
+
+    init{
+        viewModelScope.launch {
+             currentSongData=preferenceDataStore.readCurrentSongData()
+            sortData=preferenceDataStore.readSotData()
+
+        }
+    }
 
 
 
@@ -145,7 +148,14 @@ class MainViewModel @Inject constructor(
             ) {
                 super.onChildrenLoaded(parentId, children)
                 when (key) {
-                    TRACKS_ROOT -> _tracksList.postValue(Event(children).also { it.handle() })
+                    TRACKS_ROOT -> {
+                       val sortedChildren=Util.sortList(children, sortData )
+                        _tracksList.postValue(Event(sortedChildren).also { it.handle() })
+                        viewModelScope.launch {
+                            repository.updateSort(sortData){}
+                        }
+
+                    }
                     ALBUMS_ROOT -> _albumList.postValue(Event(children).also { it.handle() })
                     PLAYLIST_ROOT -> _playlist.postValue(Event(children).also { it.handle() })
 
@@ -156,13 +166,34 @@ class MainViewModel @Inject constructor(
         })
 
     }
-    private fun restoreCurrentMediaConfig(mediaId:String,from:String,seekTo:Long){
+    private fun restoreCurrentMediaConfig(mediaId:String,from:String?,seekTo:Long?){
+        // set media without playing (initial setup for song played last time)
         val transportControls = mediaSessionConnection.transportControls
         transportControls.playFromMediaId(
             mediaId,
-            Bundle().apply { putString(Constants.METADATA_KEY_FROM, from)
-            putLong(Constants.SEEK_TO,seekTo)})
+            Bundle().apply { putString(Constants.METADATA_KEY_FROM, from?:"")
+            putLong(Constants.SEEK_TO,seekTo?:0)
+                putBoolean(Constants.PLAY_MEDIA,false)})
         transportControls.pause()
+    }
+    private fun playOrderMedia(){  // update media when the order is changed
+        MusicService.currentSong?.let {
+            if (it.from == Constants.TRACKS_ROOT) {
+                val mediaItem = Util.asMediaItem(it)
+                val transportControls = mediaSessionConnection.transportControls
+                transportControls.playFromMediaId(
+                    mediaItem.mediaId,
+                    Bundle().apply {
+                        putString(Constants.METADATA_KEY_FROM, mediaItem.from)
+                        putLong(
+                            Constants.SEEK_TO,
+                            (exoPlayer?.let { it.currentPosition + 150 }) ?: 0L
+                        ) // 150 sec to cover glitch
+                        putBoolean(Constants.PLAY_MEDIA, exoPlayer?.isPlaying ?: false)
+                    }
+                )
+            }
+        }
     }
 
     private fun playMedia(mediaItem: MediaBrowserCompat.MediaItem, isPauseEnable: Boolean = true) {
@@ -250,13 +281,38 @@ class MainViewModel @Inject constructor(
         getMedia(ALBUMS_ROOT)
         getMedia(PLAYLIST_ROOT)
     }
-    fun getMedia(){
+    fun refreshMedia(){
         viewModelScope.launch(Dispatchers.IO) {
             repository.browsingTree.getMedia()
             initMedia()
         }
     }
 
+    fun updateSort(isAsc: Boolean?, itemId: Int?) {
+        sortData.apply {
+            if (itemId!=null) sortData.id=itemId
+            else sortData.isChecked=isAsc!!
+        }
+        val tracks=tracksList.value?.data
+        tracks?.apply {
+          val sortedList= Util.sortList(this,sortData)
+            val event=Event(sortedList).also { it.handle() }
+            _tracksList.postValue(event)
+            viewModelScope.launch {
+                repository.updateSort(sortData){
+                    playOrderMedia()
+                }
+            }
+        }
+    }
+
+
+    fun initLastPlayedMedia() {
+        currentSongData?.apply {
+            if(mediaId!=null&&mediaId.isNotEmpty())
+                restoreCurrentMediaConfig(mediaId,from,time)
+        }
+    }
 
 
 }

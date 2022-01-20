@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.lifecycle.lifecycleScope
 import com.example.mplayer.Constants.FROM_SPLASH_SCREEN
+import com.example.mplayer.Utility.PreferenceDataStore
 import com.example.mplayer.database.BrowsingTree
 import com.example.mplayer.Utility.Util
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +32,8 @@ class SplashScreen : AppCompatActivity() {
 
     @Inject
     lateinit var musicSource: BrowsingTree
+    @Inject
+    lateinit var preferenceDataStore: PreferenceDataStore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
@@ -50,6 +53,7 @@ class SplashScreen : AppCompatActivity() {
 
     private fun startActivity() {
         lifecycleScope.launch {
+           val data= preferenceDataStore.readSotData()
             musicSource.getMedia()
             var intent = Intent(this@SplashScreen, MainActivity::class.java)
             intent.putExtra(FROM_SPLASH_SCREEN,true)

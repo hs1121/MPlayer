@@ -9,9 +9,11 @@ import android.graphics.drawable.Drawable
 import android.media.session.MediaController
 import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import com.bumptech.glide.Glide
@@ -28,6 +30,8 @@ import com.google.android.exoplayer2.ExoPlayer
 
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
+
+import com.google.common.reflect.Reflection.getPackageName
 
 
 class PlayerNotificationManager(
@@ -105,10 +109,14 @@ class PlayerNotificationManager(
                         iconUri=mediaController.metadata.description.iconUri
                         callback.onBitmap(p0)
                     }
-                    override fun onLoadCleared(p0: Drawable?) =Unit
+                    override fun onLoadCleared(p0: Drawable?) {
+                        Log.i("hi","ye")
+                    }
 
                 })
-            return null
+            val uri =
+                Uri.parse("android.resource://" + musicService.packageName.toString() + "/" + R.drawable.place_holder)
+            return  MediaStore.Images.Media.getBitmap(musicService.contentResolver, uri);
         }
 
     }

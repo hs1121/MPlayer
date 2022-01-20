@@ -24,7 +24,7 @@
             android:layout_marginHorizontal="16dp">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardView3"
+            android:id="@+id/image_bg_card"
             android:layout_width="@dimen/card_item_image_size"
             android:layout_height="@dimen/card_item_image_size"
             app:cardCornerRadius="@dimen/card_item_image_radius"
@@ -54,7 +54,7 @@
                 android:text="Add Playlist"
                 android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/materialCardView3"
+                app:layout_constraintStart_toEndOf="@+id/image_bg_card"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

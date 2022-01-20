@@ -38,17 +38,19 @@ class PlaylistAdapter (
 //        if (list.lastIndex==position)
 //            binding.endLine.visibility=View.INVISIBLE
         if (item.isPlayable) {
-
-            binding.itemMove.visibility=View.VISIBLE
+            binding.imageBgCard.visibility=View.GONE
+            binding.itemMore.visibility=View.GONE
             binding.itemTitle.text = item.description.title
             binding.itemSubtitle.text = item.description.subtitle
 
-            glide.load(item.description.iconUri)
-                .apply(RequestOptions().override(100, 100))
-                .into(binding.itemImage)
+//            glide.load(item.description.iconUri)
+//                .apply(RequestOptions().override(100, 100))
+//                .into(binding.itemImage)
 
 
         } else {
+            binding.bottomLine.visibility=View.GONE
+            binding.itemMore.visibility=View.VISIBLE
             binding.itemTitle.text = item.description.title
             glide.load(item.description.iconUri)
                 .apply(RequestOptions().override(100, 100))

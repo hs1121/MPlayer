@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SettingActivity">
-    <include layout="@layout/equalizer_ui"/>
-
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/eqFrame"/>
+   
 </androidx.constraintlayout.widget.ConstraintLayout>

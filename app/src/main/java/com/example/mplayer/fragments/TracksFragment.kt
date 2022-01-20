@@ -20,7 +20,6 @@ import com.example.mplayer.R
 import com.example.mplayer.Utility.Action
 import com.example.mplayer.Utility.Content
 import com.example.mplayer.Utility.PreferenceDataStore
-import com.example.mplayer.Utility.SortData
 import com.example.mplayer.viewModels.MainViewModel
 import com.example.mplayer.databinding.FragmentTracksBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -84,10 +83,11 @@ class TracksFragment : Fragment() {
 
         binding.refreshLayout.setOnRefreshListener {
             binding.refreshLayout.isRefreshing = false
-            mainViewModel.getMedia()
+            mainViewModel.refreshMedia()
         }
         mainViewModel.tracksList.observe(viewLifecycleOwner, {
             mAdapter.setList(it.peekContent())
+            mAdapter.notifyDataSetChanged()
             Log.d("debug", "check")
         })
 
@@ -99,6 +99,9 @@ class TracksFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         val search = menu.findItem(R.id.search_icon)
+        val sort = menu.findItem(R.id.sort_icon)
+        sort.isVisible = true
+        search.isVisible = true
         val searchView = search?.actionView as SearchView
         searchView.apply {
             isSubmitButtonEnabled = true
@@ -149,7 +152,7 @@ class TracksFragment : Fragment() {
             val ascCheckBox= it.menu.findItem(R.id.is_asc)
 
             lifecycleScope.launch(Dispatchers.Main) {
-                val data= dataStore.getSotData()
+                val data= dataStore.readSotData()
                 ascCheckBox.isChecked=data.isChecked;
              //   val id=R.id.sort_name
                 val sortBy:MenuItem?=it.menu.findItem(data.id)
@@ -168,23 +171,31 @@ class TracksFragment : Fragment() {
              when(menuItem.itemId){
                  R.id.is_asc->{
                          menuItem.isChecked= !menuItem.isChecked
+                     mainViewModel.updateSort(menuItem.isChecked,null)
                      lifecycleScope.launch {
                          dataStore.saveSortData(menuItem.isChecked, null)
                      }
                  }
                  R.id.sort_name->{
                      menuItem.isChecked= true
+                     mainViewModel.updateSort(null,menuItem.itemId)
                      lifecycleScope.launch {
                          dataStore.saveSortData(null,menuItem.itemId)
                      }
                  }
                  R.id.sort_date->{
                      menuItem.isChecked= true
+                     mainViewModel.updateSort(null,menuItem.itemId)
                      lifecycleScope.launch {
                          dataStore.saveSortData(null,menuItem.itemId)
                      }
                  }
+
              }
+
+            val isAsc=popupMenu.menu.findItem(R.id.is_asc)
+
+
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
             menuItem.actionView = View(context)
             menuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {

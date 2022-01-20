@@ -34,12 +34,13 @@ class TracksAdapter(
 //        if (list.lastIndex==position)
 //            binding.endLine.visibility=View.INVISIBLE
         if (item.isPlayable) {
+            binding.imageBgCard.visibility=View.GONE
             binding.itemTitle.text = item.description.title
             binding.itemSubtitle.text = item.description.subtitle
-
-            glide.load(item.description.iconUri)
-                .apply(RequestOptions().override(100, 100))
-                .into(binding.itemImage)
+//
+//            glide.load(item.description.iconUri)
+//                .apply(RequestOptions().override(100, 100))
+//                .into(binding.itemImage)
 
             binding.root.setOnLongClickListener {
 
@@ -49,6 +50,7 @@ class TracksAdapter(
 
 
         }else{
+            binding.bottomLine.visibility=View.GONE
           binding.itemTitle.text=item.description.title
             glide.load(item.description.iconUri)
                 .apply(RequestOptions().override(100, 100))

@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.mosamabinomar:AndroidEqualizer:2.2@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/3bcc620d4258f386877a5abc54b4d50d/transformed/jetified-AndroidEqualizer-2.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/3bcc620d4258f386877a5abc54b4d50d/transformed/jetified-AndroidEqualizer-2.2/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/3bcc620d4258f386877a5abc54b4d50d/transformed/jetified-AndroidEqualizer-2.2/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.mosamabinomar/AndroidEqualizer/2.2/4bce3adfd0520ffc98fdbc0b8a0842eca1f40df1/AndroidEqualizer-2.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.mosamabinomar/AndroidEqualizer/2.2/a5a1cab72b71303201fba7369c8db43dbd35d2b2/AndroidEqualizer-2.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

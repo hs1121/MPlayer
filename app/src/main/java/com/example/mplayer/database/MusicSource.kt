@@ -10,6 +10,7 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import com.example.mplayer.Constants
 import com.example.mplayer.Utility.PathFromUri.getPathFromUri
+import com.example.mplayer.Utility.date
 import com.example.mplayer.Utility.flag
 import com.example.mplayer.Utility.from
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -71,7 +72,7 @@ class MusicSource @Inject constructor(
 
                     val albumId=cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID))
                     val artworkUri = Uri.parse("content://media/external/audio/albumart")
-                    val albumArt = ContentUris.withAppendedId(artworkUri, albumId)
+                    val albumArt = ContentUris.withAppendedId(artworkUri, albumId).toString()
 
                     val id=cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID))
                     val pathUri:Uri =ContentUris.withAppendedId(uri,id)
@@ -80,6 +81,7 @@ class MusicSource @Inject constructor(
 
                     val mediaItem=MediaMetadataCompat.Builder().apply {
                         flag=(MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
+                        date=dateAdded
                     }
                         .putString(MediaMetadataCompat.METADATA_KEY_ARTIST,artist)
                         .putString(MediaMetadataCompat.METADATA_KEY_TITLE,name)
@@ -93,6 +95,8 @@ class MusicSource @Inject constructor(
                         .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI,albumArt.toString())
                         .putString(MediaMetadataCompat.METADATA_KEY_DATE,dateAdded.toString())
                         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,duration)
+
+
 
                         mediaItems.add(mediaItem)
 

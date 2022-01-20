@@ -8,6 +8,7 @@ plugins {
 apply plugin: 'kotlin-android'
 
 
+
 android {
     compileSdk 31
 
@@ -95,9 +96,17 @@ dependencies {
     //dataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0-alpha01"
 
+    // AndroidEqualizer
+
+    implementation 'com.github.mosamabinomar:AndroidEqualizer:2.2'
+    implementation 'com.diogobernardino:williamchart:2.2'
+    implementation 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.0'
+
+
 
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
 
 
 
 }
+

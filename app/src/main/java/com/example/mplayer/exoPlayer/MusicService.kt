@@ -3,7 +3,9 @@ package com.example.mplayer.exoPlayer
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.media.audiofx.BassBoost
 import android.media.audiofx.Equalizer
+import android.media.audiofx.PresetReverb
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
@@ -46,6 +48,14 @@ class MusicService : MediaBrowserServiceCompat() {
     private lateinit var playerNotificationManager: PlayerNotificationManager
 
     companion object {
+
+         var equalizer: Equalizer?=null
+         var bass:BassBoost?=null
+         var presetReverb: PresetReverb?=null
+
+
+
+
         // player instance (used to connect exoplayer ui to player)
         private val _playerInstance = MutableLiveData<ExoPlayer?>()
         val playerInstance: LiveData<ExoPlayer?> = _playerInstance
@@ -95,27 +105,21 @@ class MusicService : MediaBrowserServiceCompat() {
         sessionToken = mediaSession.sessionToken
          mediaSessionConnector = MediaSessionConnector(mediaSession)
 
-        val playbackPreparer = PlayerPlayBackPreparer(browsingTree) {it,seetTo-> // executes whenever user changes the media(callback method)
+        val playbackPreparer = PlayerPlayBackPreparer(browsingTree) {it,seetTo,playMedia-> // executes whenever user changes the media(callback method)
             currentlyPlayingSong = it
             currentSong=it
             mediaSession.setMetadata(it)
             val key = it?.from ?: ""
             mediaSessionConnector.setQueueNavigator(PlayerQueueNavigator(mediaSession, key)) // sets the
-            if(seetTo==-1L)
+
             preparePlayer(
                 browsingTree.mediaListByItem(it),
                 it,
                 key,
-                true
+                playMedia,
+                seetTo
             )
-            else
-                preparePlayer(
-                    browsingTree.mediaListByItem(it),
-                    it,
-                    key,
-                    false,
-                    seetTo
-                )
+
         }
         mediaSessionConnector.setPlaybackPreparer(playbackPreparer)
         mediaSessionConnector.setPlayer(exoPlayer)
@@ -204,6 +208,9 @@ class MusicService : MediaBrowserServiceCompat() {
 
     override fun onDestroy() {
         serviceScope.cancel()
+        equalizer?.release()
+        bass?.release()
+        presetReverb?.release()
         playerNotificationManager.getNotificationManager().setPlayer(null)
         mediaSession.isActive = false
         mediaSession.release()
