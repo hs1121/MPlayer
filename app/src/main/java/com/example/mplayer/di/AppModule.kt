@@ -62,7 +62,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideBrowsingTree(musicSource: MusicSource)= BrowsingTree(musicSource)
+    fun provideBrowsingTree(musicSource: MusicSource,preferenceDataStore: PreferenceDataStore)= BrowsingTree(musicSource,preferenceDataStore)
 
     @Singleton
     @Provides

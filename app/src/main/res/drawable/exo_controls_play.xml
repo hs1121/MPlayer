@@ -1,30 +1,15 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aapt="http://schemas.android.com/aapt"
-    android:width="70dp"
-    android:height="70dp"
-    android:viewportWidth="70"
-    android:viewportHeight="70">
+    android:width="65dp"
+    android:height="65dp"
+    android:viewportWidth="65"
+    android:viewportHeight="65">
   <path
-      android:pathData="M67.5,35C67.5,52.9493 52.9493,67.5 35,67.5C17.0507,67.5 2.5,52.9493 2.5,35C2.5,17.0507 17.0507,2.5 35,2.5C52.9493,2.5 67.5,17.0507 67.5,35Z"
-      android:fillColor="#ffffff"/>
+      android:pathData="M65,32.5C65,50.4493 50.4493,65 32.5,65C14.5507,65 0,50.4493 0,32.5C0,14.5507 14.5507,0 32.5,0C50.4493,0 65,14.5507 65,32.5Z"
+      android:fillColor="@color/iconColor_outer"/>
   <path
-      android:pathData="M70,35C70,54.33 54.33,70 35,70C15.67,70 0,54.33 0,35C0,15.67 15.67,0 35,0C54.33,0 70,15.67 70,35Z">
-    <aapt:attr name="android:fillColor">
-      <gradient 
-          android:startY="10"
-          android:startX="11.5"
-          android:endY="63"
-          android:endX="59.5"
-          android:type="linear">
-        <item android:offset="0" android:color="@color/iconColor_outer"/>
-        <item android:offset="1" android:color="@color/iconColor_outer"/>
-      </gradient>
-    </aapt:attr>
-  </path>
-  <path
-      android:pathData="M27.8999,47.1C27.8999,47.4788 28.1139,47.8251 28.4527,47.9944C28.7915,48.1638 29.1969,48.1273 29.4999,47.9L46.2999,35.3C46.5517,35.1112 46.6999,34.8148 46.6999,34.5C46.6999,34.1853 46.5517,33.8889 46.2999,33.7L29.4999,21.1C29.1969,20.8728 28.7915,20.8362 28.4527,21.0056C28.1139,21.175 27.8999,21.5213 27.8999,21.9V47.1Z"
+      android:pathData="M26,45.2C26,45.5788 26.214,45.925 26.5528,46.0944C26.8916,46.2638 27.297,46.2273 27.6,46L44.4,33.4C44.6518,33.2111 44.8,32.9148 44.8,32.6C44.8,32.2852 44.6518,31.9889 44.4,31.8L27.6,19.2C27.297,18.9727 26.8916,18.9362 26.5528,19.1056C26.214,19.275 26,19.6212 26,20V45.2Z"
       android:strokeLineJoin="round"
       android:strokeWidth="2"
-      android:fillColor="@color/iconColor_inner"
-      android:strokeColor="@color/iconColor_inner"/>
+      android:fillColor="@color/iconColor"
+      android:strokeColor="@color/iconColor"/>
 </vector>

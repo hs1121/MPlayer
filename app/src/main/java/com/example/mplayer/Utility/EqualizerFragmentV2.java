@@ -53,7 +53,7 @@ public class EqualizerFragmentV2 extends Fragment {
 
     public static final String ARG_AUDIO_SESSIOIN_ID = "audio_session_id";
 
-    static int  themeColor = Color.parseColor("#B24242");
+    static int  themeColor = Color.parseColor("#fff");
     private  PreferenceDataStore preferenceDataStore;
     private EqualizerData equalizerData;
     public Equalizer mEqualizer;
@@ -383,8 +383,8 @@ public class EqualizerFragmentV2 extends Fragment {
                     break;
             }
             seekBarFinal[i] = seekBar;
-            seekBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_IN));
-            seekBar.getThumb().setColorFilter(new PorterDuffColorFilter(themeColor, PorterDuff.Mode.SRC_IN));
+          //  seekBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_IN));
+         //   seekBar.getThumb().setColorFilter(new PorterDuffColorFilter(themeColor, PorterDuff.Mode.SRC_IN));
             seekBar.setId(i);
 //            seekBar.setLayoutParams(layoutParams);
             seekBar.setMax(upperEqualizerBandLevel - lowerEqualizerBandLevel);

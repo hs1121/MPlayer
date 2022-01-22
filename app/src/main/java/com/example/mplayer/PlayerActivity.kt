@@ -11,6 +11,8 @@ import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.example.mplayer.Utility.Util
+import com.example.mplayer.Utility.from
 import com.example.mplayer.Utility.isPlayEnabled
 import com.example.mplayer.Utility.isPlaying
 import com.example.mplayer.databinding.ActivityPlayerBinding
@@ -33,7 +35,8 @@ class PlayerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityPlayerBinding.inflate(layoutInflater)
-        window.statusBarColor=getColor(R.color.background_color)
+        Util.setStatusBarGradient(this)
+       // window.statusBarColor=getColor(R.color.background_color)
         setContentView(binding.root)
         playerViewModel=ViewModelProvider(this).get(PlayerViewModel::class.java)
         MusicService.playerInstance.observe(this,{
@@ -58,6 +61,7 @@ class PlayerActivity : AppCompatActivity() {
         playerViewModel.songMetaData.observe(this,{ item ->
             binding.titleName.text=item.description.title
             binding.artistName.text=item.description.subtitle
+            binding.fromText.text=item.from
             item?.description?.iconUri.let { glide.load(it).into(binding.songImage) }
 
         })

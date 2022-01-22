@@ -28,9 +28,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_add" />
-                            <entry key="sourceFile" value="C:\Users\hs112\Desktop\app icons\no_repeat.svg" />
+                            <entry key="outputName" value="exo_controls_pause" />
+                            <entry key="sourceFile" value="C:\Users\hs112\Desktop\icon\Group 78.svg" />
                           </map>
                         </option>
                       </PersistentState>

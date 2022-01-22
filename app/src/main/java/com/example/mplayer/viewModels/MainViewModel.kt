@@ -34,13 +34,11 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    val currentlyPlayingSong=mediaSessionConnection.nowPlaying
-    val isPlaying=mediaSessionConnection.playbackState
-    private var currentSongData:CurrentSongData?=null
-    var exoPlayer: ExoPlayer?=null
+    val currentlyPlayingSong = mediaSessionConnection.nowPlaying
+    val isPlaying = mediaSessionConnection.playbackState
+    private var currentSongData: CurrentSongData? = null
+    var exoPlayer: ExoPlayer? = null
 
-
-    val onControllerReady=mediaSessionConnection.onControllerReady
 
     private var _tracksList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
     var tracksList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _tracksList
@@ -48,26 +46,27 @@ class MainViewModel @Inject constructor(
     private val _albumList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
     val albumList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _albumList
 
-     private var _playlist =MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
-     val playlist : LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>  = _playlist
+    private var _playlist = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
+    val playlist: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _playlist
 
 
     private var _songList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
     var songList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _songList
 
 
-   private lateinit var sortData: SortData
+    private lateinit var sortData: SortData
 
 
-
-    init{
+    init {
+        mediaSessionConnection //init media session
         viewModelScope.launch {
-             currentSongData=preferenceDataStore.readCurrentSongData()
-            sortData=preferenceDataStore.readSotData()
+            currentSongData = preferenceDataStore.readCurrentSongData()
+            sortData = preferenceDataStore.readSotData()
+
 
         }
-    }
 
+    }
 
 
     companion object {
@@ -87,46 +86,43 @@ class MainViewModel @Inject constructor(
 //        }
 //    }
 
-    fun insertPlaylist(playlistEntity: PlaylistEntity,callBack: () -> Unit){
+    fun insertPlaylist(playlistEntity: PlaylistEntity, callBack: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertPlaylist(playlistEntity)
             repository.browsingTree.updatePlaylist()
             resetPlaylist()
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 callBack()
             }
         }
 
     }
 
-   suspend fun getPlayList(id:String):PlaylistEntity?= repository.getPlaylist(id)
+    suspend fun getPlayList(id: String): PlaylistEntity? = repository.getPlaylist(id)
 
-    fun deletePlaylist(entity: PlaylistEntity){
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deletePlaylist(entity)
-        }
-    }
-    fun deletePlaylists(name:MutableList<String>, callBack: () -> Unit){
+
+    fun deletePlaylists(name: MutableList<String>, callBack: () -> Unit) {
         viewModelScope.launch {
             repository.deletePlaylist(name)
             repository.browsingTree.updatePlaylist()
             resetPlaylist()
-            withContext(Dispatchers.Main){
-                callBack()
-            }
-        }
-    }
-    fun updatePlaylistItem(item:MutableList<String?>,name:String,callBack:()->Unit){
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.updatePlaylistITem(item, name)
-            repository.browsingTree.updatePlaylist()
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 callBack()
             }
         }
     }
 
-    fun updatePlaylist(playlistEntity: PlaylistEntity ,callBack: () -> Unit){
+    fun updatePlaylistItem(item: MutableList<String?>, name: String, callBack: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updatePlaylistITem(item, name)
+            repository.browsingTree.updatePlaylist()
+            withContext(Dispatchers.Main) {
+                callBack()
+            }
+        }
+    }
+
+    fun updatePlaylist(playlistEntity: PlaylistEntity, callBack: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.updatePlaylist(playlistEntity)
             repository.browsingTree.updatePlaylist()
@@ -149,11 +145,8 @@ class MainViewModel @Inject constructor(
                 super.onChildrenLoaded(parentId, children)
                 when (key) {
                     TRACKS_ROOT -> {
-                       val sortedChildren=Util.sortList(children, sortData )
+                        val sortedChildren = Util.sortList(children, sortData)
                         _tracksList.postValue(Event(sortedChildren).also { it.handle() })
-                        viewModelScope.launch {
-                            repository.updateSort(sortData){}
-                        }
 
                     }
                     ALBUMS_ROOT -> _albumList.postValue(Event(children).also { it.handle() })
@@ -166,19 +159,24 @@ class MainViewModel @Inject constructor(
         })
 
     }
-    private fun restoreCurrentMediaConfig(mediaId:String,from:String?,seekTo:Long?){
+
+    private fun restoreCurrentMediaConfig(mediaId: String, from: String?, seekTo: Long?) {
         // set media without playing (initial setup for song played last time)
         val transportControls = mediaSessionConnection.transportControls
         transportControls.playFromMediaId(
             mediaId,
-            Bundle().apply { putString(Constants.METADATA_KEY_FROM, from?:"")
-            putLong(Constants.SEEK_TO,seekTo?:0)
-                putBoolean(Constants.PLAY_MEDIA,false)})
+            Bundle().apply {
+                putString(Constants.METADATA_KEY_FROM, from ?: "")
+                putLong(Constants.SEEK_TO, seekTo ?: 0)
+                putBoolean(Constants.PLAY_MEDIA, false)
+            })
         transportControls.pause()
     }
-    private fun playOrderMedia(){  // update media when the order is changed
+
+    private fun playOrderMedia() {
+        // update media when the order is changed
         MusicService.currentSong?.let {
-            if (it.from == Constants.TRACKS_ROOT) {
+            if (it.from == TRACKS_ROOT) {
                 val mediaItem = Util.asMediaItem(it)
                 val transportControls = mediaSessionConnection.transportControls
                 transportControls.playFromMediaId(
@@ -187,11 +185,14 @@ class MainViewModel @Inject constructor(
                         putString(Constants.METADATA_KEY_FROM, mediaItem.from)
                         putLong(
                             Constants.SEEK_TO,
-                            (exoPlayer?.let { it.currentPosition + 150 }) ?: 0L
+                            (exoPlayer?.let { it.currentPosition }) ?: 0L
                         ) // 150 sec to cover glitch
                         putBoolean(Constants.PLAY_MEDIA, exoPlayer?.isPlaying ?: false)
+
+                        // todo: fix the glitch (execute it at end or when track changed )
                     }
                 )
+
             }
         }
     }
@@ -219,8 +220,10 @@ class MainViewModel @Inject constructor(
         } else
             transportControls.playFromMediaId(
                 mediaItem.mediaId,
-                Bundle().apply { putString(Constants.METADATA_KEY_FROM, mediaItem.from)
-                    putLong(Constants.SEEK_TO,-1L)})
+                Bundle().apply {
+                    putString(Constants.METADATA_KEY_FROM, mediaItem.from)
+                    putLong(Constants.SEEK_TO, -1L)
+                })
     }
 
     fun playPause() {
@@ -236,23 +239,23 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun itemClicked(item: MediaBrowserCompat.MediaItem,context: Context) {
-        if (item.isPlayable){
-            playMedia(item,false)
-            context.startActivity(Intent(context,PlayerActivity::class.java))
-        }
-        else{
+    fun itemClicked(item: MediaBrowserCompat.MediaItem, context: Context) {
+        if (item.isPlayable) {
+            playMedia(item, false)
+            context.startActivity(Intent(context, PlayerActivity::class.java))
+        } else {
             getMedia(item.description.mediaId.toString())
 
         }
     }
 
-    private val _mediaRemoved=MutableLiveData<Boolean>()
-    val mediaRemoved:LiveData<Boolean> = _mediaRemoved
-    fun mediaRemoved(boolean: Boolean){
+    private val _mediaRemoved = MutableLiveData<Boolean>()
+    val mediaRemoved: LiveData<Boolean> = _mediaRemoved
+    fun mediaRemoved(boolean: Boolean) {
         _mediaRemoved.postValue(boolean)
     }
-    fun mediaRemoved(list:MutableList<Uri>,callBack: () -> Unit){
+
+    fun mediaRemoved(list: MutableList<Uri>, callBack: () -> Unit) {
         viewModelScope.launch {
             repository.browsingTree.mediaReset(list)
             initMedia()
@@ -260,6 +263,7 @@ class MainViewModel @Inject constructor(
         }
 
     }
+
     fun resetSongList() {
         // reset the songList to make tell that it is not handled (if any update is made or user selects another album or playlist)
         _songList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
@@ -281,7 +285,8 @@ class MainViewModel @Inject constructor(
         getMedia(ALBUMS_ROOT)
         getMedia(PLAYLIST_ROOT)
     }
-    fun refreshMedia(){
+
+    fun refreshMedia() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.browsingTree.getMedia()
             initMedia()
@@ -290,17 +295,22 @@ class MainViewModel @Inject constructor(
 
     fun updateSort(isAsc: Boolean?, itemId: Int?) {
         sortData.apply {
-            if (itemId!=null) sortData.id=itemId
-            else sortData.isChecked=isAsc!!
+            if (itemId != null) sortData.id = itemId
+            else sortData.isChecked = isAsc!!
         }
-        val tracks=tracksList.value?.data
+        val tracks = tracksList.value?.data
         tracks?.apply {
-          val sortedList= Util.sortList(this,sortData)
-            val event=Event(sortedList).also { it.handle() }
+            val sortedList = Util.sortList(this, sortData)
+            val event = Event(sortedList).also { it.handle() }
             _tracksList.postValue(event)
             viewModelScope.launch {
-                repository.updateSort(sortData){
-                    playOrderMedia()
+                repository.updateSort(sortData) {
+                    viewModelScope.launch {
+                        repository.updateSort(sortData) {
+                            playOrderMedia()
+                        }
+                    }
+
                 }
             }
         }
@@ -309,8 +319,8 @@ class MainViewModel @Inject constructor(
 
     fun initLastPlayedMedia() {
         currentSongData?.apply {
-            if(mediaId!=null&&mediaId.isNotEmpty())
-                restoreCurrentMediaConfig(mediaId,from,time)
+            if (mediaId != null && mediaId.isNotEmpty())
+                restoreCurrentMediaConfig(mediaId, from, time)
         }
     }
 

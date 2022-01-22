@@ -6,14 +6,18 @@
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/primary_light</item>
+        <item name="colorSecondary">@color/white</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/background_color</item>
+        <item name="statusBarBackground">@drawable/background_main</item>
         <!-- Customize your theme here. -->
+        <item name="android:editTextColor">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_primary</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="popupMenuBackground">@color/grad_medium</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:textColor">@color/primary</item>
+        <item name="android:textColor">@color/text_primary</item>
 
         </style>
 
@@ -24,7 +28,8 @@
     <style name="bottom_nav_style" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="itemIconTint">@color/bottom_nav_color</item>
         <item name="itemTextColor">@color/bottom_nav_color</item>
-        <item name="backgroundTint">@color/bottom_nav_background</item>
+
+
     </style>
     <style name="custom_card" parent="CardView">
         <item name="android:topRightRadius">@dimen/radius_bottom_nav</item>
@@ -35,27 +40,27 @@
 
 
     <style name="TextAppearance.App.CollapsingToolbar.Expanded" parent="TextAppearance.MaterialComponents.Headline5">
-        <item name="android:textColor">@color/primary</item>
+        <item name="android:textColor">@color/text_primary</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">32dp</item>
     </style>
 
     <style name="TextAppearance.App.CollapsingToolbar.Collapsed" parent="TextAppearance.MaterialComponents.Headline6">
-        <item name="android:textColor">@color/primary</item>
+        <item name="android:textColor">@color/text_primary</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TitleTextStyle" parent="Widget.AppCompat.TextView">
         <item name="fontFamily">@font/abhaya_libre_bold</item>
-        <item name="android:textColor">@color/primary</item>
+        <item name="android:textColor">@color/text_primary</item>
     </style>
     <style name="normal_text" parent="Widget.AppCompat.TextView">
         <item name="fontFamily">@font/abhaya_libre</item>
-        <item name="android:textColor">@color/black_60</item>
+        <item name="android:textColor">@color/text_primary</item>
     </style>
 
     <style name="icon_style" parent="">
-        <item name="tint">@color/primary</item>
+        <item name="tint">@color/iconColor</item>
     </style>
     
     <style name="custom_checkbox_style" parent="Widget.AppCompat.CompoundButton.CheckBox">
@@ -63,39 +68,45 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
-    <style name="custom_input_style" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="custom_input_style" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="boxCornerRadiusTopStart">@dimen/input_text_radius</item>
         <item name="boxCornerRadiusTopEnd">@dimen/input_text_radius</item>
         <item name="boxCornerRadiusBottomStart">@dimen/input_text_radius</item>
         <item name="boxCornerRadiusBottomEnd">@dimen/input_text_radius</item>
-        <item name="strokeColor">@color/primary</item>
+        <item name="hintTextColor">@color/grad_dark</item>
+        <item name="strokeColor">@color/transparent</item>
+
 
     </style>
 
     <style name="custom_button_accept_style" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/primary</item>
+        <item name="backgroundTint">@color/on_primary</item>
         <item name="cornerRadius">@dimen/input_text_radius</item>
     </style>
     <style name="custom_button_cancel_style" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/background_color</item>
-        <item name="android:textColor">@color/primary</item>
-        <item name="strokeWidth">1dp</item>
-        <item name="strokeColor">@color/primary</item>
+        <item name="backgroundTint">@color/white_80</item>
+        <item name="android:textColor">@color/on_primary</item>
         <item name="cornerRadius">@dimen/input_text_radius</item>
     </style>
 
     <style name="custom_switch" parent="Theme.AppCompat.Light">
         <!-- active thumb & track color (30% transparency) -->
-        <item name="colorControlActivated">@color/primary_light</item>
+        <item name="colorControlActivated">@color/iconColor</item>
 
         <!-- inactive thumb color -->
-        <item name="colorSwitchThumbNormal">#f1f1f1
+        <item name="colorSwitchThumbNormal">@color/icon_inactive
         </item>
-
         <!-- inactive track color (30% transparency) -->
-        <item name="android:colorForeground">#42221f1f
+        <item name="android:colorForeground">@color/white_40
         </item>
     </style>
 
 
+
+    <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
+        <item name="android:popupBackground">@color/grad_medium</item>
+    </style>
+
+
+    <color name="white_80">#CCFFFFFF</color>
 </resources>

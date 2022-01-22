@@ -8,6 +8,7 @@
     <dimen name="card_item_image_radius">10dp</dimen>
 
     <dimen name="icon_size">24dp</dimen>
+    <dimen name="player_icon">30dp</dimen>
 
     <dimen name="input_text_radius">10dp</dimen>
 

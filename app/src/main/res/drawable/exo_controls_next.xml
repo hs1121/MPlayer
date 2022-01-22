@@ -1,27 +1,12 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aapt="http://schemas.android.com/aapt"
-    android:width="44dp"
-    android:height="44dp"
-    android:viewportWidth="44"
-    android:viewportHeight="44">
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
   <path
-      android:pathData="M22,22m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0"
-      android:fillColor="#ffffff"/>
+      android:pathData="M25.7101,15.087C26.0506,15.2698 26.0639,15.7533 25.734,15.9545L6.74,27.5364C6.4068,27.7396 5.9797,27.4997 5.9797,27.1095L5.9797,5.3357C5.9797,4.9577 6.383,4.7164 6.7161,4.8952L25.7101,15.087Z"
+      android:fillColor="@color/iconColor"/>
   <path
-      android:pathData="M22,22m-22,0a22,22 0,1 1,44 0a22,22 0,1 1,-44 0">
-    <aapt:attr name="android:fillColor">
-      <gradient 
-          android:startY="6.28572"
-          android:startX="7.22857"
-          android:endY="39.6"
-          android:endX="37.4"
-          android:type="linear">
-        <item android:offset="0" android:color="@color/iconColor_outer"/>
-        <item android:offset="1" android:color="@color/iconColor_outer"/>
-      </gradient>
-    </aapt:attr>
-  </path>
-  <path
-      android:pathData="M30.8203,27.8701C30.8203,29.1365 29.7932,30.1632 28.5268,30.1632C27.2604,30.1632 26.2337,29.1365 26.2337,27.8701V23.0761C26.1352,23.1881 26.0204,23.2868 25.8879,23.3632L15.0748,29.6058C14.8608,29.7293 14.6221,29.7916 14.3832,29.7916C14.1449,29.7916 13.9056,29.7293 13.6916,29.6058C13.2639,29.3593 13,28.9021 13,28.4082V15.9225C13,15.4284 13.2639,14.9716 13.6916,14.7246C14.1197,14.4774 14.6468,14.4774 15.0749,14.7246L25.8883,20.9677C26.0207,21.0445 26.1355,21.143 26.2341,21.255V15.993C26.2341,14.7266 27.2608,13.7 28.5272,13.7C29.7936,13.7 30.8203,14.7266 30.8203,15.993V27.8701Z"
-      android:fillColor="@color/iconColor_inner"/>
+      android:pathData="M27.2998,27.3C27.2998,27.5762 27.0759,27.8 26.7998,27.8V27.8C26.5237,27.8 26.2998,27.5762 26.2998,27.3L26.2998,5.3C26.2998,5.0239 26.5237,4.8 26.7998,4.8V4.8C27.0759,4.8 27.2998,5.0239 27.2998,5.3L27.2998,27.3Z"
+      android:fillColor="@color/iconColor"/>
 </vector>

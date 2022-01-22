@@ -34,6 +34,7 @@ class AlbumListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val mainActivity: MainActivity = activity as MainActivity
+        (activity as MainActivity).supportActionBar?.title=""
         mainViewModel= mainActivity.getViewModel()!!
         binding= FragmentAlbumListBinding.inflate(layoutInflater)
 
@@ -48,7 +49,9 @@ class AlbumListFragment : Fragment() {
         },null)
         binding.recyclerView.adapter=adapter
         mainViewModel.songList.observe(viewLifecycleOwner){
-            adapter.setList(it.peekContent())
+
+                adapter.setList(it.peekContent())
+
 
         }
 
@@ -58,7 +61,8 @@ class AlbumListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity)?.supportActionBar?.title=args.mediaId
+        (activity as MainActivity).supportActionBar?.title=""
+        (activity as MainActivity).supportActionBar?.title=args.mediaId
     }
 
 
@@ -66,7 +70,7 @@ class AlbumListFragment : Fragment() {
         super.onDestroyView()
         mainViewModel.resetSongList() // reset list so that it can fetch data everytime (for a different/same key)
         // if title is blank then is can be changed else it donot updates and shows same title
-        (activity as MainActivity)?.supportActionBar?.title=""
+        (activity as MainActivity).supportActionBar?.title=""
 
     }
 

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PlayerActivity"
+    android:background="@drawable/background_main"
     android:orientation="vertical"
-        android:background="@color/background_color">
+    tools:context=".PlayerActivity">
 
     <ImageView
         android:id="@+id/settings"
@@ -19,7 +19,7 @@
         android:src="@drawable/exo_ic_settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/primary" />
+        app:tint="@color/iconColor" />
 
 
     <ImageView
@@ -29,70 +29,80 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:scaleType="fitXY"
-        app:tint="@color/primary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_back" />
+        app:srcCompat="@drawable/ic_back"
+        app:tint="@color/iconColor" />
 
     <TextView
-        android:id="@+id/title_name"
+
+        android:id="@+id/from_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="32dp"
+
         android:fontFamily="@font/abhaya_libre_bold"
-        android:gravity="center"
-        android:text="Moon Light"
+        android:text="From Tracks"
         android:textColor="@color/text_primary"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/back" />
-
-    <TextView
-        android:id="@+id/artist_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/abhaya_libre"
-        android:text="Harnoor"
-        android:textColor="@color/text_primary"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/title_name"
-        app:layout_constraintHorizontal_bias="0.484"
-        app:layout_constraintStart_toStartOf="@+id/title_name"
-        app:layout_constraintTop_toBottomOf="@+id/title_name" />
+        app:layout_constraintBottom_toTopOf="@+id/materialCardView"
+        app:layout_constraintEnd_toStartOf="@+id/settings"
+        app:layout_constraintStart_toEndOf="@+id/back"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"
         android:layout_width="320dp"
         android:layout_height="320dp"
         android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="32dp"
         app:cardBackgroundColor="@color/primary"
-
-        app:cardCornerRadius="160dp"
-        app:layout_constraintBottom_toTopOf="@+id/player_view"
+        app:layout_constraintBottom_toTopOf="@+id/title_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/artist_name">
+        app:layout_constraintStart_toStartOf="parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/song_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
+
+            android:scaleType="fitXY"
             android:src="@drawable/place_holder" />
     </com.google.android.material.card.MaterialCardView>
+
+
+    <TextView
+        android:id="@+id/title_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/abhaya_libre_bold"
+        android:gravity="start"
+        android:text="Moon Light"
+        android:maxLines="1"
+        android:maxLength="20"
+        android:textColor="@color/text_primary"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/artist_name"
+        app:layout_constraintStart_toStartOf="@+id/materialCardView" />
+
+
+    <TextView
+        android:id="@+id/artist_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Harnoor"
+        android:textColor="@color/text_primary"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/player_view"
+        app:layout_constraintStart_toStartOf="@+id/title_name" />
 
     <com.google.android.exoplayer2.ui.PlayerControlView
         android:id="@+id/player_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="0dp"
-        android:layout_marginBottom="0dp"
+        android:layout_marginBottom="80dp"
         app:controller_layout_id="@layout/custom_player_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

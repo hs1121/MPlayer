@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@drawable/background_main"
     android:clickable="true"
     android:focusable="true">
 
@@ -23,7 +23,7 @@
             android:focusable="true"
             android:padding="12dp"
             android:src="@drawable/back2"
-            app:tint="@color/primary" />
+            app:tint="@color/iconColor" />
 
         <TextView
             android:id="@+id/equalizer_fragment_title"
@@ -32,7 +32,7 @@
             android:layout_centerInParent="true"
             android:text="@string/eq"
             android:textAllCaps="true"
-            android:textColor="@color/primary"
+            android:textColor="@color/text_primary"
             android:textSize="25sp" />
 
         <androidx.appcompat.widget.SwitchCompat
@@ -69,7 +69,7 @@
             android:layout_marginLeft="9dp"
             android:layout_marginRight="9dp"
             android:layout_weight="1"
-            android:background="@color/primary"
+            android:background="@color/grad_dark"
             android:layoutDirection="ltr"
             >
 
@@ -85,6 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
+                android:popupBackground="@color/grad_dark"
                 android:background="@android:color/transparent" />
 
             <ImageView
@@ -123,6 +124,8 @@
                     <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
                         android:id="@+id/seekBar1"
                         android:layout_width="0dp"
+
+                        android:progressTint="@color/iconColor"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
                         android:padding="10dp"
@@ -157,6 +160,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
+                        android:progressTint="@color/iconColor"
                         android:padding="10dp"
                         android:thumb="@drawable/custom_equalizer_thumb"
                         app:seekBarRotation="CW270" />
@@ -189,6 +193,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
+                        android:progressTint="@color/iconColor"
                         android:padding="10dp"
                         android:thumb="@drawable/custom_equalizer_thumb"
                         app:seekBarRotation="CW270" />
@@ -222,6 +227,7 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
                         android:padding="10dp"
+                        android:progressTint="@color/iconColor"
                         android:thumb="@drawable/custom_equalizer_thumb"
                         app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
@@ -252,9 +258,12 @@
                         android:id="@+id/seekBar5"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
+                        android:progressTint="@color/iconColor"
                         android:layout_marginTop="20dp"
                         android:padding="10dp"
+
                         android:thumb="@drawable/custom_equalizer_thumb"
+                        android:thumbTint="@color/iconColor"
                         app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
@@ -263,6 +272,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+
                     android:textColor="@color/text_primary"
                     android:textSize="10dp" />
             </LinearLayout>

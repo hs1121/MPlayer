@@ -15,6 +15,7 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.util.Log
+import android.view.WindowManager
 import com.example.mplayer.Constants
 import com.example.mplayer.R
 import java.lang.Exception
@@ -151,9 +152,19 @@ object Util {
 
         return sortedChildren
     }
+    fun setStatusBarGradient(activity: Activity){
+
+        val window= activity.window
+        val background=activity.resources.getDrawable(R.drawable.background_main)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.statusBarColor = activity.resources.getColor(android.R.color.transparent);
+        window.navigationBarColor = activity.resources.getColor(android.R.color.transparent);
+        window.setBackgroundDrawable(background);
+    }
 
 
 }
+
 
 enum class Action {
     EDIT,

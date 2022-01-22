@@ -5,6 +5,7 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import com.example.mplayer.R
 import com.google.android.material.button.MaterialButton
@@ -31,7 +32,7 @@ class AddPlaylistDialog(
         savedInstanceState: Bundle?
     ): View? {
         val view =inflater.inflate(R.layout.add_playlist_dialog,container,false)
-        val nameText=view.findViewById<TextInputEditText>(R.id.name_text_field)
+        val nameText=view.findViewById<EditText>(R.id.name_text_field)
         val byText=view.findViewById<TextInputEditText>(R.id.by_text_field)
         val cancelButton=view.findViewById<MaterialButton>(R.id.cancel_button)
         val addButton=view.findViewById<MaterialButton>(R.id.add_button)
@@ -65,7 +66,7 @@ class AddPlaylistDialog(
         super.onStart()
         val width = (resources.displayMetrics.widthPixels * 0.85).toInt()
         val height = (resources.displayMetrics.heightPixels * 0.40).toInt()
-        dialog!!.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog!!.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog!!.window?.setBackgroundDrawableResource(R.color.transparent)
     }
 }

@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-   app:cardBackgroundColor="@color/primary"
-    app:cardCornerRadius="12dp"
+    app:cardBackgroundColor="@color/on_primary"
+    app:cardCornerRadius="8dp"
+    android:layout_marginHorizontal="8dp"
     app:cardElevation="0dp">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginHorizontal="8dp">
+        android:layout_marginHorizontal="8dp"
+
+        android:layout_marginTop="8dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             app:cardCornerRadius="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -36,10 +39,10 @@
             style="@style/TitleTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/background_color"
             android:layout_marginHorizontal="16dp"
             android:lines="1"
             android:text="Track Name"
+            android:textColor="@color/text_primary"
             android:textSize="16dp"
             app:layout_constraintBottom_toTopOf="@+id/exo_progress"
             app:layout_constraintEnd_toStartOf="@+id/exo_prev"
@@ -48,35 +51,34 @@
 
         <ImageView
             android:id="@+id/exo_prev"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginEnd="4dp"
             android:src="@drawable/exo_controls_previous"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/play_pause"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintBottom_toBottomOf="@+id/exo_next"
+            app:layout_constraintEnd_toStartOf="@+id/play_pause"
+            app:layout_constraintTop_toTopOf="@+id/exo_next" />
 
         <ImageView
             android:id="@+id/play_pause"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="4dp"
             android:src="@drawable/exo_controls_pause"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/exo_next"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/exo_next"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginEnd="8dp"
+
             android:src="@drawable/exo_controls_next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <com.google.android.exoplayer2.ui.DefaultTimeBar
@@ -84,16 +86,20 @@
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="1dp"
-            android:clickable="false"
-            android:focusableInTouchMode="false"
             app:buffered_color="@color/unplayed_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView"
-            app:played_color="@color/background_color"
+            app:played_color="@color/played_color"
             app:scrubber_enabled_size="0dp"
             app:unplayed_color="@color/unplayed_color" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="exo_prev" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
+</androidx.cardview.widget.CardView>

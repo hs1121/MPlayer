@@ -55,7 +55,7 @@ class SettingActivity : AppCompatActivity() {
         exoPlayer.repeatMode = Player.REPEAT_MODE_ONE;
         //EqualizerFragment.
         equalizerFragment = EqualizerFragmentV2.newBuilder(preferenceDataStore,data)
-            .setAccentColor(Color.parseColor("#37474f"))
+            .setAccentColor(getColor(R.color.white))
             .setAudioSessionId(sessionId)
             .build()
 

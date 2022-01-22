@@ -2,10 +2,9 @@ package com.example.mplayer.fragments
 
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
+import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,6 +14,7 @@ import com.example.mplayer.Adapters.PlaylistAdapter
 
 import com.example.mplayer.Constants
 import com.example.mplayer.MainActivity
+import com.example.mplayer.R
 import com.example.mplayer.Utility.Action
 import com.example.mplayer.Utility.AddPlaylistDialog
 import com.example.mplayer.Utility.Content
@@ -63,14 +63,38 @@ class PlaylistFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
         }
 
         mainViewModel.playlist.observe(viewLifecycleOwner){
-            mAdapter.setList(it.peekContent())
-        }
-        binding.addPlaylist.setOnClickListener {
-            showDialog()
+            if (it.peekContent().isEmpty()){
+                binding.nestedScrollView.visibility=View.GONE
+                binding.noSongText.visibility=View.VISIBLE
             }
+            else {
+                binding.nestedScrollView.visibility=View.VISIBLE
+                binding.noSongText.visibility=View.GONE
+                mAdapter.setList(it.peekContent())
+            }
+        }
 
 
+
+        setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+       val addIcon= menu.findItem(R.id.add_icon)
+        addIcon.isVisible = true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+      return  when(item.itemId){
+            R.id.add_icon->{
+                showDialog()
+                true
+            }
+            else ->super.onOptionsItemSelected(item)
+        }
+
     }
 
     private fun showDialog(){
@@ -116,7 +140,10 @@ class PlaylistFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
     }
 
     override fun onItemDelete(item: MediaBrowserCompat.MediaItem) {
-        TODO("Not yet implemented")
+      val list= mutableListOf<String>().apply { add(item.mediaId!!) }
+        mainViewModel.deletePlaylists(list){
+            Toast.makeText(requireContext(), "Playlist Deleted", Toast.LENGTH_SHORT).show()
+        }
     }
 
 

@@ -1,62 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
     tools:context=".fragments.PlaylistFragment"
-    android:background="@color/background_color"
-    >
-    <LinearLayout
+    android:orientation="vertical">
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-    android:orientation="vertical">
+        android:background="@color/transparent"
+        android:id="@+id/nested_scroll_view">
+
+
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:nestedScrollingEnabled="false"
-            android:id="@+id/recycler_view"/>
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/add_playlist"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/card_music_item"
-            android:layout_marginHorizontal="16dp">
+            android:background="@color/transparent"
+            android:clipToPadding="false"
+            android:paddingBottom="120dp" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/image_bg_card"
-            android:layout_width="@dimen/card_item_image_size"
-            android:layout_height="@dimen/card_item_image_size"
-            app:cardCornerRadius="@dimen/card_item_image_radius"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:cardElevation="0dp">
 
-            <ImageView
-                android:id="@+id/item_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                app:tint="@color/primary"
+    </androidx.core.widget.NestedScrollView>
+    <TextView
+        android:id="@+id/no_song_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/abhaya_libre_bold"
+        android:text="No Playlists"
+        android:layout_gravity="center"
+        android:textColor="@color/iconColor"
+        android:textSize="32dp"
+        android:visibility="gone" />
 
-                android:background="@color/background_color"
-                android:src="@android:drawable/ic_input_add" />
-        </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:id="@+id/item_title"
-                style="@style/TitleTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:lines="1"
-                android:text="Add Playlist"
-                android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/image_bg_card"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
-
-</androidx.core.widget.NestedScrollView>
+</LinearLayout>

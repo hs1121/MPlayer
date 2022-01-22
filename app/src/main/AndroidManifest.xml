@@ -29,13 +29,13 @@
         <activity
             android:name=".PlayerActivity"
             android:exported="true"
-            android:configChanges="orientation"
+
             android:screenOrientation="portrait"/>
         <activity
             android:name=".SplashScreen"
             android:exported="true"
             android:noHistory="true"
-            android:configChanges="orientation"
+
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

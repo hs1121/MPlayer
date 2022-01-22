@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-    tools:context=".fragments.AlbumListFragment"
-    android:background="@color/background_color"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+tools:context=".fragments.AlbumListFragment"
+android:background="@color/transparent"
+android:orientation="vertical"
     >
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:nestedScrollingEnabled="false"
 
-        android:id="@+id/recycler_view"/>
+<androidx.recyclerview.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:nestedScrollingEnabled="false"
+    android:id="@+id/recycler_view"
+    android:paddingBottom="120dp"
+    android:clipToPadding="false"/>
 
-</androidx.core.widget.NestedScrollView>
+<TextView
+    android:id="@+id/no_song_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:fontFamily="@font/abhaya_libre_bold"
+    android:layout_gravity="center"
+    android:text="No Playlists"
+    android:textSize="32dp"
+    android:textColor="@color/text_primary"
+    android:visibility="visible"/>
+</LinearLayout>
 

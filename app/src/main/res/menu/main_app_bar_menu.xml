@@ -5,7 +5,7 @@
         android:id="@+id/search_icon"
         android:icon="@drawable/ic_search"
         android:title="Search"
-        app:iconTint="@color/primary"
+        app:iconTint="@color/iconColor"
         android:visible="false"
         app:showAsAction="collapseActionView|ifRoom"
         app:actionViewClass="androidx.appcompat.widget.SearchView"/>
@@ -15,6 +15,14 @@
         android:icon="@drawable/ic_sort"
         android:title="Sort"
         android:visible="false"
-        app:iconTint="@color/primary"
+        app:iconTint="@color/iconColor"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/add_icon"
+        android:title="New Playlist"
+        android:visible="false"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="ifRoom"
+        android:iconTint="@color/iconColor"/>
 </menu>

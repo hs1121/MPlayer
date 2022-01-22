@@ -42,15 +42,23 @@ class AlbumFragment : Fragment() {
             findNavController().navigate(action)
 
         },null)
-        binding.albumRecyclerView.apply {
+        binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mAdapter
             setItemViewCacheSize(16)
            // setHasFixedSize(true)
         }
 
-        mainViewModel.albumList.observe(viewLifecycleOwner,{ list->
-            mAdapter.setList(list.peekContent())
+        mainViewModel.albumList.observe(viewLifecycleOwner, { list ->
+            if (list.peekContent().isEmpty()) {
+                binding.nestedScrollView.visibility = View.GONE
+                binding.noSongText.visibility = View.VISIBLE
+            } else {
+                binding.nestedScrollView.visibility = View.VISIBLE
+                binding.noSongText.visibility = View.GONE
+                mAdapter.setList(list.peekContent())
+            }
+
         })
 
 

@@ -23,6 +23,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.RequestManager
+import com.example.mplayer.Utility.Util
 import com.example.mplayer.Utility.isPlaying
 import com.example.mplayer.databinding.ActivityMainBinding
 import com.example.mplayer.exoPlayer.MusicService
@@ -49,20 +50,13 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Util.setStatusBarGradient(this)
+      //  window.statusBarColor = getColor(R.color.background_color)
         mainViewModel=MainViewModel.getViewModel(this)
-//        mainViewModel=ViewModelProvider(this)
-//            .get(MainViewModel::class.java)
-
-        window.statusBarColor = getColor(R.color.background_color)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-
-        val fromSplashScreen = intent.getBooleanExtra(Constants.FROM_SPLASH_SCREEN, false)
-
-        if (true ) {
             navController = findNavController(R.id.nav_host_container)
             setSupportActionBar(binding.toolbar)
 
@@ -83,13 +77,9 @@ class MainActivity : AppCompatActivity() {
 
             binding.bottomNavigation.selectedItemId=R.id.tracks_fragment
 
-        }
-        mainViewModel?.initMedia()
-        mainViewModel.onControllerReady.observe(this){
-            if (it==true)
-            mainViewModel.initLastPlayedMedia()
-        }
 
+        mainViewModel.initMedia()
+        mainViewModel.initLastPlayedMedia();
 
         val playPause: ImageView = findViewById(R.id.play_pause)
         playPause.setOnClickListener { mainViewModel.playPause() }
@@ -97,8 +87,10 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.isPlaying.observe(this,{ playbackState ->
             if (playbackState != null) {
                 when {
-                    playbackState.isPlaying -> playPause.setImageResource(R.drawable.exo_controls_pause)
-                    else -> playPause.setImageResource(R.drawable.exo_controls_play)
+                    playbackState.isPlaying -> {
+                        playPause.setImageResource(R.drawable.ic_mini_pause)
+                         }
+                    else -> playPause.setImageResource(R.drawable.ic_mini_play)
                 }
             }
         })
@@ -114,7 +106,7 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.currentlyPlayingSong.observe(this,{ item ->
             if(item.description.mediaUri!=null)
-                binding.playerMini.visibility=View.VISIBLE
+                  binding.playerMini.visibility=View.VISIBLE
             val title=findViewById<TextView>(R.id.player_mini_title)
             val image=findViewById<ImageView>(R.id.player_mini_image)
             title.text=item.description.title
@@ -149,6 +141,8 @@ class MainActivity : AppCompatActivity() {
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
+
+
 
 }
 

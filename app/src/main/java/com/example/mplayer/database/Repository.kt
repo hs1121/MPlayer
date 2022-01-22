@@ -14,11 +14,8 @@ class Repository @Inject constructor(
 ){
 
      fun updateSort(sortData: SortData,callback:()->Unit){
-        val list =browsingTree.browsingList[Constants.TRACKS_ROOT]
-        list?.let {
-            browsingTree.browsingList[Constants.TRACKS_ROOT]=Util.sortBrowsingTree(it,sortData)
+            browsingTree.sortTracks(sortData)
             callback()
-        }
 
     }
 

@@ -7,12 +7,24 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="black_60">#99000000</color>
+    <color name="black_80">#CC000000</color>
+    <color name="black_40">#66000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="white_40">#66FFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="mat_black">#102027</color>
+    <color name="mat_black_LightShade">#263238</color>
 
+    <color name="grad_light">#4a4374</color>
+    <color name="grad_medium">#2C2561</color>
+    <color name="grad_dark">#1f1c48</color>
+    <color name="on_primary">#8F5AC7</color>
 
+    <color name="dark">#092634</color>
+    <color name="moderate">#344e5e</color>
+    <color name="light">@color/white</color>
 
-    <color name="background_color">#EFEFEF</color>
+    <color name="background_color">@color/moderate</color>
     <color name="blackShade">#37474f</color>
     <color name="primary_dark">#102027</color>
     <color name="primary">#37474f</color>
@@ -20,24 +32,25 @@
     <color name="primaryLight_60">#806B7C85</color>
 
 
-    <color name="text_primary">@color/primary</color>
-    <color name="text_light">@color/white</color>
+    <color name="text_primary">@color/white</color>
+    <color name="text_light">@color/white_40</color>
 
 
     <color name="icon_unselected">@color/black_60</color>
     <color name="icon_selected">@color/primary</color>
 
-    <color name="iconColor">@color/blackShade</color>
+    <color name="iconColor">@color/light</color>
+    <color name="icon_inactive">#858585</color>
 
 <!--    Main activity-->
     <color name="bottom_nav_background">#E8E7E7</color>
 
 <!--    player activity-->
-    <color name="iconColor_outer">@color/primary</color>
-    <color name="iconColor_inner">@color/background_color</color>
-    <color name="unplayed_color">@color/primary_light</color>
-    <color name="played_color">@color/primary</color>
+    <color name="iconColor_outer">@color/grad_dark</color>
+    <color name="iconColor_inner">#FDFEFF</color>
+    <color name="unplayed_color">#40FFFFFF</color>
+    <color name="played_color">@color/light</color>
 
-    <color name="checkbox_color">@color/primary</color>
+    <color name="checkbox_color">@color/iconColor</color>
 
 </resources>

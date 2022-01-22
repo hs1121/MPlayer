@@ -86,9 +86,17 @@ class TracksFragment : Fragment() {
             mainViewModel.refreshMedia()
         }
         mainViewModel.tracksList.observe(viewLifecycleOwner, {
-            mAdapter.setList(it.peekContent())
-            mAdapter.notifyDataSetChanged()
-            Log.d("debug", "check")
+            if (it.peekContent().isEmpty()){
+                binding.refreshLayout.visibility=View.GONE
+                binding.noSongText.visibility=View.VISIBLE
+            }
+            else {
+                binding.refreshLayout.visibility = View.VISIBLE
+                binding.noSongText.visibility = View.GONE
+                mAdapter.setList(it.peekContent())
+                mAdapter.notifyDataSetChanged()
+
+            }
         })
 
         setHasOptionsMenu(true)

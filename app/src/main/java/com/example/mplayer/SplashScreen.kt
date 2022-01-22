@@ -1,7 +1,9 @@
 package com.example.mplayer
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
@@ -10,6 +12,7 @@ import com.example.mplayer.Constants.FROM_SPLASH_SCREEN
 import com.example.mplayer.Utility.PreferenceDataStore
 import com.example.mplayer.database.BrowsingTree
 import com.example.mplayer.Utility.Util
+import com.example.mplayer.exoPlayer.MediaSessionConnection
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -34,12 +37,15 @@ class SplashScreen : AppCompatActivity() {
     lateinit var musicSource: BrowsingTree
     @Inject
     lateinit var preferenceDataStore: PreferenceDataStore
+    @Inject
+    lateinit var mediaSessionConnection: MediaSessionConnection
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         if (savedInstanceState == null) {
+            mediaSessionConnection //  initializing
             if (Util.isStoragePermissionGranted(
                     this,
                     android.Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -60,4 +66,8 @@ class SplashScreen : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+
+
+
 }

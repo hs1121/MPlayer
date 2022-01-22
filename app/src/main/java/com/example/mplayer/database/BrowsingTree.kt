@@ -8,20 +8,21 @@ import com.example.mplayer.Constants
 import com.example.mplayer.Constants.ALBUMS_ROOT
 import com.example.mplayer.Constants.PLAYLIST_ROOT
 import com.example.mplayer.Constants.TRACKS_ROOT
-import com.example.mplayer.Utility.Util
-import com.example.mplayer.Utility.flag
-import com.example.mplayer.Utility.from
+import com.example.mplayer.Utility.*
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
-class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
+class BrowsingTree @Inject constructor( val musicSource: MusicSource ,
+ val preferenceDataStore: PreferenceDataStore) {
     var browsingList = mutableMapOf<String, MutableList<MediaMetadataCompat>>()
 
     // creates a browsing tree in key value pair for easy navagation
@@ -73,9 +74,19 @@ class BrowsingTree @Inject constructor( val musicSource: MusicSource) {
         browsingList[ALBUMS_ROOT] = albumRoot
         browsingList[PLAYLIST_ROOT] = playlistRoot
 
-        musicSource.setStateInitialized()
+        GlobalScope.launch {
+            val data=preferenceDataStore.readSotData()
+            sortTracks(data)
+            musicSource.setStateInitialized()
+        }
+
+
 
     }
+    fun sortTracks(sortData: SortData){
+        browsingList[TRACKS_ROOT]=Util.sortBrowsingTree(browsingList[TRACKS_ROOT]!!,sortData)
+    }
+
 
 
     suspend fun getMedia() {

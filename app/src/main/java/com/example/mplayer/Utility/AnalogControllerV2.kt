@@ -27,9 +27,9 @@ class AnalogControllerV2 : View {
     var mListener: onProgressChangedListener? = null
     var label: String? = null
     val themeColor=resources.getColor(R.color.white)
-    val circlePaintColor=resources.getColor(R.color.primary)
-    val primaryLight=resources.getColor(R.color.primary_light)
-    val primaryDark=resources.getColor(R.color.primary_dark)
+    val circlePaintColor=resources.getColor(R.color.grad_medium)
+    val primaryLight=resources.getColor(R.color.on_primary)
+    val primaryDark=resources.getColor(R.color.grad_dark)
 
     interface onProgressChangedListener {
         fun onProgressChanged(progress: Int)

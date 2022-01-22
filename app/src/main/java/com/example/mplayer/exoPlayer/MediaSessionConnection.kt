@@ -2,6 +2,7 @@ package com.example.mplayer.exoPlayer
 
 import android.content.ComponentName
 import android.content.Context
+import android.media.session.PlaybackState
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
@@ -29,6 +30,7 @@ class MediaSessionConnection(
 
     private val _onControllerReady=MutableLiveData<Boolean>(false)
     val onControllerReady= _onControllerReady as LiveData<Boolean>
+
 
     val transportControls:MediaControllerCompat.TransportControls
     get ()= mediaControllerCompat.transportControls
@@ -84,12 +86,14 @@ class MediaSessionConnection(
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) { //executes when playback state is changed
             super.onPlaybackStateChanged(state)
             _playbackState.postValue(state?: EMPTY_PLAYBACK_STATE)
-        }
+            }
+
 
         override fun onMetadataChanged(metadata: MediaMetadataCompat?) { //executes when metadata  is changed
             super.onMetadataChanged(metadata)
 //           _nowPlaying.postValue( MusicService.currentSong?:NOTHING_PLAYING)
             _nowPlaying.postValue(metadata?:NOTHING_PLAYING)
+
         }
 
         override fun onSessionDestroyed() {

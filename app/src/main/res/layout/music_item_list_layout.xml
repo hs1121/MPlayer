@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
-    app:cardBackgroundColor="@color/background_color"
+    app:cardBackgroundColor="@color/transparent"
     app:cardElevation="0dp">
     <View
         android:layout_width="match_parent"
@@ -99,7 +99,7 @@
             <CheckBox
                 android:id="@+id/checkBox"
                 style="@style/custom_checkbox_style"
-                android:buttonTint="@color/primary"
+                android:buttonTint="@color/iconColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -112,7 +112,7 @@
             android:layout_height="1dp"
             android:alpha=".3"
             android:layout_marginHorizontal="24dp"
-            android:background="@color/primary"/>
+            android:background="@color/on_primary"/>
 
 
 
