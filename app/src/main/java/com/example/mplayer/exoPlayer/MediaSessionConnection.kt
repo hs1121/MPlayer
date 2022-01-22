@@ -62,8 +62,6 @@ class MediaSessionConnection(
             mediaControllerCompat= MediaControllerCompat(context,mediaBrowser.sessionToken).apply {
                 registerCallback(ControllerCallback())
                 _onControllerReady.postValue(true)
-
-
             }
         //    MediaControllerCompat.setMediaController(context as Activity,mediaControllerCompat)
 

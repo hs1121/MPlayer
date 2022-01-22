@@ -53,6 +53,7 @@ class SelectionAdapter (
                 .into(binding.itemImage)
             binding.itemSubtitle.visibility= View.GONE
         }
+        binding.checkBox.isChecked= item in selectedItems
         binding.checkBox.setOnClickListener {
             if (binding.checkBox.isChecked)
                 selectedItems.add(item)

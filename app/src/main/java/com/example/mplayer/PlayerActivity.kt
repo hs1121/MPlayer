@@ -61,7 +61,7 @@ class PlayerActivity : AppCompatActivity() {
         playerViewModel.songMetaData.observe(this,{ item ->
             binding.titleName.text=item.description.title
             binding.artistName.text=item.description.subtitle
-            binding.fromText.text=item.from
+            binding.fromText.text=MusicService.currentSong?.from?:"M Player"
             item?.description?.iconUri.let { glide.load(it).into(binding.songImage) }
 
         })

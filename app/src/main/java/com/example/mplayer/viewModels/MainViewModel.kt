@@ -38,6 +38,7 @@ class MainViewModel @Inject constructor(
     val isPlaying = mediaSessionConnection.playbackState
     private var currentSongData: CurrentSongData? = null
     var exoPlayer: ExoPlayer? = null
+    val onControllerReady=mediaSessionConnection.onControllerReady
 
 
     private var _tracksList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()

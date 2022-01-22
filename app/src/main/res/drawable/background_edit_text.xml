@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+   <solid android:color="@color/grad_medium"/>
+    <corners
+        android:topRightRadius="@dimen/edit_text_corner_radius"
+        android:topLeftRadius="@dimen/edit_text_corner_radius"
+        android:bottomLeftRadius="@dimen/edit_text_corner_radius"
+        android:bottomRightRadius="@dimen/edit_text_corner_radius"/>
+    <stroke android:color="@color/on_primary"
+        android:width="1dp"/>
+
+</shape>

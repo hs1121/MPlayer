@@ -79,7 +79,11 @@ class MainActivity : AppCompatActivity() {
 
 
         mainViewModel.initMedia()
-        mainViewModel.initLastPlayedMedia();
+        mainViewModel.onControllerReady.observe(this){
+            if (it)
+            mainViewModel.initLastPlayedMedia();
+        }
+
 
         val playPause: ImageView = findViewById(R.id.play_pause)
         playPause.setOnClickListener { mainViewModel.playPause() }

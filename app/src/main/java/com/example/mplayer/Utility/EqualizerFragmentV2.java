@@ -53,7 +53,7 @@ public class EqualizerFragmentV2 extends Fragment {
 
     public static final String ARG_AUDIO_SESSIOIN_ID = "audio_session_id";
 
-    static int  themeColor = Color.parseColor("#fff");
+    static int  themeColor = Color.parseColor("#FFFFFFFF");
     private  PreferenceDataStore preferenceDataStore;
     private EqualizerData equalizerData;
     public Equalizer mEqualizer;
@@ -526,6 +526,7 @@ public class EqualizerFragmentV2 extends Fragment {
     @Override
     public void onDestroy() {
         SettingActivity activity=(SettingActivity) getActivity();
+        assert activity != null;
         activity.saveEqDAta(equalizerData);
         super.onDestroy();
         Settings.isEditing = false;
