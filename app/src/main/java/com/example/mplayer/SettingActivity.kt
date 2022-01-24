@@ -1,5 +1,6 @@
 package com.example.mplayer
 
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.mplayer.databinding.ActivitySettingBinding
@@ -14,7 +15,9 @@ import androidx.lifecycle.lifecycleScope
 import com.example.mplayer.Utility.EqualizerData
 import com.example.mplayer.Utility.EqualizerFragmentV2
 import com.example.mplayer.Utility.PreferenceDataStore
+import com.example.mplayer.Utility.Util
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,9 +32,9 @@ class SettingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         binding = ActivitySettingBinding.inflate(layoutInflater)
+        Util.setStatusBarGradient(this)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(binding.root)
         MusicService.playerInstance.observe(this) {
             it?.let {
@@ -67,7 +70,7 @@ class SettingActivity : AppCompatActivity() {
     }
 
     fun saveEqDAta(equalizerData: EqualizerData) {
-        lifecycleScope.launch {
+        GlobalScope.launch {
             preferenceDataStore.saveEqData(equalizerData)
         }
     }

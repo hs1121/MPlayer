@@ -318,7 +318,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/add/baseline_add_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/equalizer/baseline_equalizer_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -328,9 +328,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="exo_controls_pause" />
+                            <entry key="outputName" value="ic_equalizer_" />
                             <entry key="sourceFile" value="C:\Users\hs112\Desktop\icon\Group 78.svg" />
                           </map>
                         </option>

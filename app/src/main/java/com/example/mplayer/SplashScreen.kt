@@ -2,6 +2,7 @@ package com.example.mplayer
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -43,6 +44,7 @@ class SplashScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         if (savedInstanceState == null) {
             mediaSessionConnection //  initializing

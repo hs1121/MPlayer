@@ -33,6 +33,15 @@
                 android:src="@drawable/place_holder" />
         </androidx.cardview.widget.CardView>
 
+<!--        <androidx.viewpager2.widget.ViewPager2-->
+<!--            android:id="@+id/view_pager"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginHorizontal="16dp"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/exo_progress"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/exo_prev"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/cardView"-->
+<!--            app:layout_constraintTop_toTopOf="parent"/>-->
 
         <TextView
             android:id="@+id/player_mini_title"

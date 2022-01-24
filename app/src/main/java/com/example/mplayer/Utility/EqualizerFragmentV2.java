@@ -156,7 +156,7 @@ public class EqualizerFragmentV2 extends Fragment {
             MusicService.Companion.setPresetReverb(presetReverb);
 
         }
-        setPreviousSettings(equalizerData);
+
 
     }
 
@@ -189,8 +189,6 @@ public class EqualizerFragmentV2 extends Fragment {
         });
 
         fragTitle = view.findViewById(R.id.equalizer_fragment_title);
-
-
         equalizerSwitch = view.findViewById(R.id.equalizer_switch);
         equalizerSwitch.setChecked(Settings.isEqualizerEnabled);
         equalizerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -287,7 +285,7 @@ public class EqualizerFragmentV2 extends Fragment {
                 try {
                     bassBoost.setStrength(Settings.bassStrength);
                     Settings.equalizerModel.setBassStrength(Settings.bassStrength);
-                    equalizerData.setBass(Settings.bassStrength);
+                    equalizerData.setBass(progress);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -298,10 +296,10 @@ public class EqualizerFragmentV2 extends Fragment {
             @Override
             public void onProgressChanged(int progress) {
                 Settings.reverbPreset = (short) ((progress * 6) / 19);
+                equalizerData.setReverb(progress);
                 Settings.equalizerModel.setReverbPreset(Settings.reverbPreset);
                 try {
                     presetReverb.setPreset(Settings.reverbPreset);
-                    equalizerData.setReverb(Settings.reverbPreset);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -457,6 +455,7 @@ public class EqualizerFragmentV2 extends Fragment {
         mEndButton.setBackgroundColor(themeColor);
         mEndButton.setTextColor(Color.WHITE);
 
+        setPreviousSettings(equalizerData);
 
     }
 
@@ -568,8 +567,20 @@ public class EqualizerFragmentV2 extends Fragment {
 
     private void setPreviousSettings(EqualizerData equalizerData) {
         if (equalizerData.getPresetPos() != -1) { // -1 states no data code
-            bassBoost.setStrength(equalizerData.getBass());
-            presetReverb.setPreset(equalizerData.getReverb());
+            bassController.setProgress(equalizerData.getBass());
+            reverbController.setProgress(equalizerData.getReverb());
+
+            Settings.bassStrength = (short) (((float) 1000 / 19) * (equalizerData.getBass()));
+            Settings.reverbPreset = (short) ((equalizerData.getReverb() * 6) / 19);
+            try {
+                bassBoost.setStrength(Settings.bassStrength);
+                presetReverb.setPreset(Settings.reverbPreset);
+                Settings.equalizerModel.setBassStrength(Settings.bassStrength);
+                Settings.equalizerModel.setReverbPreset(Settings.reverbPreset);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             if (equalizerData.getPresetPos() == 0) {
                 int i = 0;
                 final short lowerEqualizerBandLevel = mEqualizer.getBandLevelRange()[0];
@@ -584,6 +595,18 @@ public class EqualizerFragmentV2 extends Fragment {
 
             equalizerSwitch.setChecked(equalizerData.isEnable());
 
+        }
+        else{
+            Settings.bassStrength = (short)1;
+            Settings.reverbPreset = (short) 1;
+            try {
+                bassBoost.setStrength(Settings.bassStrength);
+                presetReverb.setPreset(Settings.reverbPreset);
+                Settings.equalizerModel.setBassStrength(Settings.bassStrength);
+                Settings.equalizerModel.setReverbPreset(Settings.reverbPreset);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

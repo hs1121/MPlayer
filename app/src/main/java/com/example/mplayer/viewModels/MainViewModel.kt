@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.mplayer.Constants
@@ -56,6 +57,8 @@ class MainViewModel @Inject constructor(
 
 
     private lateinit var sortData: SortData
+    private  var repeatMode:Int=ExoPlayer.REPEAT_MODE_OFF
+    private  var shuffleMode=false
 
 
     init {
@@ -204,7 +207,7 @@ class MainViewModel @Inject constructor(
         val isPrepared = mediaSessionConnection.playbackState.value?.isPrepared ?: false
         val transportControls = mediaSessionConnection.transportControls
 
-        if (isPrepared && mediaItem.mediaId == nowPlaying?.description?.mediaId) {
+        if (isPrepared && mediaItem.mediaId == nowPlaying?.description?.mediaId&& mediaItem.from==nowPlaying?.from) {
             mediaSessionConnection.playbackState.value?.let { playbackState ->
                 when {
                     playbackState.isPlaying ->
@@ -319,9 +322,18 @@ class MainViewModel @Inject constructor(
 
 
     fun initLastPlayedMedia() {
+
         currentSongData?.apply {
             if (mediaId != null && mediaId.isNotEmpty())
                 restoreCurrentMediaConfig(mediaId, from, time)
+        }
+    }
+    fun initPlayModes(){
+        viewModelScope.launch {
+            repeatMode = preferenceDataStore.readRepeatMode()
+            shuffleMode = preferenceDataStore.readShuffleMode()
+            exoPlayer?.shuffleModeEnabled = shuffleMode
+            exoPlayer?.repeatMode = repeatMode
         }
     }
 

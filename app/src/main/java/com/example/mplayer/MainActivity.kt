@@ -1,8 +1,10 @@
 package com.example.mplayer
 
+import android.app.ActivityOptions
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentSender
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -56,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
             navController = findNavController(R.id.nav_host_container)
             setSupportActionBar(binding.toolbar)
@@ -80,8 +83,11 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.initMedia()
         mainViewModel.onControllerReady.observe(this){
-            if (it)
-            mainViewModel.initLastPlayedMedia();
+            if (it) {
+                mainViewModel.initLastPlayedMedia();
+                mainViewModel.initPlayModes()
+            }
+
         }
 
 
@@ -118,6 +124,8 @@ class MainActivity : AppCompatActivity() {
 
         })
         binding.playerMini.setOnClickListener {
+//            startActivity(Intent(applicationContext, PlayerActivity::class.java),
+//            ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
             startActivity(Intent(applicationContext, PlayerActivity::class.java))
         }
 

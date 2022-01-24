@@ -1,5 +1,6 @@
 package com.example.mplayer.exoPlayer
 
+import android.os.Build
 import android.widget.Toast
 import com.example.mplayer.Utility.PreferenceDataStore
 import com.example.mplayer.Utility.from
@@ -36,9 +37,9 @@ class PlayerListener(
                     }
 
 
-                if (!playWhenReady) {
-                    //musicService.stopForeground(false)
-                    //musicService.isForegroundService = false
+                if (!playWhenReady&& Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    musicService.stopForeground(false)
+                    musicService.isForegroundService = false
                     // :::: Not required since notification can be swiped without stopping
                     // foreground service and  with these options when app force killed from recent tab
                     // , the notification do not clears and create null exception and also bad UX
@@ -54,16 +55,6 @@ class PlayerListener(
 
 
 
-    override fun onIsPlayingChanged(isPlaying: Boolean) {
-        super.onIsPlayingChanged(isPlaying)
-        if(!isLooping) {
-            isLooping=true
-            musicService.serviceScope.launch {
-                saveSongState()
-            }
-        }
-    }
-
     private suspend fun saveSongState(){
 
         val song=musicService.currentlyPlayingSong!!
@@ -78,7 +69,19 @@ class PlayerListener(
         }
     }
 
+    override fun onRepeatModeChanged(repeatMode: Int) {
+        super.onRepeatModeChanged(repeatMode)
+        musicService.serviceScope.launch {
+            preferenceDataStore.saveRepeatMode(repeatMode)
+        }
+    }
 
+    override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
+        super.onShuffleModeEnabledChanged(shuffleModeEnabled)
+        musicService.serviceScope.launch {
+            preferenceDataStore.saveShuffleMode(shuffleModeEnabled)
+        }
+    }
 
     override fun onPlayerError(error: PlaybackException) {
         super.onPlayerError(error)

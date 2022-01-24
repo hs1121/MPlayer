@@ -74,8 +74,8 @@
 
     <ImageView
         android:id="@+id/exo_next"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginStart="32dp"
         android:src="@drawable/exo_controls_next"
         app:layout_constraintBottom_toBottomOf="@+id/play_pause"
@@ -84,8 +84,8 @@
 
     <ImageView
         android:id="@+id/exo_prev"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginEnd="32dp"
         android:src="@drawable/exo_controls_previous"
         app:layout_constraintBottom_toBottomOf="@+id/play_pause"

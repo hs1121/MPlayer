@@ -9,6 +9,7 @@ import androidx.datastore.preferences.edit
 import androidx.datastore.preferences.preferencesKey
 import com.example.mplayer.R
 import com.example.mplayer.database.BrowsingTree
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import java.lang.Exception
@@ -19,6 +20,8 @@ const val SORT_BY="SortName"
 const val IS_ASC="IsAsc"
 const val CURRENT_SONG="CurrentSong"
 const val EQUALIZER_DATA_KEY="EqualizerDataKey"
+const val REPEAT_MODE_KEY="RepeatModeKey"
+const val SHUFFLE_MODE_KEY="ShuffleModeKey"
 
 class PreferenceDataStore(private val context: Context) {
 
@@ -72,6 +75,23 @@ class PreferenceDataStore(private val context: Context) {
         return stringToEqData(data)
     }
 
+    suspend fun saveRepeatMode(data:Int){
+        save(REPEAT_MODE_KEY,data.toString())
+    }
+    suspend fun readRepeatMode():Int{
+        val data=read(REPEAT_MODE_KEY)
+        return data?.toInt()?:ExoPlayer.REPEAT_MODE_OFF
+    }
+
+    suspend fun saveShuffleMode(data:Boolean){
+        save(SHUFFLE_MODE_KEY,booleanToString(data))
+    }
+    suspend fun readShuffleMode():Boolean{
+        val data=read(SHUFFLE_MODE_KEY)
+        return stringToBoolean(data)
+    }
+
+
 
 
 
@@ -115,7 +135,7 @@ class PreferenceDataStore(private val context: Context) {
 
 data class SortData(var isChecked:Boolean, var id:Int)
 data class EqualizerData(var isEnable:Boolean,var presetPos:Int,
-                         var bands:HashMap<Short,Short>,var bass:Short,var reverb:Short)
+                         var bands:HashMap<Short,Short>,var bass:Int,var reverb:Int)
 data class CurrentSongData(val mediaId:String?,val from:String?,val time:Long?)
 
 

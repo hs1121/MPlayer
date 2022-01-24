@@ -19,6 +19,11 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:textColor">@color/text_primary</item>
 
+        <!--animations-->
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@transition/player_expand_trans</item>
+        <item name="android:windowExitTransition">@transition/player_expand_trans</item>
+
         </style>
 
 
@@ -80,12 +85,15 @@
     </style>
 
     <style name="custom_button_accept_style" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/on_primary</item>
+        <item name="backgroundTint">@color/grad_medium</item>
         <item name="cornerRadius">@dimen/input_text_radius</item>
+        <item name="android:textColor">@color/text_primary</item>
     </style>
     <style name="custom_button_cancel_style" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/white_80</item>
-        <item name="android:textColor">@color/on_primary</item>
+        <item name="backgroundTint">@color/grad_dark</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/grad_medium</item>
+        <item name="android:textColor">@color/text_primary</item>
         <item name="cornerRadius">@dimen/input_text_radius</item>
     </style>
 

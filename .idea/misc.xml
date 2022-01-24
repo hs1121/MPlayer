@@ -37,6 +37,7 @@
         <entry key="..\:/Users/hs112/AndroidStudioProjects/MPlayer/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/hs112/AndroidStudioProjects/MPlayer/app/src/main/res/menu/main_app_bar_menu.xml" value="0.176" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.24166666666666667" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/drawable/background_edit_text.xml" value="0.16644951140065148" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/drawable/background_main.xml" value="0.2611111111111111" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/drawable/background_player.xml" value="0.26614583333333336" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/drawable/checkbox_selector.xml" value="0.26614583333333336" />
@@ -60,11 +61,14 @@
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/drawable/ic_songimagebg.xml" value="0.24166666666666667" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/drawable/ic_unchecked.xml" value="0.26614583333333336" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/drawable/transparent_bg.xml" value="0.26614583333333336" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout-hdpi/activity_main.xml" value="0.15789473684210525" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout-hdpi/activity_player.xml" value="0.15789473684210525" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout-hdpi/custom_player_layout.xml" value="0.23233695652173914" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/activity_main.xml" value="0.10396756443672169" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/activity_player.xml" value="0.2" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/activity_setting.xml" value="0.19157608695652173" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/activity_splash_screen.xml" value="0.24592391304347827" />
-        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/add_playlist_dialog.xml" value="0.4387947269303202" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/add_playlist_dialog.xml" value="0.264" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/app_playlist_dialog.xml" value="0.264" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/check.xml" value="1.6" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/custom_player_layout.xml" value="0.24682971014492755" />
@@ -79,6 +83,7 @@
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/music_item_list_layout.xml" value="0.264" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/player_mini_layout.xml" value="0.264" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/sort_dialog.xml" value="0.19927536231884058" />
+        <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/layout/swipes_song_layout.xml" value="0.15789473684210525" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/menu/arrange_menu_item.xml" value="0.25" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25" />
         <entry key="..\:/programs/Android Studio Programs/MPlayer/app/src/main/res/menu/list_menu.xml" value="0.25" />

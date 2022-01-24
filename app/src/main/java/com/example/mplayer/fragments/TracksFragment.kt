@@ -87,11 +87,11 @@ class TracksFragment : Fragment() {
         }
         mainViewModel.tracksList.observe(viewLifecycleOwner, {
             if (it.peekContent().isEmpty()){
-                binding.refreshLayout.visibility=View.GONE
+                binding.recyclerView.visibility=View.GONE
                 binding.noSongText.visibility=View.VISIBLE
             }
             else {
-                binding.refreshLayout.visibility = View.VISIBLE
+                binding.recyclerView.visibility = View.VISIBLE
                 binding.noSongText.visibility = View.GONE
                 mAdapter.setList(it.peekContent())
                 mAdapter.notifyDataSetChanged()

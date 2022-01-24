@@ -133,7 +133,6 @@ class SelectionFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.confirm_button -> {
-
                 val list = mAdapter.getSelectedItems()
                 val name = args.name!!
                 val by = args.by?:""

@@ -2,6 +2,7 @@ package com.example.mplayer
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.media.session.PlaybackState
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -36,6 +37,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivityPlayerBinding.inflate(layoutInflater)
         Util.setStatusBarGradient(this)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
        // window.statusBarColor=getColor(R.color.background_color)
         setContentView(binding.root)
         playerViewModel=ViewModelProvider(this).get(PlayerViewModel::class.java)
@@ -66,7 +68,11 @@ class PlayerActivity : AppCompatActivity() {
 
         })
 
-        binding.back.setOnClickListener { onBackPressed() }
+        binding.back.setOnClickListener {
+            onBackPressed() }
         binding.settings.setOnClickListener { startActivity(Intent(applicationContext,SettingActivity::class.java)) }
     }
+
+
+
 }

@@ -37,12 +37,14 @@ class PlaylistItemFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
 
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val mainActivity: MainActivity = activity as MainActivity
         mainActivity.supportActionBar?.title=args.mediaId
+        mainActivity.supportActionBar?.title=""
 
         mainViewModel= mainActivity.getViewModel()!!
         binding= FragmentPlaylistItemBinding.inflate(inflater)
