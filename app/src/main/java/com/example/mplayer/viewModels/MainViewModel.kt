@@ -55,6 +55,9 @@ class MainViewModel @Inject constructor(
     private var _songList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
     var songList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _songList
 
+    private var _playlistItemList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
+    var playlistItemList: LiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>> = _playlistItemList
+
 
     private lateinit var sortData: SortData
     private  var repeatMode:Int=ExoPlayer.REPEAT_MODE_OFF
@@ -139,7 +142,7 @@ class MainViewModel @Inject constructor(
     }
 
 
-    fun getMedia(key: String) {
+    fun getMedia(key: String,flag:Boolean=false) {
         mediaSessionConnection.subscribe(key, object :
             MediaBrowserCompat.SubscriptionCallback() {
             override fun onChildrenLoaded(
@@ -156,7 +159,11 @@ class MainViewModel @Inject constructor(
                     ALBUMS_ROOT -> _albumList.postValue(Event(children).also { it.handle() })
                     PLAYLIST_ROOT -> _playlist.postValue(Event(children).also { it.handle() })
 
-                    else -> _songList.postValue(Event(children).also { it.handle() })
+                    else ->
+                        if (flag)  // true means playListItemList else songList
+                            _playlistItemList.postValue(Event(children).also { it.handle() })
+                        else
+                        _songList.postValue(Event(children).also { it.handle() })
                 }
 
             }
@@ -167,6 +174,7 @@ class MainViewModel @Inject constructor(
     private fun restoreCurrentMediaConfig(mediaId: String, from: String?, seekTo: Long?) {
         // set media without playing (initial setup for song played last time)
         val transportControls = mediaSessionConnection.transportControls
+
         transportControls.playFromMediaId(
             mediaId,
             Bundle().apply {
@@ -272,6 +280,11 @@ class MainViewModel @Inject constructor(
         // reset the songList to make tell that it is not handled (if any update is made or user selects another album or playlist)
         _songList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
         songList = _songList
+
+    }
+    fun resetPlayListItemList(){
+        _playlistItemList = MutableLiveData<Event<MutableList<MediaBrowserCompat.MediaItem>>>()
+        playlistItemList = _playlistItemList
     }
 
     fun resetPlaylist() {
@@ -319,10 +332,18 @@ class MainViewModel @Inject constructor(
     fun initLastPlayedMedia() {
 
         currentSongData?.apply {
-            if (mediaId != null && mediaId.isNotEmpty())
+            if (mediaId != null && mediaId.isNotEmpty()&& songExists(this))
                 restoreCurrentMediaConfig(mediaId, from, time)
         }
     }
+
+    private fun songExists(songData: CurrentSongData): Boolean {
+             return repository.browsingTree.musicSource.tracks.find {
+                    songData.mediaId==it.description.mediaId
+                }!=null
+
+    }
+
     fun initPlayModes(){
         viewModelScope.launch(Dispatchers.Main) {
             repeatMode = preferenceDataStore.readRepeatMode()

@@ -218,9 +218,18 @@ class SelectionFragment : Fragment() {
         mainViewModel.mediaRemoved.observe(viewLifecycleOwner){
             if (it) {
                 mainViewModel.mediaRemoved(mAdapter.getUris().toMutableList()) {
-                    Toast.makeText(requireContext(), "Deleted Successfully", Toast.LENGTH_SHORT)
-                        .show()
-                    activity?.onBackPressed()
+                    try {
+                        Toast.makeText(
+                            requireActivity(),
+                            "Deleted Successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        activity?.onBackPressed()
+                    }catch (e:Exception){
+
+                    }
+
                 }
 
             }

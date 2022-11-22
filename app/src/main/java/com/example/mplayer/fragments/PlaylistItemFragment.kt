@@ -56,11 +56,11 @@ class PlaylistItemFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
 
 
 
-        if (mainViewModel.songList.value==null||
-            mainViewModel.songList.value?.isHandled()==false)
-        mainViewModel.getMedia(args.mediaId)
+        if (mainViewModel.playlistItemList.value==null||
+            mainViewModel.playlistItemList.value?.isHandled()==false )
+        mainViewModel.getMedia(args.mediaId,true)
 
-        mainViewModel.songList.observe(viewLifecycleOwner){
+        mainViewModel.playlistItemList.observe(viewLifecycleOwner){
             mAdapter.setList(it.data)
         }
         setHasOptionsMenu(true)
@@ -82,7 +82,7 @@ class PlaylistItemFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
     override fun onDestroyView() {
 
         super.onDestroyView()
-        mainViewModel.resetSongList()
+        mainViewModel.resetPlayListItemList()
 
     }
 

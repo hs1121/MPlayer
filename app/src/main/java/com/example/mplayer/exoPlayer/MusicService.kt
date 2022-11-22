@@ -53,9 +53,6 @@ class MusicService : MediaBrowserServiceCompat() {
          var bass:BassBoost?=null
          var presetReverb: PresetReverb?=null
 
-
-
-
         // player instance (used to connect exoplayer ui to player)
         private val _playerInstance = MutableLiveData<ExoPlayer?>()
         val playerInstance: LiveData<ExoPlayer?> = _playerInstance

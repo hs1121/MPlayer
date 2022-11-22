@@ -37,21 +37,18 @@ class AlbumListFragment : Fragment() {
         mainViewModel= mainActivity.getViewModel()!!
         binding= FragmentAlbumListBinding.inflate(layoutInflater)
 
-        if (mainViewModel.songList.value==null||
-            mainViewModel.songList.value?.isHandled()==false) {
+//        if (mainViewModel.songList.value==null||
+//            mainViewModel.songList.value?.isHandled()==false ) {
             // fetch album data if not fetched before or not handled (not updated the list after change in main data)
             mainViewModel.getMedia(args.mediaId)
-        }
+//        }
         binding.recyclerView.layoutManager=LinearLayoutManager(requireContext())
         adapter= TracksAdapter(requireContext(),glide,{
                 mainViewModel.itemClicked(it,requireContext())
         },null)
         binding.recyclerView.adapter=adapter
         mainViewModel.songList.observe(viewLifecycleOwner){
-
                 adapter.setList(it.peekContent())
-
-
         }
 
 
