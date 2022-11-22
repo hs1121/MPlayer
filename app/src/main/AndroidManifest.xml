@@ -21,7 +21,7 @@
         android:theme="@style/Theme.MPlayer" >
 
         <activity
-            android:name=".SettingActivity"
+            android:name=".EqualizerActivity"
             android:exported="false"
             android:configChanges="orientation"
             android:screenOrientation="portrait"

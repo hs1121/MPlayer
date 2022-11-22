@@ -19,3 +19,30 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+#-dontwarn kotlin.**
+#-dontwarn kotlinx.atomicfu.** # https://github.com/Kotlin/kotlinx.coroutines/issues/1155
+#-keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
+#-keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
+#-keepclassmembernames class kotlinx.** {  volatile <fields>;}
+#-keepclassmembernames class kotlinx.** { public <methods>; }
+#-keepclassmembernames class kotlinx.** { public <fields>; }
+#-keepclassmembernames class kotlinx.** { public static <fields>; }
+#-keepclassmembernames class kotlinx.** { public static <methods>; }
+
+#-keep class kotlinx.** { *; }
+#-keep class kotlin.** { *; }
+#-keepnames class androidx.navigation.fragment.*
+#-keep class layout.** { *; }
+#-keep class com.** { *; }
+
+#-keepnames class kotlin.ResultKt {}
+
+#
+#-keepclassmembernames class kotlin.** {  volatile <fields>;}
+#-keepclassmembernames class kotlin.** { public <methods>; }
+#-keepclassmembernames class kotlin.** { public <fields>; }
+#-keepclassmembernames class kotlin.** { public static <fields>; }
+#-keepclassmembernames class kotlin.** { public static <methods>; }
+

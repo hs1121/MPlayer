@@ -1,15 +1,18 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.android.exoplayer:exoplayer-datasource:2.16.1@aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/46541cb0c3088b3e1154c44d2607a073/transformed/jetified-exoplayer-datasource-2.16.1/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/e6d0ae9be6e715132e044bfd8793055d/transformed/jetified-exoplayer-datasource-2.16.1/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0fb186e9acbc44944bf8eb258f1d40e8/transformed/jetified-exoplayer-datasource-2.16.1/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/3ff44c8aeec98b8ab0323607bc85d199/transformed/jetified-exoplayer-datasource-2.16.1/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/89363f2fc5b604cbb0212d61f8b3347f/transformed/jetified-exoplayer-datasource-2.16.1/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/46541cb0c3088b3e1154c44d2607a073/transformed/jetified-exoplayer-datasource-2.16.1/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/46541cb0c3088b3e1154c44d2607a073/transformed/jetified-exoplayer-datasource-2.16.1/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/46541cb0c3088b3e1154c44d2607a073/transformed/jetified-exoplayer-datasource-2.16.1/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/03a6ef25ac88c49c06dd86bd6445d407/transformed/jetified-exoplayer-datasource-2.16.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/13b8e9a2959e05b4dcf163827458988e/transformed/jetified-exoplayer-datasource-2.16.1/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/e6d0ae9be6e715132e044bfd8793055d/transformed/jetified-exoplayer-datasource-2.16.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e6d0ae9be6e715132e044bfd8793055d/transformed/jetified-exoplayer-datasource-2.16.1/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e6d0ae9be6e715132e044bfd8793055d/transformed/jetified-exoplayer-datasource-2.16.1/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

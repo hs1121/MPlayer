@@ -115,7 +115,7 @@ class PlaylistFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
 
     override fun onItemClick(item: MediaBrowserCompat.MediaItem) {
         val action = PlaylistFragmentDirections.actionPlaylistFragmentToPlaylistItemFragment(
-            item.mediaId.toString()
+            item.mediaId.toString(),item.description.title.toString()
         )
         findNavController().navigate(action)
     }

@@ -38,7 +38,8 @@ class AlbumFragment : Fragment() {
         mainViewModel.getMedia(ALBUMS_ROOT)
         mAdapter= TracksAdapter(requireContext(),glide,{ item->
             val key= item.description.mediaId!!
-            val action=AlbumFragmentDirections.actionToAlbumList(key)
+            val title= item.description.title.toString()
+            val action=AlbumFragmentDirections.actionToAlbumList(key,title)
             findNavController().navigate(action)
 
         },null)

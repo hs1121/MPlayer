@@ -79,6 +79,9 @@ class ArrangeFragment : Fragment() { // Used to rearrange the playlist items
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
         inflater.inflate(R.menu.selection_menu, menu)
+        val item = menu.findItem(R.id.delete_button)
+        item?.isVisible = false
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

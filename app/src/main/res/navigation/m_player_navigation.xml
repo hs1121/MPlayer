@@ -30,10 +30,13 @@
     <fragment
         android:id="@+id/albumListFragment"
         android:name="com.example.mplayer.fragments.AlbumListFragment"
-        android:label=""
+        android:label="{title}"
         tools:layout="@layout/fragment_album_list">
         <argument
             android:name="mediaId"
+            app:argType="string" />
+        <argument
+            android:name="title"
             app:argType="string" />
     </fragment>
 
@@ -57,8 +60,8 @@
     <fragment
         android:id="@+id/selectionFragment"
         android:name="com.example.mplayer.fragments.SelectionFragment"
-        android:label="fragment_selection"
-        tools:layout="@layout/fragment_selection" >
+        android:label="Edit"
+        tools:layout="@layout/fragment_selection">
         <argument
             android:name="name"
             app:argType="string"
@@ -87,8 +90,8 @@
     <fragment
         android:id="@+id/playlistItemFragment"
         android:name="com.example.mplayer.fragments.PlaylistItemFragment"
-        android:label=""
-        tools:layout="@layout/fragment_playlist_item" >
+        android:label="{title}"
+        tools:layout="@layout/fragment_playlist_item">
         <argument
             android:name="mediaId"
             app:argType="string" />
@@ -98,6 +101,9 @@
         <action
             android:id="@+id/action_playlistItemFragment_to_selectionFragment"
             app:destination="@id/selectionFragment" />
+        <argument
+            android:name="title"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/arrangeFragment"

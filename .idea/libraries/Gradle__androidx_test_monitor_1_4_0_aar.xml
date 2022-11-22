@@ -1,16 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.test:monitor:1.4.0@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/8df313a0cc2d44778df3c54a18d07c80/transformed/monitor-1.4.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/694c4fb69602282a1bb05818aaef16d4/transformed/monitor-1.4.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2112751feff5dedbfe8c2e0dcca69494/transformed/monitor-1.4.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/ae6a4bffa3115c473125011af7032877/transformed/monitor-1.4.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d776b10ba1b7cfc60fe26b8d8bc777e8/transformed/monitor-1.4.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/8abffb9e7f0ca7ad08ee17135eee4f0e/transformed/monitor-1.4.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/12559d5c795d4ec849a47fd15f85651b/transformed/monitor-1.4.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/588956df9e1d78eaf79eee7e12403976/transformed/monitor-1.4.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/588956df9e1d78eaf79eee7e12403976/transformed/monitor-1.4.0/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/588956df9e1d78eaf79eee7e12403976/transformed/monitor-1.4.0/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/2571b44ab3bddd2195827cd3a54f6c5c/transformed/monitor-1.4.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2571b44ab3bddd2195827cd3a54f6c5c/transformed/monitor-1.4.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2571b44ab3bddd2195827cd3a54f6c5c/transformed/monitor-1.4.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.test/monitor/1.4.0/2770e38fa6d39242c2fa2e9d2ca3275b1d9debd8/monitor-1.4.0-javadoc.jar!/" />

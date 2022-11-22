@@ -1,9 +1,21 @@
 <component name="libraryTable">
   <library name="Gradle: com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.0@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/1ea3a09fd506435f0174fbd71fb7de91/transformed/jetified-verticalseekbar-0.7.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/1ea3a09fd506435f0174fbd71fb7de91/transformed/jetified-verticalseekbar-0.7.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/1ea3a09fd506435f0174fbd71fb7de91/transformed/jetified-verticalseekbar-0.7.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/6865ca8fa16d0c2ac0d18a6519e4e8ab/transformed/jetified-verticalseekbar-0.7.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6865ca8fa16d0c2ac0d18a6519e4e8ab/transformed/jetified-verticalseekbar-0.7.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6865ca8fa16d0c2ac0d18a6519e4e8ab/transformed/jetified-verticalseekbar-0.7.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/6cf15505367908f979df7bb2def24708/transformed/jetified-verticalseekbar-0.7.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6cf15505367908f979df7bb2def24708/transformed/jetified-verticalseekbar-0.7.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6cf15505367908f979df7bb2def24708/transformed/jetified-verticalseekbar-0.7.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/1efbbb4322ffdcf4b4eddad5d31d285f/transformed/jetified-verticalseekbar-0.7.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/1efbbb4322ffdcf4b4eddad5d31d285f/transformed/jetified-verticalseekbar-0.7.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/1efbbb4322ffdcf4b4eddad5d31d285f/transformed/jetified-verticalseekbar-0.7.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/dd5bf970ca9d9a86ed1eb5225ad61f54/transformed/jetified-verticalseekbar-0.7.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/dd5bf970ca9d9a86ed1eb5225ad61f54/transformed/jetified-verticalseekbar-0.7.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/dd5bf970ca9d9a86ed1eb5225ad61f54/transformed/jetified-verticalseekbar-0.7.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4e1137170469500304afd9e40063e86f/transformed/jetified-verticalseekbar-0.7.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4e1137170469500304afd9e40063e86f/transformed/jetified-verticalseekbar-0.7.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/4e1137170469500304afd9e40063e86f/transformed/jetified-verticalseekbar-0.7.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.h6ah4i.android.widget.verticalseekbar/verticalseekbar/0.7.0/8de8d2e95d6ddd1d3e7a46f479421a4d4d69ef77/verticalseekbar-0.7.0-javadoc.jar!/" />

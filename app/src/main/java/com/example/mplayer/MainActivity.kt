@@ -18,7 +18,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -94,16 +93,16 @@ class MainActivity : AppCompatActivity() {
         val playPause: ImageView = findViewById(R.id.play_pause)
         playPause.setOnClickListener { mainViewModel.playPause() }
 
-        mainViewModel.isPlaying.observe(this,{ playbackState ->
+        mainViewModel.isPlaying.observe(this) { playbackState ->
             if (playbackState != null) {
                 when {
                     playbackState.isPlaying -> {
                         playPause.setImageResource(R.drawable.ic_mini_pause)
-                         }
+                    }
                     else -> playPause.setImageResource(R.drawable.ic_mini_play)
                 }
             }
-        })
+        }
 
         MusicService.playerInstance.observe(this){ it ->
             if (mainViewModel.exoPlayer==null&&it!=null){
@@ -114,15 +113,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        mainViewModel.currentlyPlayingSong.observe(this,{ item ->
-            if(item.description.mediaUri!=null)
-                  binding.playerMini.visibility=View.VISIBLE
-            val title=findViewById<TextView>(R.id.player_mini_title)
-            val image=findViewById<ImageView>(R.id.player_mini_image)
-            title.text=item.description.title
+        mainViewModel.currentlyPlayingSong.observe(this) { item ->
+            if (item.description.mediaUri != null)
+                binding.playerMini.visibility = View.VISIBLE
+            val title = findViewById<TextView>(R.id.player_mini_title)
+            val image = findViewById<ImageView>(R.id.player_mini_image)
+            title.text = item.description.title
             item?.description?.iconUri.let { glide.load(it).into(image) }
 
-        })
+        }
         binding.playerMini.setOnClickListener {
 //            startActivity(Intent(applicationContext, PlayerActivity::class.java),
 //            ActivityOptions.makeSceneTransitionAnimation(this).toBundle())

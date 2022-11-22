@@ -43,8 +43,7 @@ class PlaylistItemFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
         savedInstanceState: Bundle?
     ): View? {
         val mainActivity: MainActivity = activity as MainActivity
-        mainActivity.supportActionBar?.title=args.mediaId
-        mainActivity.supportActionBar?.title=""
+
 
         mainViewModel= mainActivity.getViewModel()!!
         binding= FragmentPlaylistItemBinding.inflate(inflater)
@@ -66,13 +65,13 @@ class PlaylistItemFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
         }
         setHasOptionsMenu(true)
 
-        if(mAdapter!=null) test(0) else test(1)
-        test(0)
+//        if(mAdapter!=null) test(0) else test(1)
+//        test(0)
         return binding.root
 
     }
 
-    private fun test(value:Int=0, str:String="")="hello"
+   // private fun test(value:Int=0, str:String="")="hello"
 
     override fun onResume() {
         super.onResume()
@@ -84,7 +83,6 @@ class PlaylistItemFragment : Fragment() , PlaylistAdapter.PlaylistItemListener {
 
         super.onDestroyView()
         mainViewModel.resetSongList()
-        (activity as MainActivity)?.supportActionBar?.title=""
 
     }
 

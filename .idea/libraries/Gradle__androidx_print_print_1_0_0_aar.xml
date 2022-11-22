@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.print:print:1.0.0@aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/fc5273042c5059dc8a48da56c1524787/transformed/print-1.0.0/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/3dee0ebb5b05bc7aeeefea0d9391be58/transformed/print-1.0.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2c81023d0bfcdd508bcd8daaa2631186/transformed/print-1.0.0/res" />
@@ -11,9 +11,12 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/c19332c58d05f2af8b97b93c1872eade/transformed/print-1.0.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/7a473becc346528d98e69a3438c7c12e/transformed/print-1.0.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/120c7e21f7f6e894a4854e33c2fe14db/transformed/print-1.0.0/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/fc5273042c5059dc8a48da56c1524787/transformed/print-1.0.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/fc5273042c5059dc8a48da56c1524787/transformed/print-1.0.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/fc5273042c5059dc8a48da56c1524787/transformed/print-1.0.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/38f96e6c233d5455f7faeac665fe18c3/transformed/print-1.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d9f59d3bc742833d415407a5f2b7fb31/transformed/print-1.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/3dee0ebb5b05bc7aeeefea0d9391be58/transformed/print-1.0.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/3dee0ebb5b05bc7aeeefea0d9391be58/transformed/print-1.0.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/3dee0ebb5b05bc7aeeefea0d9391be58/transformed/print-1.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

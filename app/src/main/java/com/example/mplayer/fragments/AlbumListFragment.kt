@@ -34,7 +34,6 @@ class AlbumListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val mainActivity: MainActivity = activity as MainActivity
-        (activity as MainActivity).supportActionBar?.title=""
         mainViewModel= mainActivity.getViewModel()!!
         binding= FragmentAlbumListBinding.inflate(layoutInflater)
 
@@ -56,13 +55,13 @@ class AlbumListFragment : Fragment() {
         }
 
 
+
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity).supportActionBar?.title=""
-        (activity as MainActivity).supportActionBar?.title=args.mediaId
+
     }
 
 

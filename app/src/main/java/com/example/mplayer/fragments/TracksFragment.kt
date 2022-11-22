@@ -85,19 +85,18 @@ class TracksFragment : Fragment() {
             binding.refreshLayout.isRefreshing = false
             mainViewModel.refreshMedia()
         }
-        mainViewModel.tracksList.observe(viewLifecycleOwner, {
-            if (it.peekContent().isEmpty()){
-                binding.recyclerView.visibility=View.GONE
-                binding.noSongText.visibility=View.VISIBLE
-            }
-            else {
+        mainViewModel.tracksList.observe(viewLifecycleOwner) {
+            if (it.peekContent().isEmpty()) {
+                binding.recyclerView.visibility = View.GONE
+                binding.noSongText.visibility = View.VISIBLE
+            } else {
                 binding.recyclerView.visibility = View.VISIBLE
                 binding.noSongText.visibility = View.GONE
                 mAdapter.setList(it.peekContent())
                 mAdapter.notifyDataSetChanged()
 
             }
-        })
+        }
 
         setHasOptionsMenu(true)
 

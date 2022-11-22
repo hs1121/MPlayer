@@ -1,25 +1,18 @@
 package com.example.mplayer
 
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.media.session.PlaybackState
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.media.session.PlaybackStateCompat
-import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.mplayer.Utility.Util
 import com.example.mplayer.Utility.from
-import com.example.mplayer.Utility.isPlayEnabled
 import com.example.mplayer.Utility.isPlaying
 import com.example.mplayer.databinding.ActivityPlayerBinding
 import com.example.mplayer.exoPlayer.MusicService
 import com.example.mplayer.viewModels.PlayerViewModel
-import com.google.android.exoplayer2.SimpleExoPlayer
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -70,7 +63,7 @@ class PlayerActivity : AppCompatActivity() {
 
         binding.back.setOnClickListener {
             onBackPressed() }
-        binding.settings.setOnClickListener { startActivity(Intent(applicationContext,SettingActivity::class.java)) }
+        binding.settings.setOnClickListener { startActivity(Intent(applicationContext,EqualizerActivity::class.java)) }
     }
 
 

@@ -63,7 +63,7 @@ class MainViewModel @Inject constructor(
 
     init {
         mediaSessionConnection //init media session
-        viewModelScope.launch {
+        viewModelScope.launch (Dispatchers.IO){
             currentSongData = preferenceDataStore.readCurrentSongData()
             sortData = preferenceDataStore.readSotData()
 
@@ -260,7 +260,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun mediaRemoved(list: MutableList<Uri>, callBack: () -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.browsingTree.mediaReset(list)
             initMedia()
             callBack()
@@ -307,14 +307,9 @@ class MainViewModel @Inject constructor(
             val sortedList = Util.sortList(this, sortData)
             val event = Event(sortedList).also { it.handle() }
             _tracksList.postValue(event)
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.Main) {
                 repository.updateSort(sortData) {
-                    viewModelScope.launch {
-                        repository.updateSort(sortData) {
-                            playOrderMedia()
-                        }
-                    }
-
+                        playOrderMedia()
                 }
             }
         }
@@ -329,7 +324,7 @@ class MainViewModel @Inject constructor(
         }
     }
     fun initPlayModes(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Main) {
             repeatMode = preferenceDataStore.readRepeatMode()
             shuffleMode = preferenceDataStore.readShuffleMode()
             exoPlayer?.shuffleModeEnabled = shuffleMode

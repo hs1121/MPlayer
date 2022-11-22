@@ -5,8 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.media.audiofx.BassBoost;
 import android.media.audiofx.Equalizer;
 import android.media.audiofx.PresetReverb;
@@ -32,7 +30,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
-import com.bullhead.equalizer.AnalogController;
 import com.bullhead.equalizer.EqualizerModel;
 import com.bullhead.equalizer.Settings;
 import com.db.chart.model.LineSet;
@@ -40,13 +37,11 @@ import com.db.chart.view.AxisController;
 import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
 import com.example.mplayer.R;
-import com.example.mplayer.SettingActivity;
+import com.example.mplayer.EqualizerActivity;
 import com.example.mplayer.exoPlayer.MusicService;
 
 import java.util.ArrayList;
 import java.util.Map;
-
-import dagger.hilt.android.AndroidEntryPoint;
 
 
 public class EqualizerFragmentV2 extends Fragment {
@@ -524,7 +519,7 @@ public class EqualizerFragmentV2 extends Fragment {
 
     @Override
     public void onDestroy() {
-        SettingActivity activity=(SettingActivity) getActivity();
+        EqualizerActivity activity=(EqualizerActivity) getActivity();
         assert activity != null;
         activity.saveEqDAta(equalizerData);
         super.onDestroy();

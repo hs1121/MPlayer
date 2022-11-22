@@ -37,7 +37,7 @@ class PlayerListener(
                     }
 
 
-                if (!playWhenReady&& Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (!playWhenReady&& Build.VERSION.SDK_INT <= Build.VERSION_CODES.O) {
                     musicService.stopForeground(false)
                     musicService.isForegroundService = false
                     // :::: Not required since notification can be swiped without stopping

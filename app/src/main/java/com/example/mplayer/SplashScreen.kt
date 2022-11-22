@@ -14,6 +14,9 @@ import com.example.mplayer.Utility.PreferenceDataStore
 import com.example.mplayer.database.BrowsingTree
 import com.example.mplayer.Utility.Util
 import com.example.mplayer.exoPlayer.MediaSessionConnection
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -43,25 +46,34 @@ class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
-        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
-        if (savedInstanceState == null) {
-            mediaSessionConnection //  initializing
-            if (Util.isStoragePermissionGranted(
-                    this,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Constants.PERMISSION_READ_INTERNAL_STORAGE
-                ) ){
+
+            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+            if (savedInstanceState == null) {
+                mediaSessionConnection //  initializing
+                if (Util.isStoragePermissionGranted(
+                        this,
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Constants.PERMISSION_READ_INTERNAL_STORAGE
+                    )
+                ) {
+                    try {
                     startActivity()
+
+                    }catch (e : Exception){
+                        Firebase.crashlytics.log(e.toString())
+                    }
+
+                }
             }
-        }
+
 
     }
 
     private fun startActivity() {
-        lifecycleScope.launch {
-           val data= preferenceDataStore.readSotData()
+        lifecycleScope.launch(Dispatchers.Main) {
             musicSource.getMedia()
             var intent = Intent(this@SplashScreen, MainActivity::class.java)
             intent.putExtra(FROM_SPLASH_SCREEN,true)

@@ -1,9 +1,21 @@
 <component name="libraryTable">
   <library name="Gradle: com.diogobernardino:williamchart:2.2@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/058d5ee8cf831191caebaab840653d13/transformed/jetified-williamchart-2.2/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/058d5ee8cf831191caebaab840653d13/transformed/jetified-williamchart-2.2/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/058d5ee8cf831191caebaab840653d13/transformed/jetified-williamchart-2.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/4da6af4eeca8d721a7cd6796b089ef7f/transformed/jetified-williamchart-2.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4da6af4eeca8d721a7cd6796b089ef7f/transformed/jetified-williamchart-2.2/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4da6af4eeca8d721a7cd6796b089ef7f/transformed/jetified-williamchart-2.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/2fbdc5b90c301e19b4d06068e392d10e/transformed/jetified-williamchart-2.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2fbdc5b90c301e19b4d06068e392d10e/transformed/jetified-williamchart-2.2/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2fbdc5b90c301e19b4d06068e392d10e/transformed/jetified-williamchart-2.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/7ce5f4bba078065c9e178d7f2365984d/transformed/jetified-williamchart-2.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/7ce5f4bba078065c9e178d7f2365984d/transformed/jetified-williamchart-2.2/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/7ce5f4bba078065c9e178d7f2365984d/transformed/jetified-williamchart-2.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/18056950b297566a4c0b7388f11e3db3/transformed/jetified-williamchart-2.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/18056950b297566a4c0b7388f11e3db3/transformed/jetified-williamchart-2.2/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/18056950b297566a4c0b7388f11e3db3/transformed/jetified-williamchart-2.2/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/76db29180a43f7bb8c9b96c438ab5ad1/transformed/jetified-williamchart-2.2/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/76db29180a43f7bb8c9b96c438ab5ad1/transformed/jetified-williamchart-2.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/76db29180a43f7bb8c9b96c438ab5ad1/transformed/jetified-williamchart-2.2/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.diogobernardino/williamchart/2.2/1a6c0de643e7561eca0ff05ac949342ab2e01a2d/williamchart-2.2-javadoc.jar!/" />
